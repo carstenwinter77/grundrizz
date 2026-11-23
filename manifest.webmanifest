@@ -1,0 +1,19 @@
+{
+  "name": "Grundrizz – Raumplaner in 3D",
+  "short_name": "Grundrizz",
+  "description": "Grundriss zeichnen, einrichten und in 3D begehen.",
+  "lang": "de",
+  "start_url": "/grundrizz/",
+  "scope": "/grundrizz/",
+  "id": "/grundrizz/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f6f5",
+  "theme_color": "#1d6c74",
+  "categories": ["lifestyle", "productivity", "utilities"],
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

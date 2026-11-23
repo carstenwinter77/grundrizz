@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Grundrizz installieren</title>
+<meta name="description" content="Grundrizz auf iPhone, iPad, Android oder Computer installieren. Kostenlos, ohne App Store, ohne Konto.">
+<meta name="theme-color" content="#1d6c74">
+<meta property="og:title" content="Grundrizz – Raumplaner in 3D">
+<meta property="og:description" content="Grundriss zeichnen, einrichten und in 3D begehen. Kostenlos, ohne Konto. Hier installieren.">
+<meta property="og:url" content="https://carstenwinter77.github.io/grundrizz/installieren/">
+<meta property="og:image" content="https://carstenwinter77.github.io/grundrizz/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../icon.svg" type="image/svg+xml"><link rel="icon" href="../icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap">
+<style>
+:root{--bg:#f4f2ec;--paper:#fffdf8;--ink:#1c2427;--muted:#5d686b;--line:#e2ddd1;--accent:#1d6c74;--accent-2:#164f55;--accent-soft:#e1eeec;--accent-ink:#fff;--warm:#c9773a;--grid:rgba(29,108,116,.07);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121718;--paper:#1a2123;--ink:#e9eeec;--muted:#9aa7a8;--line:#2c3638;--accent:#4fb0b8;--accent-2:#7cc9cf;--accent-soft:#1c3336;--accent-ink:#0d1a1c;--warm:#e3a36d;--grid:rgba(79,176,184,.07);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121718;--paper:#1a2123;--ink:#e9eeec;--muted:#9aa7a8;--line:#2c3638;--accent:#4fb0b8;--accent-2:#7cc9cf;--accent-soft:#1c3336;--accent-ink:#0d1a1c;--warm:#e3a36d;--grid:rgba(79,176,184,.07);color-scheme:dark}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+ background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:Montserrat,Inter,system-ui,sans-serif;line-height:1.15;text-wrap:balance;margin:0}
+a{color:var(--accent)}
+header{padding-block:calc(18px + env(safe-area-inset-top,0px)) 8px}
+.top{display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font:800 22px Montserrat,Arial,sans-serif;letter-spacing:-.02em}
+.brand .mk{width:34px;height:34px;color:var(--accent)}
+.brand b{color:var(--warm);font-weight:800}
+.top .sp{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:12px 18px;font:600 15px Inter,sans-serif;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink);min-height:46px}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.pri:hover{background:var(--accent-2)}
+.btn.sm{padding:8px 14px;min-height:38px;font-size:14px}
+.btn svg{width:18px;height:18px}
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;padding-block:36px 48px}
+.hero>*{min-width:0}
+.eyebrow{font:600 12px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--warm);margin-bottom:12px}
+.hero h1{font-size:clamp(34px,5.4vw,56px);font-weight:700;letter-spacing:-.025em}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.lead{font-size:18px;color:var(--muted);max-width:34em;margin:18px 0 26px}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;padding:0;list-style:none;color:var(--muted);font-size:14px}
+.facts li{display:flex;align-items:center;gap:7px}
+.facts svg{width:16px;height:16px;color:var(--accent)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 2px rgb(0 0 0 / .04),0 12px 32px rgb(20 40 40 / .07)}
+.qrcard{padding:26px;text-align:center}
+.qrcard h2{font-size:20px;margin-bottom:4px}
+.qrcard p{margin:0 0 18px;color:var(--muted);font-size:14px}
+.qr{display:block;width:min(240px,100%);aspect-ratio:1;margin:0 auto;padding:14px;background:#fff;border-radius:14px;border:1px solid var(--line)}
+.qr path{fill:#13201f}
+.link{display:flex;gap:6px;margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:5px 5px 5px 12px;background:var(--bg);align-items:center}
+.link input{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:500 14px ui-monospace,"SF Mono",Menlo,monospace}
+.link input:focus{outline:none}
+.share{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.msg{min-height:1.4em;font-size:13px;color:var(--accent);margin-top:8px}
+section{padding-block:40px}
+.sh{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:22px}
+.sh h2{font-size:clamp(26px,3.6vw,34px);letter-spacing:-.02em}
+.sh p{margin:6px 0 0;color:var(--muted);max-width:38em}
+.tabs{display:inline-flex;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:4px;gap:2px;max-width:100%;overflow-x:auto}
+.tabs button{border:0;background:none;color:var(--muted);font:600 14px Inter,sans-serif;padding:9px 14px;border-radius:10px;cursor:pointer;white-space:nowrap;display:flex;gap:7px;align-items:center}
+.tabs button svg{width:17px;height:17px}
+.tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
+.panel{display:grid;grid-template-columns:1fr 300px;gap:28px;padding:28px;align-items:start}
+.panel>*{min-width:0}
+.panel h3{font-size:22px;margin-bottom:4px}
+.panel .sub{color:var(--muted);margin:0 0 18px;font-size:15px}
+ol.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:grid;gap:14px}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start}
+ol.steps li::before{content:counter(s);display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font:700 16px Montserrat,sans-serif}
+ol.steps b{display:block;font-weight:600}
+ol.steps span{color:var(--muted);font-size:15px}
+.ico{display:inline-grid;place-items:center;vertical-align:-5px;width:24px;height:24px;border-radius:6px;background:var(--accent-soft);color:var(--accent);margin:0 2px}
+.ico svg{width:16px;height:16px}
+.note{margin-top:18px;padding:12px 14px;border-radius:12px;background:var(--bg);border:1px dashed var(--line);font-size:14px;color:var(--muted)}
+.note b{color:var(--ink)}
+.phone{position:relative;border-radius:34px;border:10px solid #1c2427;background:#1c2427;aspect-ratio:9/18.5;max-width:240px;margin:0 auto;overflow:hidden;box-shadow:0 18px 40px rgb(0 0 0 / .18)}
+.phone .scr{position:absolute;inset:0;background:linear-gradient(160deg,#2b6c73,#173f44);border-radius:24px;padding:34px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;align-content:start}
+.phone .app{display:flex;flex-direction:column;align-items:center;gap:5px;font:500 9px Inter,sans-serif;color:#e7f1f0}
+.phone .app i{display:block;width:100%;aspect-ratio:1;border-radius:22%;background:rgb(255 255 255 / .16)}
+.phone .app.me i{background:url(../icon-192.png) center/cover;box-shadow:0 0 0 3px rgb(255 255 255 / .85);animation:pop 2.4s ease-in-out infinite}
+@keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@media (prefers-reduced-motion:reduce){.phone .app.me i{animation:none}}
+.desk{border-radius:14px;border:1px solid var(--line);background:var(--bg);overflow:hidden}
+.desk .bar{display:flex;align-items:center;gap:8px;padding:9px 10px;background:var(--paper);border-bottom:1px solid var(--line)}
+.desk .url{flex:1;min-width:0;border-radius:8px;background:var(--bg);padding:5px 10px;font:12px ui-monospace,monospace;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.desk .inst{display:grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--accent);color:var(--accent-ink)}
+.desk .inst svg{width:15px;height:15px}
+.desk .body{height:150px;display:grid;place-items:center;color:var(--muted);font-size:13px;padding:12px;text-align:center}
+.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.feat .card{padding:22px}
+.feat svg{width:30px;height:30px;color:var(--accent);margin-bottom:10px}
+.feat h3{font-size:18px;margin-bottom:6px}
+.feat p{margin:0;color:var(--muted);font-size:15px}
+.faq{display:grid;gap:10px;max-width:780px}
+.faq details{background:var(--paper);border:1px solid var(--line);border-radius:14px}
+.faq summary{cursor:pointer;list-style:none;padding:16px 18px;font-weight:600;display:flex;justify-content:space-between;gap:12px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--accent);font:600 20px Inter,sans-serif;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq details>div{padding:0 18px 16px;color:var(--muted)}
+.ok{display:none;margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:var(--accent);font-weight:600}
+.standalone .ok{display:block}
+footer{padding-block:30px calc(30px + env(safe-area-inset-bottom,0px));color:var(--muted);font-size:14px;border-top:1px solid var(--line);margin-top:20px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
+[hidden]{display:none!important}
+@media (max-width:860px){.hero{grid-template-columns:1fr;gap:28px;padding-top:20px}.panel{grid-template-columns:1fr;padding:22px}.panel .vis{order:-1;max-width:260px;width:100%;margin:0 auto}.feat{grid-template-columns:1fr}}
+@media (max-width:520px){.top .btn span{display:none}.lead{font-size:17px}.qrcard{padding:20px}.hide-sm{display:none}}
+</style>
+</head>
+<body>
+<header><div class="wrap top">
+  <a class="brand" href="../" aria-label="Grundrizz"><svg class="mk" viewBox="125 123 246 248" aria-hidden="true"><g transform="translate(80 80)" fill="none" stroke-linecap="round"><path d="M82 92 H270 V270 H82 V92 M176 92 V159 M82 177 H151 M151 177 V215 M210 177 H270 M210 177 V217" stroke="currentColor" stroke-width="18" stroke-linejoin="round"/><path d="M143 270 V239 A53 53 0 0 1 196 186" stroke="currentColor" stroke-width="15"/><path d="M57 94 Q62 55 100 55 H273" stroke="#C9773A" stroke-width="21"/></g></svg><span>Grundri<b>zz</b></span></a><span class="sp"></span>
+  <a class="btn sm pri" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Grundrizz öffnen</span></a>
+</div></header>
+
+<main>
+<div class="wrap hero">
+  <div>
+    <div class="eyebrow">Installieren · kostenlos · ohne App Store</div>
+    <h1>Deine Wohnung in 3D, <em>direkt auf dem Startbildschirm.</em></h1>
+    <p class="lead">Grundrizz ist ein Raumplaner für alle: Grundriss zeichnen, Möbel stellen und in 3D durch die Räume gehen. Installiert startet er wie eine App, im Vollbild und auch ohne Internet.</p>
+    <div class="cta">
+      <button class="btn pri" id="instBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Jetzt installieren</button>
+      <a class="btn pri" id="howBtn" href="#anleitung"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>So installierst du es</a>
+      <a class="btn" href="../">Erst im Browser ausprobieren</a>
+    </div>
+    <ul class="facts">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Kostenlos</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Kein Konto nötig</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Daten bleiben auf deinem Gerät</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>iPhone, iPad, Android, Computer</li>
+    </ul>
+    <div class="ok">Grundrizz ist auf diesem Gerät schon installiert. Viel Spaß beim Planen!</div>
+  </div>
+  <div class="card qrcard">
+    <h2>Mit dem Handy scannen</h2>
+    <p>Kamera auf den Code richten, die Seite öffnet sich auf dem Handy.</p>
+    <svg class="qr" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR-Code zu https://carstenwinter77.github.io/grundrizz/installieren/"><path d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM9 0h1v1h-1zM10 0h1v1h-1zM11 0h1v1h-1zM12 0h1v1h-1zM16 0h1v1h-1zM19 0h1v1h-1zM23 0h1v1h-1zM26 0h1v1h-1zM27 0h1v1h-1zM28 0h1v1h-1zM29 0h1v1h-1zM30 0h1v1h-1zM31 0h1v1h-1zM32 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM11 1h1v1h-1zM15 1h1v1h-1zM16 1h1v1h-1zM21 1h1v1h-1zM24 1h1v1h-1zM26 1h1v1h-1zM32 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM8 2h1v1h-1zM9 2h1v1h-1zM10 2h1v1h-1zM11 2h1v1h-1zM12 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM19 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM29 2h1v1h-1zM30 2h1v1h-1zM32 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM8 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM15 3h1v1h-1zM17 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM29 3h1v1h-1zM30 3h1v1h-1zM32 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM12 4h1v1h-1zM14 4h1v1h-1zM15 4h1v1h-1zM16 4h1v1h-1zM19 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM23 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM29 4h1v1h-1zM30 4h1v1h-1zM32 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM9 5h1v1h-1zM10 5h1v1h-1zM11 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM21 5h1v1h-1zM22 5h1v1h-1zM26 5h1v1h-1zM32 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM27 6h1v1h-1zM28 6h1v1h-1zM29 6h1v1h-1zM30 6h1v1h-1zM31 6h1v1h-1zM32 6h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM16 7h1v1h-1zM21 7h1v1h-1zM22 7h1v1h-1zM23 7h1v1h-1zM0 8h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM9 8h1v1h-1zM12 8h1v1h-1zM13 8h1v1h-1zM16 8h1v1h-1zM17 8h1v1h-1zM18 8h1v1h-1zM19 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM23 8h1v1h-1zM26 8h1v1h-1zM27 8h1v1h-1zM28 8h1v1h-1zM29 8h1v1h-1zM30 8h1v1h-1zM0 9h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM9 9h1v1h-1zM11 9h1v1h-1zM12 9h1v1h-1zM13 9h1v1h-1zM16 9h1v1h-1zM19 9h1v1h-1zM20 9h1v1h-1zM23 9h1v1h-1zM26 9h1v1h-1zM27 9h1v1h-1zM29 9h1v1h-1zM30 9h1v1h-1zM32 9h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1zM11 10h1v1h-1zM12 10h1v1h-1zM13 10h1v1h-1zM14 10h1v1h-1zM15 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM25 10h1v1h-1zM28 10h1v1h-1zM30 10h1v1h-1zM0 11h1v1h-1zM1 11h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM7 11h1v1h-1zM8 11h1v1h-1zM9 11h1v1h-1zM10 11h1v1h-1zM11 11h1v1h-1zM12 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM18 11h1v1h-1zM20 11h1v1h-1zM21 11h1v1h-1zM23 11h1v1h-1zM24 11h1v1h-1zM28 11h1v1h-1zM29 11h1v1h-1zM30 11h1v1h-1zM31 11h1v1h-1zM32 11h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM5 12h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM8 12h1v1h-1zM9 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM22 12h1v1h-1zM24 12h1v1h-1zM25 12h1v1h-1zM27 12h1v1h-1zM28 12h1v1h-1zM29 12h1v1h-1zM31 12h1v1h-1zM32 12h1v1h-1zM0 13h1v1h-1zM3 13h1v1h-1zM5 13h1v1h-1zM8 13h1v1h-1zM9 13h1v1h-1zM10 13h1v1h-1zM11 13h1v1h-1zM15 13h1v1h-1zM18 13h1v1h-1zM19 13h1v1h-1zM20 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM24 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM29 13h1v1h-1zM31 13h1v1h-1zM32 13h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM13 14h1v1h-1zM15 14h1v1h-1zM16 14h1v1h-1zM17 14h1v1h-1zM22 14h1v1h-1zM24 14h1v1h-1zM25 14h1v1h-1zM26 14h1v1h-1zM27 14h1v1h-1zM28 14h1v1h-1zM29 14h1v1h-1zM31 14h1v1h-1zM1 15h1v1h-1zM2 15h1v1h-1zM4 15h1v1h-1zM5 15h1v1h-1zM11 15h1v1h-1zM15 15h1v1h-1zM20 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1zM24 15h1v1h-1zM25 15h1v1h-1zM26 15h1v1h-1zM28 15h1v1h-1zM29 15h1v1h-1zM30 15h1v1h-1zM0 16h1v1h-1zM1 16h1v1h-1zM4 16h1v1h-1zM5 16h1v1h-1zM6 16h1v1h-1zM11 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM15 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM19 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM25 16h1v1h-1zM27 16h1v1h-1zM28 16h1v1h-1zM32 16h1v1h-1zM1 17h1v1h-1zM7 17h1v1h-1zM8 17h1v1h-1zM11 17h1v1h-1zM16 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM22 17h1v1h-1zM23 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM29 17h1v1h-1zM30 17h1v1h-1zM32 17h1v1h-1zM2 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM10 18h1v1h-1zM12 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM24 18h1v1h-1zM27 18h1v1h-1zM28 18h1v1h-1zM30 18h1v1h-1zM31 18h1v1h-1zM0 19h1v1h-1zM3 19h1v1h-1zM7 19h1v1h-1zM9 19h1v1h-1zM11 19h1v1h-1zM13 19h1v1h-1zM14 19h1v1h-1zM15 19h1v1h-1zM16 19h1v1h-1zM20 19h1v1h-1zM21 19h1v1h-1zM22 19h1v1h-1zM23 19h1v1h-1zM24 19h1v1h-1zM26 19h1v1h-1zM27 19h1v1h-1zM28 19h1v1h-1zM29 19h1v1h-1zM30 19h1v1h-1zM31 19h1v1h-1zM0 20h1v1h-1zM3 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM8 20h1v1h-1zM9 20h1v1h-1zM10 20h1v1h-1zM15 20h1v1h-1zM17 20h1v1h-1zM22 20h1v1h-1zM25 20h1v1h-1zM27 20h1v1h-1zM28 20h1v1h-1zM29 20h1v1h-1zM32 20h1v1h-1zM0 21h1v1h-1zM1 21h1v1h-1zM2 21h1v1h-1zM8 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM15 21h1v1h-1zM16 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM26 21h1v1h-1zM29 21h1v1h-1zM30 21h1v1h-1zM32 21h1v1h-1zM0 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM10 22h1v1h-1zM17 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM29 22h1v1h-1zM31 22h1v1h-1zM0 23h1v1h-1zM2 23h1v1h-1zM3 23h1v1h-1zM4 23h1v1h-1zM5 23h1v1h-1zM7 23h1v1h-1zM9 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM16 23h1v1h-1zM18 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM22 23h1v1h-1zM23 23h1v1h-1zM24 23h1v1h-1zM25 23h1v1h-1zM26 23h1v1h-1zM29 23h1v1h-1zM30 23h1v1h-1zM31 23h1v1h-1zM0 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM7 24h1v1h-1zM8 24h1v1h-1zM9 24h1v1h-1zM13 24h1v1h-1zM16 24h1v1h-1zM17 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM25 24h1v1h-1zM26 24h1v1h-1zM27 24h1v1h-1zM28 24h1v1h-1zM29 24h1v1h-1zM32 24h1v1h-1zM8 25h1v1h-1zM9 25h1v1h-1zM11 25h1v1h-1zM12 25h1v1h-1zM16 25h1v1h-1zM17 25h1v1h-1zM18 25h1v1h-1zM19 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM23 25h1v1h-1zM24 25h1v1h-1zM28 25h1v1h-1zM30 25h1v1h-1zM32 25h1v1h-1zM0 26h1v1h-1zM1 26h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM6 26h1v1h-1zM12 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM15 26h1v1h-1zM16 26h1v1h-1zM17 26h1v1h-1zM21 26h1v1h-1zM22 26h1v1h-1zM23 26h1v1h-1zM24 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM30 26h1v1h-1zM31 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM8 27h1v1h-1zM10 27h1v1h-1zM11 27h1v1h-1zM12 27h1v1h-1zM14 27h1v1h-1zM15 27h1v1h-1zM18 27h1v1h-1zM19 27h1v1h-1zM20 27h1v1h-1zM21 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM28 27h1v1h-1zM29 27h1v1h-1zM30 27h1v1h-1zM32 27h1v1h-1zM0 28h1v1h-1zM2 28h1v1h-1zM3 28h1v1h-1zM4 28h1v1h-1zM6 28h1v1h-1zM8 28h1v1h-1zM9 28h1v1h-1zM11 28h1v1h-1zM12 28h1v1h-1zM14 28h1v1h-1zM17 28h1v1h-1zM18 28h1v1h-1zM19 28h1v1h-1zM22 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1zM26 28h1v1h-1zM27 28h1v1h-1zM28 28h1v1h-1zM29 28h1v1h-1zM31 28h1v1h-1zM32 28h1v1h-1zM0 29h1v1h-1zM2 29h1v1h-1zM3 29h1v1h-1zM4 29h1v1h-1zM6 29h1v1h-1zM8 29h1v1h-1zM14 29h1v1h-1zM15 29h1v1h-1zM18 29h1v1h-1zM19 29h1v1h-1zM20 29h1v1h-1zM23 29h1v1h-1zM24 29h1v1h-1zM25 29h1v1h-1zM28 29h1v1h-1zM30 29h1v1h-1zM31 29h1v1h-1zM32 29h1v1h-1zM0 30h1v1h-1zM2 30h1v1h-1zM3 30h1v1h-1zM4 30h1v1h-1zM6 30h1v1h-1zM8 30h1v1h-1zM9 30h1v1h-1zM11 30h1v1h-1zM14 30h1v1h-1zM15 30h1v1h-1zM16 30h1v1h-1zM17 30h1v1h-1zM20 30h1v1h-1zM21 30h1v1h-1zM24 30h1v1h-1zM26 30h1v1h-1zM27 30h1v1h-1zM0 31h1v1h-1zM6 31h1v1h-1zM14 31h1v1h-1zM16 31h1v1h-1zM21 31h1v1h-1zM22 31h1v1h-1zM23 31h1v1h-1zM26 31h1v1h-1zM28 31h1v1h-1zM29 31h1v1h-1zM30 31h1v1h-1zM0 32h1v1h-1zM1 32h1v1h-1zM2 32h1v1h-1zM3 32h1v1h-1zM4 32h1v1h-1zM5 32h1v1h-1zM6 32h1v1h-1zM8 32h1v1h-1zM10 32h1v1h-1zM13 32h1v1h-1zM14 32h1v1h-1zM17 32h1v1h-1zM22 32h1v1h-1zM23 32h1v1h-1zM24 32h1v1h-1zM25 32h1v1h-1zM27 32h1v1h-1zM29 32h1v1h-1zM31 32h1v1h-1z"/></svg>
+    <div class="link"><input id="lnk" value="https://carstenwinter77.github.io/grundrizz/installieren/" readonly aria-label="Link zum Weitergeben"><button class="btn sm pri" id="cpBtn" type="button">Kopieren</button></div>
+    <div class="share">
+      <button class="btn sm" id="shBtn" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 8l5-5 5 5M5 13v7h14v-7"/></svg>Teilen</button>
+      <a class="btn sm" id="waBtn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.2-4.5A9 9 0 1 1 21 12z"/></svg>WhatsApp</a>
+      <a class="btn sm" id="mailBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>E-Mail</a>
+    </div>
+    <div class="msg" id="msg" aria-live="polite"></div>
+  </div>
+</div>
+
+<section id="anleitung"><div class="wrap">
+  <div class="sh"><div><h2>Installieren in drei Schritten</h2><p>Grundrizz ist eine Web-App. Du lädst nichts aus einem Store, sondern legst sie direkt aus dem Browser auf den Startbildschirm. Wir haben dein Gerät schon vorausgewählt.</p></div>
+    <div class="tabs" role="tablist" aria-label="Gerät wählen">
+      <button role="tab" id="t-ios" aria-controls="p-ios" data-d="ios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>iPhone &amp; iPad</button>
+      <button role="tab" id="t-and" aria-controls="p-and" data-d="and"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M6 5h12M6 18h12"/></svg>Android</button>
+      <button role="tab" id="t-pc" aria-controls="p-pc" data-d="pc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg>Computer</button>
+    </div></div>
+
+  <div class="card panel" role="tabpanel" id="p-ios" aria-labelledby="t-ios">
+    <div><h3>iPhone und iPad</h3><p class="sub">Am besten mit Safari. Auf neueren iPhones geht es auch in Chrome und Edge über das Teilen-Menü.</p>
+      <ol class="steps">
+        <li><div><b>Diese Seite in Safari öffnen</b><span>QR-Code oben scannen oder den Link antippen.</span></div></li>
+        <li><div><b>Auf Teilen tippen <i class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 7l4-4 4 4M6 11v9h12v-9"/></svg></i></b><span>Das Quadrat mit dem Pfeil nach oben. Beim iPhone unten in der Leiste, beim iPad oben rechts.</span></div></li>
+        <li><div><b>„Zum Home-Bildschirm“ wählen <i class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></i></b><span>Etwas nach unten wischen, falls der Eintrag nicht gleich zu sehen ist. Dann oben rechts auf „Hinzufügen“.</span></div></li>
+      </ol>
+      <div class="note"><b>Wichtig beim iPhone:</b> Die installierte App hat einen eigenen Speicher. Was du vorher in Safari geplant hast, holst du so hinüber: in Safari unter <b>Projekte → Per Link teilen</b> einen Link erzeugen und ihn in der App öffnen.</div></div>
+    <div class="vis"><div class="phone" aria-hidden="true"><div class="scr"><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app me"><i></i>Grundrizz</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span></div></div></div>
+  </div>
+
+  <div class="card panel" role="tabpanel" id="p-and" aria-labelledby="t-and" hidden>
+    <div><h3>Android</h3><p class="sub">Mit Chrome, Edge oder Samsung Internet.</p>
+      <ol class="steps">
+        <li><div><b>Diese Seite in Chrome öffnen</b><span>QR-Code oben scannen oder den Link antippen.</span></div></li>
+        <li><div><b>Auf „Jetzt installieren“ tippen</b><span>Der Knopf erscheint oben auf dieser Seite, sobald Chrome bereit ist. Alternativ im Menü <i class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></i> oben rechts „App installieren“ oder „Zum Startbildschirm hinzufügen“ wählen.</span></div></li>
+        <li><div><b>Bestätigen</b><span>Grundrizz liegt jetzt bei deinen Apps und startet im Vollbild. Bei Samsung Internet: Menü, dann „Seite hinzufügen zu“ und „Startbildschirm“.</span></div></li>
+      </ol>
+      <div class="note"><b>Tipp:</b> Auf vielen Android-Handys kannst du in Grundrizz Räume sogar mit der Kamera ausmessen (im Zeichnen-Modus unter „Messen“).</div></div>
+    <div class="vis"><div class="phone" aria-hidden="true"><div class="scr"><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app me"><i></i>Grundrizz</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span><span class="app"><i></i>&nbsp;</span></div></div></div>
+  </div>
+
+  <div class="card panel" role="tabpanel" id="p-pc" aria-labelledby="t-pc" hidden>
+    <div><h3>Windows, Mac und Linux</h3><p class="sub">Auf dem großen Bildschirm plant es sich am bequemsten.</p>
+      <ol class="steps">
+        <li><div><b>In Chrome oder Edge öffnen</b><span>Link oben kopieren oder auf „Grundrizz öffnen“ klicken.</span></div></li>
+        <li><div><b>Installieren-Symbol in der Adressleiste klicken <i class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 7v6M9 10l3 3 3-3M8 20h8"/></svg></i></b><span>Ganz rechts in der Adressleiste, oder oben auf dieser Seite „Jetzt installieren“. Danach liegt Grundrizz im Startmenü oder im Dock.</span></div></li>
+        <li><div><b>Mac mit Safari</b><span>Im Menü „Ablage“ auf „Zum Dock hinzufügen“ (ab macOS Sonoma). Firefox kann Web-Apps nicht installieren, dort einfach ein Lesezeichen setzen.</span></div></li>
+      </ol></div>
+    <div class="vis"><div class="desk" aria-hidden="true"><div class="bar"><span class="url">carstenwinter77.github.io/grundrizz</span><span class="inst"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M12 7v6M9 10l3 3 3-3"/></svg></span></div><div class="body">Hier klicken, dann „Installieren“</div></div></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sh"><div><h2>Was dich erwartet</h2></div></div>
+  <div class="feat">
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 12h9v9M12 3v5"/></svg><h3>Grundriss in Minuten</h3><p>Vorlage wählen, Räume mit dem Finger ziehen, Maße eintippen oder ein Foto vom Exposé nachzeichnen. Raumscans vom Handy lassen sich laden.</p></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5z"/><path d="M6 17v3M18 17v3M7 10V7h10v3"/></svg><h3>Einrichten mit echten Maßen</h3><p>Hunderte Möbel im Katalog. Der Umzugs-Check prüft, ob dein Sofa durch die Tür der neuen Wohnung passt.</p></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg><h3>Wohnen, bevor du einziehst</h3><p>In 3D durch die Räume gehen, Sonne über Tag und Jahr ansehen, Licht ausmachen. Plan per Link teilen.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sh"><div><h2>Häufige Fragen</h2></div></div>
+  <div class="faq">
+    <details><summary>Kostet Grundrizz etwas?</summary><div>Nein. Grundrizz ist kostenlos, ohne Werbung und ohne Anmeldung.</div></details>
+    <details><summary>Wo werden meine Pläne gespeichert?</summary><div>Nur auf deinem Gerät, im Speicher des Browsers bzw. der installierten App. Niemand sonst sieht sie. Zur Sicherheit kannst du unter „Projekte“ jederzeit eine Datei speichern.</div></details>
+    <details><summary>Funktioniert es ohne Internet?</summary><div>Ja. Nach dem ersten Öffnen mit Internet startet Grundrizz auch offline. Updates holt es sich automatisch, sobald du wieder online bist.</div></details>
+    <details><summary>Warum nicht im App Store?</summary><div>Grundrizz ist eine Web-App. Sie wird direkt aus dem Browser installiert, ist sofort auf dem neuesten Stand und braucht keine Berechtigungen.</div></details>
+    <details><summary>Wie bekomme ich meinen Plan auf ein anderes Gerät?</summary><div>In Grundrizz unter „Projekte“ auf „Per Link teilen“ und den Link auf dem anderen Gerät öffnen. Oder „Datei speichern“ und die Datei dort mit „Datei laden“ öffnen.</div></details>
+    <details><summary>Wie entferne ich die App wieder?</summary><div>Wie jede andere App: Symbol lange gedrückt halten und „App entfernen“ bzw. „Deinstallieren“ wählen. Am Computer in der App oben rechts im Menü „Deinstallieren“.</div></details>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap"><span>Grundrizz · Raumplaner in 3D für alle.</span><span><a href="../">Zur App</a></span></div></footer>
+
+<script>
+(function(){
+  var PAGE='https://carstenwinter77.github.io/grundrizz/installieren/', TEXT='Schau mal: Mit Grundrizz planst du deine Wohnung in 3D. Kostenlos, ohne Konto.';
+  var ua=navigator.userAgent, ios=/iPhone|iPad|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1), and=/Android/.test(ua);
+  function pick(d){ document.querySelectorAll('[role=tab]').forEach(function(b){ var on=b.dataset.d===d; b.setAttribute('aria-selected',on); b.tabIndex=on?0:-1; document.getElementById('p-'+b.dataset.d).hidden=!on; }); }
+  pick(ios?'ios':and?'and':'pc');
+  document.querySelector('.tabs').addEventListener('click',function(e){ var b=e.target.closest('[role=tab]'); if(b) pick(b.dataset.d); });
+  document.querySelector('.tabs').addEventListener('keydown',function(e){ if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return; var t=[].slice.call(document.querySelectorAll('[role=tab]')), i=t.findIndex(function(b){return b.getAttribute('aria-selected')==='true';}); i=(i+(e.key==='ArrowRight'?1:t.length-1))%t.length; pick(t[i].dataset.d); t[i].focus(); });
+  if(matchMedia('(display-mode: standalone)').matches||navigator.standalone) document.body.classList.add('standalone');
+  var msg=document.getElementById('msg'), lnk=document.getElementById('lnk');
+  document.getElementById('cpBtn').onclick=function(){ var done=function(){ msg.textContent='Link kopiert. Jetzt einfach einfügen und verschicken.'; };
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(PAGE).then(done,function(){ lnk.select(); msg.textContent='Link markiert, jetzt kopieren.'; }); else { lnk.select(); document.execCommand&&document.execCommand('copy'); done(); } };
+  lnk.addEventListener('focus',function(){ lnk.select(); });
+  var sh=document.getElementById('shBtn'); if(navigator.share){ sh.hidden=false; sh.onclick=function(){ navigator.share({title:'Grundrizz',text:TEXT,url:PAGE}).catch(function(){}); }; }
+  document.getElementById('waBtn').href='https://wa.me/?text='+encodeURIComponent(TEXT+' '+PAGE);
+  document.getElementById('mailBtn').href='mailto:?subject='+encodeURIComponent('Grundrizz: Wohnung in 3D planen')+'&body='+encodeURIComponent(TEXT+'\n\nHier installieren: '+PAGE);
+  var deferred=null, ib=document.getElementById('instBtn');
+  window.addEventListener('beforeinstallprompt',function(e){ e.preventDefault(); deferred=e; ib.hidden=false; document.getElementById('howBtn').classList.remove('pri'); });
+  ib.onclick=function(){ if(!deferred) return; deferred.prompt(); deferred.userChoice.then(function(c){ if(c.outcome==='accepted'){ ib.hidden=true; msg.textContent='Installiert. Grundrizz findest du jetzt bei deinen Apps.'; } deferred=null; }); };
+  window.addEventListener('appinstalled',function(){ ib.hidden=true; document.body.classList.add('standalone'); });
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(function(){});
+})();
+</script>
+</body>
+</html>

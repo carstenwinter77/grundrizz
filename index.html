@@ -1,9 +1,9 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Grundrizz"><meta name="theme-color" content="#1d6c74">
+<meta name="apple-mobile-web-app-title" content="Grundrizz"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="apple-touch-icon.png"><meta name="theme-color" content="#1d6c74">
 <meta name="description" content="Grundrizz: Grundriss zeichnen, einrichten und in 3D begehen. Läuft im Browser, auch auf dem iPhone.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231d6c74'/%3E%3Cpath d='M14 50V14h36v36H32V34H14' fill='none' stroke='white' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="icon.svg" type="image/svg+xml"><link rel="icon" href="icon-192.png" sizes="192x192"><meta property="og:image" content="https://carstenwinter77.github.io/grundrizz/og.png"><meta property="og:title" content="Grundrizz – Raumplaner in 3D für alle">
 <style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Grundrizz</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -402,6 +402,97 @@ label.pshow input{width:auto;margin:0;flex:none}
 .mv-t{font-size:12px;color:var(--muted)}
 .mv-b{display:flex;gap:4px;flex:none}
 .mv-t{background:none!important;padding:0!important;border:0!important}
+
+/* Foto-Vorlage */
+.ufbox{position:absolute;left:58px;top:58px;width:270px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;box-shadow:0 6px 22px rgb(0 0 0 / .14);z-index:3}
+.ufbox.min>*:not(.ufh){display:none}
+.ufbox .ufh{display:flex;align-items:center;gap:8px}.ufbox .ufh b{flex:1;font:600 13.5px var(--font-ui)}
+.ufbox .lnk{border:0;background:none;color:var(--accent);font:500 12px var(--font-ui);cursor:pointer;padding:2px 4px}
+.ufbox.min{padding:6px 10px}
+.ufbox .x{border:0;background:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 2px}
+.ufbox .ufr{display:flex;flex-wrap:wrap;gap:6px}.ufbox .btn.on{background:var(--accent);color:var(--accent-ink)}
+.ufbox .uff{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}.ufbox .uff span{display:flex;align-items:center;gap:6px;color:var(--fg)}
+.ufbox .uff input[type=number]{width:110px;font-size:16px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--fg)}
+.ufbox small{font-size:11.5px;line-height:1.35}
+#drawSvg .ufimg{pointer-events:none}
+#drawSvg .ufmv{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:6 4}
+#drawSvg .ufl{stroke:#e0483e;stroke-width:2.5}
+#drawSvg .ufp{fill:#e0483e;stroke:#fff;stroke-width:2}
+@media (max-width:760px){ .ufbox{left:54px;right:10px;width:auto;top:56px;padding:8px 10px} .draw:has(.dsheet:not([hidden]):not(.min)) .ufbox{display:none} }
+
+/* Raum ausmessen */
+dialog.msdlg{max-width:600px;max-height:calc(100dvh - 32px);overflow:auto}
+.msdlg .msintro{margin:0 0 10px;font-size:12.5px}
+.msdlg .msg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.msdlg .f{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.msdlg .f.w2{grid-column:1/-1}
+.msdlg input,.msdlg select{font:inherit;font-size:15px;color:var(--fg);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0}
+.msdlg .msin{display:flex;flex-direction:column;gap:4px}
+.msdlg .msops{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.msdlg .msop{display:grid;grid-template-columns:1fr 1.3fr .9fr .9fr auto;gap:6px;align-items:end;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.msdlg .msl{display:flex;flex-direction:column;gap:2px;font-size:11px;color:var(--muted)}
+.msdlg .x{border:0;background:none;color:var(--muted);font-size:20px;cursor:pointer;padding:0 4px}
+.msdlg .msprev{display:block;width:100%;max-width:320px;height:auto;margin:12px auto 4px}
+.msprev .msr{fill:var(--accent-soft);stroke:var(--fg);stroke-width:3}
+.msprev .msf{stroke:#4a90c8;stroke-width:5}.msprev .mst1{stroke:#c0763a;stroke-width:5}.msprev .mso{stroke:var(--panel);stroke-width:5}
+.msprev .mst0{font:9px var(--font-ui);fill:var(--muted)}
+.msdlg .msbtn{margin-top:12px;gap:8px}
+@media (max-width:560px){ .msdlg .msop{grid-template-columns:1fr 1fr auto;} .msdlg .msop .msa0,.msdlg .msop .msb0{grid-row:2} .msdlg input,.msdlg select{font-size:16px} }
+.arov{position:fixed;inset:0;z-index:99;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:calc(20px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.arov[hidden]{display:none}
+.arov .arx{position:absolute;left:50%;top:50%;width:44px;height:44px;margin:-22px;border:2px solid #fff;border-radius:50%;box-shadow:0 0 0 1px rgb(0 0 0 / .4)}
+.arov .art{background:rgb(0 0 0 / .6);color:#fff;padding:8px 14px;border-radius:12px;font:500 15px var(--font-ui);text-align:center}
+.arov .arb{display:flex;gap:10px;pointer-events:auto}
+
+/* Sonne übers Jahr */
+dialog.sydlg{max-width:720px;max-height:calc(100dvh - 32px);overflow:auto}
+.sydlg .syi{font-size:12.5px;margin:0 0 10px}
+.sydlg .syw{overflow-x:auto;margin:0 -4px 6px}
+.sydlg .syt{border-collapse:separate;border-spacing:2px;font:12px var(--font-num);min-width:560px;width:100%}
+.sydlg .syt th{font:600 11px var(--font-ui);color:var(--muted);padding:2px 4px;text-align:center}
+.sydlg .syt tbody th{text-align:left;color:var(--fg);font-size:12.5px;white-space:nowrap;padding-right:8px}
+.sydlg .syt th small{display:block;font-weight:400;color:var(--muted);font-size:10.5px}
+.sydlg .syt td{text-align:center;padding:6px 0;border-radius:4px;min-width:30px;color:var(--fg)}
+.sydlg .syn{color:var(--muted);font-family:var(--font-ui)}
+.sydlg .syl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:12.5px;margin-bottom:10px}
+.sydlg .syl li{display:contents}
+
+/* Hilfe */
+dialog.hpdlg{max-width:640px;width:calc(100% - 24px);max-height:calc(100dvh - 32px);display:flex;flex-direction:column;gap:10px;padding:16px 18px}
+dialog.hpdlg:not([open]){display:none}
+.hpdlg .hph{display:flex;align-items:center}.hpdlg .hph h3{flex:1;margin:0}
+.hpdlg .x{border:0;background:none;color:var(--muted);font-size:24px;line-height:1;cursor:pointer;padding:0 4px}
+.hpdlg #hpQ{font:inherit;font-size:16px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--fg);width:100%;box-sizing:border-box}
+.hpdlg .hpc{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none;flex:none}
+.hpdlg .hpc button{flex:none;border:1px solid var(--line);background:var(--field);color:var(--fg);border-radius:999px;padding:5px 11px;font:500 12.5px var(--font-ui);cursor:pointer}
+.hpdlg .hpc button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.hpdlg .hpl{overflow:auto;flex:1;min-height:120px;display:flex;flex-direction:column;gap:6px;-webkit-overflow-scrolling:touch}
+.hpdlg details{border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.hpdlg summary{cursor:pointer;padding:9px 12px;font:600 13.5px var(--font-ui);list-style:none;display:flex;flex-direction:column;gap:1px}
+.hpdlg summary::-webkit-details-marker{display:none}
+.hpdlg summary small{font:500 10.5px var(--font-ui);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.hpdlg details>div{padding:0 12px 11px;font-size:13.5px;line-height:1.5}
+.hpdlg h5{margin:10px 0 4px;font:600 11px var(--font-ui);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.hpdlg ul.hpk{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:13px}
+.hpdlg ul.hpk li{display:contents}
+.hpdlg .hpf{justify-content:space-between;flex:none}
+@media (max-width:560px){ dialog.hpdlg{width:100%;max-width:none;height:100dvh;max-height:none;margin:0;border-radius:0;padding:calc(12px + env(safe-area-inset-top,0px)) 14px calc(12px + env(safe-area-inset-bottom,0px))} .hpdlg ul.hpk{grid-template-columns:1fr} .hpdlg ul.hpk li span:first-child{margin-top:6px;font-weight:600} }
+dialog.intro{max-width:420px;text-align:center;padding:24px 22px 18px}
+.intro .ins svg{width:72px;height:72px;fill:none;stroke:var(--accent);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;margin-bottom:6px}
+.intro .ins h3{font-size:19px;margin:0 0 8px}
+.intro .ins p{margin:0 auto;max-width:34ch;line-height:1.5;color:var(--fg);min-height:4.5em}
+.intro .indots{display:flex;justify-content:center;gap:6px;margin:14px 0}
+.intro .indots span{width:7px;height:7px;border-radius:50%;background:var(--line)}.intro .indots span.on{background:var(--accent);width:18px;border-radius:4px}
+.intro .inb{gap:8px;align-items:center}
+.btn.lnk{background:none;border:0;color:var(--muted);padding-left:0}
+.hptip{position:fixed;z-index:200;max-width:min(280px,calc(100vw - 16px));background:var(--fg);color:var(--panel);font:500 13px/1.35 var(--font-ui);padding:7px 10px;border-radius:9px;box-shadow:0 4px 14px rgb(0 0 0 / .25);pointer-events:none}
+
+/* Marke */
+svg.brandmk{color:var(--accent);fill:none}
+.intro .ins svg.brandmk{width:84px;height:84px;stroke:none}
+.zz{color:#C9773A}
+dialog.help h3.gzh{display:flex;align-items:center;gap:10px}
+dialog.help h3.gzh svg.brandmk{width:30px;height:30px;flex:none}
 
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
@@ -2306,11 +2397,12 @@ function buildEnv(){ setTimeout(()=>{ try{ applyEnvK(); wake(); }catch(e){} },0)
   if(lvl>0 && !low){ const wallM=envMat('#ebe6dc',0.92), w=b.x1-b.x0, d=b.z1-b.z0;
     envBox(envG,(b.x0+b.x1)/2,GROUND,(b.z0+b.z1)/2,w,-fe-2-GROUND,d,0,wallM); }
   const R=rngFrom('baeume'+Math.round(b.x1)+Math.round(b.z1)), cx=(b.x0+b.x1)/2, cz=(b.z0+b.z1)/2, rad=Math.max(b.x1-b.x0,b.z1-b.z0)/2+500;
+  const TR=(window.ENV_TREES=[]);
   for(let i=0;i<(fe<0?0:9);i++){ const a=i/9*Math.PI*2+R()*0.5, rr=rad+R()*900, x=cx+Math.cos(a)*rr, z=cz+Math.sin(a)*rr, h=600+R()*700, r=180+R()*160;
-    const gr=new THREE.Group(); gr.position.set(x,GROUND,z); envG.add(gr);
+    const gr=new THREE.Group(); gr.position.set(x,GROUND,z); envG.add(gr); const T0={x,z,r,h,ms:[],fade:false}; TR.push(T0);
     const tr=new THREE.Mesh(new THREE.CylinderGeometry(r*0.07,r*0.1,h*0.55,8), envMat('#5b4a3c')); tr.position.y=h*0.275; tr.castShadow=true; gr.add(tr);
     const n=3+((R()*3)|0); for(let k=0;k<n;k++){ const q=r*(0.55+R()*0.4), m=new THREE.Mesh(new THREE.IcosahedronGeometry(q,1), new THREE.MeshStandardMaterial({color:new THREE.Color().setHSL(0.25+R()*0.06,0.38+R()*0.15,0.17+R()*0.07),roughness:0.95,flatShading:true}));
-      m.position.set((R()-0.5)*r*0.9, h*0.62+(R()-0.3)*r*0.6, (R()-0.5)*r*0.9); m.castShadow=true; gr.add(m); } }
+      m.position.set((R()-0.5)*r*0.9, h*0.62+(R()-0.3)*r*0.6, (R()-0.5)*r*0.9); m.castShadow=true; gr.add(m); T0.ms.push(m.material); } }
   streetLights.length=0;
   // Himmel
   if(!skyMesh){ const sg=new THREE.SphereGeometry(1000,32,16), sm=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,
@@ -2841,7 +2933,7 @@ async function saveFile(name, data, what){
 $('tShot').onclick=takePhoto;
 $('fileSave').onclick=()=>{ const v=vActive(); saveFile(((v&&v.name)||'Wohnung').replace(/[\\/:*?"<>|]+/g,'-')+'.json', JSON.stringify(state,null,1), 'Datei'); };
 $('fileLoad').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ let o; try{ o=JSON.parse(t); }catch(_){ $('fileMsg').textContent='Die Datei ist kein gültiger Stand.'; return; }
-  if(!valid(o)){ $('fileMsg').textContent='Die Datei ist kein gültiger Stand.'; return; } vNew(f.name.replace(/\.json$/i,''), false, o); fillCamSel(); $('fileMsg').textContent='Als neue Variante geladen.'; e.target.value=''; }); });
+  if(!valid(o)){ $('fileMsg').textContent='Die Datei ist kein gültiger Stand.'; return; } vNew(f.name.replace(/\.json$/i,''), false, o); fillCamSel(); $('fileMsg').textContent='Als neues Projekt geladen.'; e.target.value=''; }); });
 // Rückgängig / Wiederholen
 $('tRedo').onclick=redo;
 function updUndoBtns(){ $('tUndo').disabled=!hist.length; $('tRedo').disabled=!redoStack.length; }
@@ -3978,13 +4070,13 @@ function mineRender(){ const el=$('mineBox'); if(!el) return; let ok=0, bad=0, w
     return `<div class="mv-row"><div class="mv-n"><b>${esc(m.name)}</b><small>${m.w} × ${m.d} × ${m.h} cm</small>${tags}</div><div class="mv-b"><button class="btn sm" data-mv="place" data-id="${m.id}" title="In dieses Projekt stellen">Aufstellen</button><button class="btn sm" data-mv="del" data-id="${m.id}" aria-label="Aus meinen Möbeln entfernen">×</button></div></div>`; }).join('');
   el.innerHTML=`<h2>Umzugs-Check: meine Möbel</h2>
     <p class="muted">Erfasse deine eigenen Möbel einmal und nimm sie in jede Wohnung mit. Grundrizz prüft, ob sie durch die Türen passen und in welchem Raum sie Platz haben.</p>
-    <div class="row wrap"><button class="btn sm" data-mv="sel">Ausgewählte merken</button><button class="btn sm" data-mv="all">Alle aus diesem Projekt merken</button><button class="btn sm" data-mv="new">+ Von Hand</button></div>
+    <div class="row wrap"><button class="btn sm" data-mv="sel" title="Die in der Ansicht ausgewählten Möbel als deine eigenen merken">Ausgewählte merken</button><button class="btn sm" data-mv="all" title="Alle Möbel dieses Projekts als deine eigenen merken">Alle aus diesem Projekt merken</button><button class="btn sm" data-mv="new" title="Ein Möbel mit Maßen von Hand anlegen">+ Von Hand</button></div>
     <form id="mvForm" class="mv-form" hidden><label class="f w2">Name<input id="mvN" placeholder="z. B. Omas Kommode" autocomplete="off"></label>
       <label class="f">Breite<input id="mvW" type="number" inputmode="decimal" min="5" placeholder="cm"></label><label class="f">Tiefe<input id="mvD" type="number" inputmode="decimal" min="5" placeholder="cm"></label><label class="f">Höhe<input id="mvH" type="number" inputmode="decimal" min="5" placeholder="cm"></label>
       <label class="f">Art<select id="mvK">${MINE_KINDS.map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label><label class="f">Farbe<input id="mvC" type="color" value="#8a7a66"></label>
       <div class="row"><button class="btn pri sm" type="submit">Merken</button><button class="btn sm" type="button" data-mv="cancel">Abbrechen</button></div></form>
     ${MINE.length?`<div class="mv-sum">${MINE.length} Möbel · <span class="ok">${ok} stehen gut</span>${warn?` · <span class="warn">${warn} noch prüfen</span>`:''}${bad?` · <span class="bad">${bad} passen nicht</span>`:''}</div>
-    <div class="list mv-list">${rows}</div>${placed<MINE.length?`<div class="row"><button class="btn pri" data-mv="placeall">Alle in diese Wohnung stellen</button></div>`:''}`
+    <div class="list mv-list">${rows}</div>${placed<MINE.length?`<div class="row"><button class="btn pri" data-mv="placeall" title="Alle gemerkten Möbel neben diese Wohnung stellen">Alle in diese Wohnung stellen</button></div>`:''}`
     :'<p class="muted">Noch keine eigenen Möbel gemerkt. Wähle Möbel in der Ansicht aus und tippe auf „Ausgewählte merken“, oder lege sie von Hand mit Maßen an.</p>'}`; }
 { const box=document.createElement('div'); box.className='box'; box.id='mineBox'; const pm=$('p-moebel'); pm.insertBefore(box, pm.children[2]||null);
   box.addEventListener('click',e=>{ const b=e.target.closest('[data-mv]'); if(!b) return; const a=b.dataset.mv;
@@ -4001,6 +4093,406 @@ function mineRender(){ const el=$('mineBox'); if(!el) return; let ok=0, bad=0, w
 { const r0=renderAll; renderAll=function(){ r0.apply(this,arguments); try{ mineRender(); }catch(e){ console.warn(e); } }; }
 mineRender();
 window.__mine={get:()=>MINE,check:mineCheck,place:minePlace,add:mineAdd};
+
+// ---------- Foto-Vorlage: Grundriss-Foto unterlegen, Maßstab setzen, nachzeichnen ----------
+const UF={img:{}, mode:null, pts:[], drag:null};
+function ufKey(){ return state.floorId||'f0'; }
+function ufCur(){ return state.under && state.under[ufKey()] || null; }
+function ufSrc(u){ if(!u) return null; if(UF.img[u.id]) return UF.img[u.id]; try{ const s=localStorage.getItem(LS+'.img.'+u.id); if(s){ UF.img[u.id]=s; return s; } }catch(e){} return null; }
+function ufLoad(file){ if(!file || !/^image\//.test(file.type)){ toast('Bitte ein Bild wählen (Foto oder Screenshot)'); return; }
+  const fr=new FileReader(); fr.onload=()=>{ const im=new Image(); im.onload=()=>{ const M=1800, k=Math.min(1,M/Math.max(im.width,im.height)), cv=document.createElement('canvas');
+      cv.width=Math.round(im.width*k); cv.height=Math.round(im.height*k); const c=cv.getContext('2d'); c.fillStyle='#fff'; c.fillRect(0,0,cv.width,cv.height); c.drawImage(im,0,0,cv.width,cv.height);
+      const src=cv.toDataURL('image/jpeg',0.82), id=uid('u'), old=ufCur(); UF.img[id]=src;
+      let stored=true; try{ localStorage.setItem(LS+'.img.'+id,src); }catch(e){ stored=false; }
+      if(old){ try{ localStorage.removeItem(LS+'.img.'+old.id); }catch(e){} }
+      // erst einmal so groß wie der vorhandene Grundriss, sonst 10 m breit
+      let x=0, z=0, w=1000; if(state.rooms.length){ const b=bounds(); w=Math.max(400,b.x1-b.x0); x=b.x0; z=b.z0; }
+      snap(); state.under=state.under||{}; state.under[ufKey()]={id, x, z, w, ar:cv.height/cv.width, op:0.55, show:true}; persist();
+      ufMode('scale'); edDraw(); ufPanel();
+      if(!stored) toast('Foto ist zu groß zum Speichern. Es bleibt sichtbar, bis du die Seite schließt.'); };
+    im.onerror=()=>toast('Das Bild ließ sich nicht öffnen'); im.src=fr.result; }; fr.readAsDataURL(file); }
+function ufMode(m){ UF.mode=m; if(m) { const el=$('ufBox'); if(el) el.classList.remove('min'); } UF.pts=[]; ufPanel(); ufHint(); edDraw(); }
+function ufHint(){ const h=$('dHint'); if(!h) return; if(UF.mode==='scale') h.textContent=UF.pts.length<2?'Maßstab: Tippe auf den Anfang und das Ende einer Wand, deren Länge du kennst':'Jetzt die echte Länge eintragen'; else if(UF.mode==='move') h.textContent='Foto mit dem Finger oder der Maus verschieben'; }
+function ufPanel(){ let el=$('ufBox'); const u=ufCur();
+  if(!el){ el=document.createElement('div'); el.id='ufBox'; el.className='ufbox'; edEl.appendChild(el);
+    el.addEventListener('click',e=>{ const b=e.target.closest('[data-uf]'); if(!b) return; const a=b.dataset.uf, u=ufCur();
+      if(a==='scale') ufMode(UF.mode==='scale'?null:'scale');
+      if(a==='move') ufMode(UF.mode==='move'?null:'move');
+      if(a==='hide' && u){ u.show=!u.show; persist(); edDraw(); ufPanel(); }
+      if(a==='del' && u){ snap(); try{ localStorage.removeItem(LS+'.img.'+u.id); }catch(e){} delete state.under[ufKey()]; persist(); ufMode(null); toast('Foto entfernt'); }
+      if(a==='ok'){ const L=+$('ufLen').value; if(!(L>0)){ toast('Bitte die Länge in cm eintragen'); return; } ufApplyScale(L); }
+      if(a==='min') { el.classList.toggle('min'); ufPanel(); }
+      if(a==='new') $('ufFile').click(); });
+    el.addEventListener('input',e=>{ if(e.target.id==='ufOp'){ const u=ufCur(); if(u){ u.op=+e.target.value; edDraw(); } } });
+    el.addEventListener('change',e=>{ if(e.target.id==='ufOp') persist(); }); }
+  el.hidden=!u || !ED.on; if(el.hidden) return;
+  const need=UF.mode==='scale' && UF.pts.length===2;
+  el.innerHTML=`<div class="ufh"><b>Vorlage</b><button type="button" class="lnk" data-uf="hide">${u.show!==false?'Ausblenden':'Zeigen'}</button><button type="button" class="x" data-uf="min" aria-label="${el.classList.contains('min')?'Aufklappen':'Einklappen'}">${el.classList.contains('min')?'▾':'▴'}</button></div>
+    ${need?`<label class="uff">Echte Länge dieser Strecke<span><input id="ufLen" type="number" inputmode="decimal" min="10" placeholder="z. B. 420"> cm</span></label><div class="ufr"><button type="button" class="btn pri sm" data-uf="ok">Maßstab übernehmen</button><button type="button" class="btn sm" data-uf="scale">Abbrechen</button></div>`
+    :`<div class="ufr"><button type="button" class="btn sm${UF.mode==='scale'?' on':''}" data-uf="scale" title="Zwei Punkte antippen und die echte Länge eintragen">Maßstab</button><button type="button" class="btn sm${UF.mode==='move'?' on':''}" data-uf="move" title="Foto verschieben">Verschieben</button><button type="button" class="btn sm" data-uf="new" title="Anderes Foto wählen">Neu</button><button type="button" class="btn sm" data-uf="del" title="Foto entfernen">Entfernen</button></div>
+      <label class="uff">Deutlichkeit<input id="ufOp" type="range" min="0.15" max="1" step="0.05" value="${u.op}"></label>
+      <small class="muted">${u.scaled?'Maßstab gesetzt. Jetzt mit „Raum“ die Räume auf dem Foto nachziehen.':'Tipp: Erst den Maßstab setzen, dann die Räume nachziehen.'}</small>`}`;
+  if(need) setTimeout(()=>{ const i=$('ufLen'); if(i) i.focus(); },30); }
+function ufApplyScale(L){ const u=ufCur(); if(!u || UF.pts.length<2) return; const [p,q]=UF.pts, d=Math.hypot(q[0]-p[0],q[1]-p[1]); if(d<1) return; const k=L/d;
+  snap(); u.x=p[0]-(p[0]-u.x)*k; u.z=p[1]-(p[1]-u.z)*k; u.w*=k; u.scaled=true; persist(); $('ufBox').classList.add('min'); ufMode(null); edFit(); ufFitPhoto(); toast('Maßstab gesetzt. Jetzt die Räume nachziehen.'); edSetTool('room'); }
+function ufFitPhoto(){ const u=ufCur(); if(!u) return; const R=edRect(), P=edPads(), h=u.w*u.ar; const s=Math.min((R.width-P.left-P.right)/u.w,(R.height-P.top-P.bot)/h);
+  if(state.rooms.length) return edDraw(); ED.s=Math.max(0.03,Math.min(5,s)); ED.ox=P.left+(R.width-P.left-P.right-u.w*ED.s)/2-u.x*ED.s; ED.oy=P.top+(R.height-P.top-P.bot-h*ED.s)/2-u.z*ED.s; edDraw(); }
+// Zeichnen: Foto unter das Raster legen, Messpunkte darüber
+{ const d0=edDraw; edDraw=function(){ d0.apply(this,arguments); if(!ED.on) return; const u=ufCur(); if(!u) return; if(UF.mode) ufHint();
+    const src=u.show!==false && ufSrc(u); if(src){ const [a,b]=w2s(u.x,u.z), W=u.w*ED.s, H=W*u.ar;
+      edSvg.insertAdjacentHTML('afterbegin',`<image class="ufimg" href="${src}" x="${a.toFixed(1)}" y="${b.toFixed(1)}" width="${W.toFixed(1)}" height="${H.toFixed(1)}" preserveAspectRatio="none" opacity="${u.op}"/>`);
+      if(UF.mode==='move') edSvg.insertAdjacentHTML('beforeend',`<rect class="ufmv" x="${a.toFixed(1)}" y="${b.toFixed(1)}" width="${W.toFixed(1)}" height="${H.toFixed(1)}"/>`); }
+    if(UF.mode==='scale'){ let s=''; const P=UF.pts.map(p=>w2s(p[0],p[1]));
+      if(P.length===2) s+=`<line class="ufl" x1="${P[0][0]}" y1="${P[0][1]}" x2="${P[1][0]}" y2="${P[1][1]}"/>`;
+      P.forEach(p=>{ s+=`<circle class="ufp" cx="${p[0]}" cy="${p[1]}" r="7"/>`; }); edSvg.insertAdjacentHTML('beforeend',s); } }; }
+// Eingaben abfangen, solange Maßstab oder Verschieben aktiv ist (zwei Finger zoomen weiter)
+edSvg.addEventListener('pointerdown',e=>{ if(!UF.mode || !ufCur() || ED.pts.size>0 || e.isPrimary===false) return; const [px,py]=ptr(e), w=s2w(px,py);
+  if(UF.mode==='scale'){ e.stopImmediatePropagation(); e.preventDefault(); if(UF.pts.length>=2) UF.pts=[]; UF.pts.push(w); ufHint(); ufPanel(); edDraw(); }
+  else if(UF.mode==='move'){ e.stopImmediatePropagation(); e.preventDefault(); const u=ufCur(); edSvg.setPointerCapture(e.pointerId); UF.drag={pid:e.pointerId,w0:w,x:u.x,z:u.z}; snap(); } },true);
+edSvg.addEventListener('pointermove',e=>{ const D=UF.drag; if(!D || D.pid!==e.pointerId) return; e.stopImmediatePropagation(); const u=ufCur(); if(!u) return; const [px,py]=ptr(e), w=s2w(px,py); u.x=D.x+w[0]-D.w0[0]; u.z=D.z+w[1]-D.w0[1]; edDraw(); },true);
+['pointerup','pointercancel'].forEach(t=>edSvg.addEventListener(t,e=>{ if(!UF.drag || UF.drag.pid!==e.pointerId) return; e.stopImmediatePropagation(); UF.drag=null; persist(); },true));
+// Knopf in der Werkzeugleiste und Dateiauswahl
+{ const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*'; inp.id='ufFile'; inp.hidden=true; edEl.appendChild(inp);
+  inp.addEventListener('change',()=>{ ufLoad(inp.files[0]); inp.value=''; });
+  const b=document.createElement('button'); b.type='button'; b.id='ufBtn'; b.title='Foto eines Grundrisses unterlegen und nachzeichnen';
+  b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 8"/></svg>Foto';
+  b.onclick=()=>{ if(ufCur()){ const el=$('ufBox'); if(el && !el.hidden){ ufMode(null); el.classList.toggle('min'); ufPanel(); return; } } inp.click(); };
+  const sep=$('dTools').querySelector('.sep'); $('dTools').insertBefore(b,sep); }
+// Ansicht wechseln, Stockwerk wechseln: Panel anpassen
+{ const s0=edShow; edShow=function(on){ s0.apply(this,arguments); if(!on){ UF.mode=null; UF.pts=[]; } ufPanel(); }; }
+{ const r0=renderAll; renderAll=function(){ r0.apply(this,arguments); try{ ufPanel(); }catch(e){} }; }
+{ const t0=edSetTool; edSetTool=function(t){ if(UF.mode && t!==ED.tool){ UF.mode=null; UF.pts=[]; ufPanel(); } return t0.apply(this,arguments); }; }
+window.__uf={load:ufLoad,cur:ufCur,mode:ufMode,scale:ufApplyScale,st:UF};
+
+// ---------- Raum ausmessen: geführte Eingabe, auf Android optional mit Kamera (WebXR) ----------
+let AR_OK=false; (async()=>{ try{ AR_OK=!!(navigator.xr && await navigator.xr.isSessionSupported('immersive-ar')); }catch(e){ AR_OK=false; } })();
+async function arMeasure(onDone){ let ov=$('arOv'); if(!ov){ ov=document.createElement('div'); ov.id='arOv'; ov.className='arov'; document.body.appendChild(ov); }
+  ov.innerHTML=`<div class="arx" aria-hidden="true"></div><div class="art" id="arT">Handy langsam bewegen, bis der Boden erkannt ist</div><div class="arb"><button type="button" class="btn pri" id="arSet" disabled>Punkt setzen</button><button type="button" class="btn" id="arEnd">Abbrechen</button></div>`;
+  ov.hidden=false; ov.addEventListener('beforexrselect',e=>e.preventDefault());
+  let session; try{ session=await navigator.xr.requestSession('immersive-ar',{requiredFeatures:['hit-test'],optionalFeatures:['dom-overlay'],domOverlay:{root:ov}}); }
+  catch(e){ ov.hidden=true; toast('Die Kamera-Messung ließ sich nicht starten. Bitte die Länge eintippen.'); return; }
+  const cv=document.createElement('canvas'), gl=cv.getContext('webgl',{xrCompatible:true,alpha:true}); const P=[]; let cur=null, done=false;
+  try{ await gl.makeXRCompatible?.(); }catch(e){}
+  session.updateRenderState({baseLayer:new XRWebGLLayer(session,gl)});
+  const ref=await session.requestReferenceSpace('local'), view=await session.requestReferenceSpace('viewer'), hit=await session.requestHitTestSource({space:view});
+  const T=$('arT'), S=$('arSet'); const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y,a.z-b.z)*100;
+  const finish=v=>{ if(done) return; done=true; try{ hit.cancel(); }catch(e){} session.end().catch(()=>{}); ov.hidden=true; if(v) onDone(Math.round(v)); };
+  $('arEnd').onclick=()=>finish(null);
+  S.onclick=()=>{ if(!cur) return; P.push(cur); if(P.length===2) finish(dist(P[0],P[1])); };
+  session.addEventListener('end',()=>{ done=true; ov.hidden=true; });
+  const frame=(t,f)=>{ if(done) return; session.requestAnimationFrame(frame); const L=session.renderState.baseLayer; gl.bindFramebuffer(gl.FRAMEBUFFER,L.framebuffer); gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
+    const r=f.getHitTestResults(hit); if(r.length){ const p=r[0].getPose(ref).transform.position; cur={x:p.x,y:p.y,z:p.z}; S.disabled=false;
+      T.textContent=P.length?`${Math.round(dist(P[0],cur))} cm · jetzt auf den Endpunkt zielen`:'Kreuz auf den Anfang der Wand richten (am Boden in der Ecke)'; }
+    else { cur=null; S.disabled=true; T.textContent='Handy langsam bewegen, bis der Boden erkannt ist'; } };
+  session.requestAnimationFrame(frame); }
+
+const MS_WALL=[['N','oben'],['O','rechts'],['S','unten'],['W','links']];
+function msDlg(){ let d=$('msDlg'); if(!d){ d=document.createElement('dialog'); d.className='help msdlg'; d.id='msDlg'; document.body.appendChild(d);
+    d.addEventListener('click',e=>{ const b=e.target.closest('[data-ms]'); if(!b) return; const a=b.dataset.ms;
+      if(a==='close') d.close();
+      if(a==='add'){ d.querySelector('.msops').insertAdjacentHTML('beforeend',msOpRow()); }
+      if(a==='rm') b.closest('.msop').remove();
+      if(a==='ar'){ const inp=$(b.dataset.for); arMeasure(v=>{ inp.value=v; inp.dispatchEvent(new Event('input')); toast(v+' cm gemessen'); }); }
+      if(a==='make') msMake(); });
+    d.addEventListener('input',msPrev); }
+  const ar=id=>AR_OK?`<button type="button" class="btn sm msar" data-ms="ar" data-for="${id}" title="Mit der Kamera messen">Mit Kamera messen</button>`:'';
+  const hasRooms=state.rooms.length>0;
+  d.innerHTML=`<h3>Raum ausmessen</h3>
+    <p class="muted msintro">Miss mit Zollstock oder Laser die Innenmaße von Wand zu Wand. Grundrizz baut daraus den Raum mit Türen und Fenstern.${AR_OK?' Auf diesem Handy kannst du auch mit der Kamera messen. Das ist bequem, aber nur auf etwa 2 bis 5 cm genau.':''}</p>
+    <div class="msg"><label class="f w2">Name<input id="msN" list="msNames" placeholder="z. B. Wohnzimmer" autocomplete="off"></label>
+      <label class="f">Breite (Wand oben)<span class="msin"><input id="msW" type="number" inputmode="decimal" min="40" placeholder="cm">${ar('msW')}</span></label>
+      <label class="f">Tiefe (Wand links)<span class="msin"><input id="msD" type="number" inputmode="decimal" min="40" placeholder="cm">${ar('msD')}</span></label>
+      <label class="f">Raumhöhe<span class="msin"><input id="msH" type="number" inputmode="decimal" min="150" value="${state.roomH||250}">${ar('msH')}</span></label>
+      ${hasRooms?`<label class="f">Lage<select id="msPos"><option value="r">rechts anbauen</option><option value="u">unten anbauen</option><option value="f">frei daneben</option></select></label>`:''}</div>
+    <datalist id="msNames">${['Wohnzimmer','Schlafzimmer','Küche','Bad','Flur','Arbeitszimmer','Kinderzimmer','Gästezimmer','Esszimmer','Abstellraum','WC','Balkon'].map(n=>`<option value="${n}">`).join('')}</datalist>
+    <h4>Türen, Fenster, Durchgänge</h4>
+    <p class="muted msintro">Abstand messen von der linken Ecke (bei den Wänden links und rechts: von der oberen Ecke) bis zur Kante der Öffnung.</p>
+    <div class="msops"></div><button type="button" class="btn sm" data-ms="add">+ Öffnung</button>
+    <svg class="msprev" id="msPrev" viewBox="0 0 200 140" aria-label="Vorschau"></svg>
+    <div class="row msbtn"><button type="button" class="btn pri" data-ms="make">Raum anlegen</button><button type="button" class="btn" data-ms="close">Abbrechen</button></div>`;
+  d.querySelector('.msops').insertAdjacentHTML('beforeend',msOpRow('tuer','S'));
+  try{ d.showModal(); }catch(e){ d.setAttribute('open',''); } msPrev(); setTimeout(()=>$('msN').focus(),50); }
+function msOpRow(t,s){ t=t||'fenster'; s=s||'N';
+  return `<div class="msop"><select class="mst" aria-label="Art">${[['tuer','Tür'],['fenster','Fenster'],['offen','Durchgang']].map(([k,v])=>`<option value="${k}"${k===t?' selected':''}>${v}</option>`).join('')}</select>
+    <select class="msw" aria-label="Wand">${MS_WALL.map(([k,v])=>`<option value="${k}"${k===s?' selected':''}>Wand ${v}</option>`).join('')}</select>
+    <label class="msl msa0">Abstand (cm)<input class="msa" type="number" inputmode="decimal" min="0" placeholder="z. B. 40"></label><label class="msl msb0">Breite (cm)<input class="msb" type="number" inputmode="decimal" min="20" placeholder="z. B. 90"></label>
+    <button type="button" class="x" data-ms="rm" aria-label="Öffnung entfernen">×</button></div>`; }
+function msRead(){ const w=+$('msW').value, d=+$('msD').value, h=+$('msH').value||state.roomH||250;
+  const ops=[...document.querySelectorAll('#msDlg .msop')].map(el=>({type:el.querySelector('.mst').value, side:el.querySelector('.msw').value, pos:+el.querySelector('.msa').value, width:+el.querySelector('.msb').value})).filter(o=>o.width>0);
+  return {w,d,h,ops,name:$('msN').value.trim()}; }
+function msPrev(){ const sv=$('msPrev'); if(!sv) return; const q=msRead(); if(!(q.w>0&&q.d>0)){ sv.innerHTML='<text x="100" y="74" text-anchor="middle" class="mst0">Breite und Tiefe eintragen</text>'; return; }
+  const k=Math.min(170/q.w,110/q.d), W=q.w*k, D=q.d*k, x0=(200-W)/2, y0=(140-D)/2; let g=`<rect x="${x0}" y="${y0}" width="${W}" height="${D}" class="msr"/>`;
+  q.ops.forEach(o=>{ const hz=o.side==='N'||o.side==='S', len=hz?q.w:q.d, a=Math.max(0,Math.min(len-o.width,o.pos||0))*k, b=a+Math.min(o.width,len)*k; const cls=o.type==='fenster'?'msf':o.type==='tuer'?'mst1':'mso';
+    if(hz){ const y=o.side==='N'?y0:y0+D; g+=`<line x1="${x0+a}" y1="${y}" x2="${x0+b}" y2="${y}" class="${cls}"/>`; } else { const x=o.side==='W'?x0:x0+W; g+=`<line x1="${x}" y1="${y0+a}" x2="${x}" y2="${y0+b}" class="${cls}"/>`; } });
+  g+=`<text x="100" y="${y0-4}" text-anchor="middle" class="mst0">${Math.round(q.w)} cm</text><text x="${x0-4}" y="${y0+D/2}" text-anchor="end" class="mst0">${Math.round(q.d)}</text>`;
+  sv.innerHTML=g; }
+function msMake(){ const q=msRead(); if(!(q.w>=40&&q.d>=40)){ toast('Bitte Breite und Tiefe in cm eintragen (mindestens 40)'); return; }
+  const t=state.wall, pos=$('msPos')?$('msPos').value:'r'; let x=0, z=0;
+  if(state.rooms.length){ const X1=Math.max(...state.rooms.map(r=>r.x+r.w)), Z0=Math.min(...state.rooms.map(r=>r.z)), Z1=Math.max(...state.rooms.map(r=>r.z+r.d)), X0=Math.min(...state.rooms.map(r=>r.x));
+    if(pos==='r'){ x=X1+t; z=Z0; } else if(pos==='u'){ x=X0; z=Z1+t; } else { x=X1+t+150; z=Z0; } }
+  const f=floorFor(q.name||''), r={id:uid('r'),name:q.name||('Raum '+(state.rooms.length+1)),x,z,w:Math.round(q.w),d:Math.round(q.d),h:Math.round(q.h),floor:f[0],pattern:f[1],auto:!q.name};
+  snap(); state.rooms.push(r);
+  q.ops.forEach(o=>{ const len=(o.side==='N'||o.side==='S')?r.w:r.d, w=Math.min(o.width,len), p=Math.max(0,Math.min(len-w,o.pos||0));
+    state.openings.push({id:uid('o'),roomId:r.id,side:o.side,type:o.type,pos:p,width:w,sill:o.type==='fenster'?90:0,height:o.type==='tuer'?205:o.type==='fenster'?130:205}); });
+  persist(); $('msDlg').close();
+  if(ED.on){ ED.dirty=true; edFit(); edSelect({t:'room',id:r.id}); } else { rebuildAll(); renderAll(); try{ fit(); }catch(e){} }
+  toast(r.name+' angelegt'+(q.ops.length?' mit '+q.ops.length+(q.ops.length===1?' Öffnung':' Öffnungen'):'')); }
+{ const b=document.createElement('button'); b.type='button'; b.id='msBtn'; b.title='Raum mit Maßen eingeben oder mit dem Handy ausmessen';
+  b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="8" rx="1"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/></svg>Messen';
+  b.onclick=msDlg; const sep=$('dTools').querySelector('.sep'); $('dTools').insertBefore(b,sep); }
+window.__ms={open:msDlg,make:msMake,ar:()=>AR_OK};
+
+// ---------- Scan-Import: RoomPlan-JSON (3D Scanner App, Polycam u. a.), DXF-Grundriss, OBJ-Raumscan ----------
+// Ergebnis: maßstabsgetreue Vorlage (wie Foto-Vorlage) und, wo erkennbar, gleich Räume, Türen, Fenster und Möbel.
+const SC_KIND={sofa:['sofa','Sofa'],bed:['bed','Bett'],table:['table','Tisch'],chair:['chair','Stuhl'],storage:['wardrobe','Schrank'],refrigerator:['fridge','Kühlschrank'],oven:['box','Backofen'],dishwasher:['box','Geschirrspüler'],washerDryer:['washer','Waschmaschine'],toilet:['wc','WC'],bathtub:['tub','Badewanne'],sink:['sink','Waschbecken'],stove:['box','Herd'],television:['tv','Fernseher'],fireplace:['box','Kamin'],stairs:['box','Treppe (Scan)']};
+const scRot=(p,c,s)=>[p[0]*c+p[1]*s, -p[0]*s+p[1]*c];
+function scAngle(segs){ // Hauptrichtung: längste Wände, auf 90° gefaltet
+  let sx=0, sy=0; segs.forEach(([a,b])=>{ const dx=b[0]-a[0], dz=b[1]-a[1], L=Math.hypot(dx,dz), t=Math.atan2(dz,dx)*4; sx+=Math.cos(t)*L; sy+=Math.sin(t)*L; }); return Math.atan2(sy,sx)/4; }
+function scAngleBox(pts){ let best=0, bA=Infinity; for(let d=0; d<90; d+=1){ const t=d*Math.PI/180, c=Math.cos(t), s=Math.sin(t); let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9; for(const p of pts){ const q=scRot(p,c,s); if(q[0]<x0)x0=q[0]; if(q[0]>x1)x1=q[0]; if(q[1]<z0)z0=q[1]; if(q[1]>z1)z1=q[1]; } const A=(x1-x0)*(z1-z0); if(A<bA){ bA=A; best=t; } } return best; }
+// Vorlage aus Linien (cm, schon gedreht) als Bild erzeugen
+function scUnder(segs, dots){ let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9; const grow=p=>{ x0=Math.min(x0,p[0]); x1=Math.max(x1,p[0]); z0=Math.min(z0,p[1]); z1=Math.max(z1,p[1]); };
+  segs.forEach(([a,b])=>{ grow(a); grow(b); }); (dots||[]).forEach(grow); if(!(x1>x0)) return null; const pad=40; x0-=pad; z0-=pad; x1+=pad; z1+=pad;
+  const k=Math.min(1800/(x1-x0),1800/(z1-z0),2), cv=document.createElement('canvas'); cv.width=Math.round((x1-x0)*k); cv.height=Math.round((z1-z0)*k);
+  const c=cv.getContext('2d'); c.fillStyle='#fff'; c.fillRect(0,0,cv.width,cv.height); c.fillStyle='rgba(30,40,60,.35)';
+  (dots||[]).forEach(p=>c.fillRect((p[0]-x0)*k-1,(p[1]-z0)*k-1,2,2));
+  c.strokeStyle='#1f2a33'; c.lineWidth=Math.max(2,10*k); c.lineCap='round'; c.beginPath(); segs.forEach(([a,b])=>{ c.moveTo((a[0]-x0)*k,(a[1]-z0)*k); c.lineTo((b[0]-x0)*k,(b[1]-z0)*k); }); c.stroke();
+  const src=cv.toDataURL('image/jpeg',0.85), id=uid('u'), old=ufCur(); UF.img[id]=src; try{ localStorage.setItem(LS+'.img.'+id,src); }catch(e){}
+  if(old){ try{ localStorage.removeItem(LS+'.img.'+old.id); }catch(e){} }
+  state.under=state.under||{}; state.under[ufKey()]={id,x:x0,z:z0,w:x1-x0,ar:cv.height/cv.width,op:0.5,show:true,scaled:true}; return true; }
+// Rechteck an die Wand legen: Seite + Position einer Öffnung bestimmen
+function scSide(r,p,width){ const d=[['N',Math.abs(p[1]-r.z)],['S',Math.abs(p[1]-(r.z+r.d))],['W',Math.abs(p[0]-r.x)],['O',Math.abs(p[0]-(r.x+r.w))]].sort((a,b)=>a[1]-b[1])[0];
+  if(d[1]>60) return null; const hz=d[0]==='N'||d[0]==='S', len=hz?r.w:r.d, w=Math.min(width,len), c=hz?p[0]-r.x:p[1]-r.z; return {side:d[0],pos:Math.max(0,Math.min(len-w,c-w/2)),width:w}; }
+function scPlaceOffset(){ // neben vorhandene Räume legen
+  if(!state.rooms.length) return [0,0]; return [Math.max(...state.rooms.map(r=>r.x+r.w))+200, Math.min(...state.rooms.map(r=>r.z))]; }
+function scRoomPlan(j){ const list=(Array.isArray(j.rooms)&&j.rooms.length?j.rooms:[j]).filter(r=>Array.isArray(r.walls)&&r.walls.length);
+  if(!list.length) throw new Error('Keine Wände in der Datei gefunden');
+  const P=t=>[t[12]*100,t[14]*100], D=t=>[t[0],t[2]], ang=t=>Math.atan2(t[2],t[0]);
+  const wallSeg=w=>{ const p=P(w.transform), d=D(w.transform), L=w.dimensions[0]*100/2; return [[p[0]-d[0]*L,p[1]-d[1]*L],[p[0]+d[0]*L,p[1]+d[1]*L]]; };
+  const all=[]; list.forEach(r=>r.walls.forEach(w=>all.push(wallSeg(w)))); const th=scAngle(all), c=Math.cos(th), s=Math.sin(th);
+  const R=p=>scRot(p,c,s); let segs=all.map(([a,b])=>[R(a),R(b)]);
+  const minX=Math.min(...segs.flat().map(p=>p[0])), minZ=Math.min(...segs.flat().map(p=>p[1])), [ox,oz]=scPlaceOffset(), T=p=>[p[0]-minX+ox+state.wall, p[1]-minZ+oz+state.wall];
+  segs=segs.map(([a,b])=>[T(a),T(b)]); const out={rooms:0,ops:0,items:0};
+  list.forEach((rm,i)=>{ const ws=rm.walls.map(w=>wallSeg(w).map(p=>T(R(p)))), xs=ws.flat().map(p=>p[0]), zs=ws.flat().map(p=>p[1]), ht=Math.max(...rm.walls.map(w=>w.dimensions[1]))*100;
+    const floorY=Math.min(...rm.walls.map(w=>w.transform[13]-w.dimensions[1]/2)), h2=0; // RoomPlan-Wände liegen auf der Innenfläche
+    const x=Math.min(...xs)+h2, z=Math.min(...zs)+h2, r={id:uid('r'),name:list.length>1?'Raum '+(state.rooms.length+1):'Gescannter Raum',x:Math.round(x),z:Math.round(z),w:Math.round(Math.max(...xs)-h2-x),d:Math.round(Math.max(...zs)-h2-z),h:Math.round(ht)||250,auto:true};
+    const f=floorFor(r.name); r.floor=f[0]; r.pattern=f[1]; if(r.w<40||r.d<40) return; state.rooms.push(r); out.rooms++;
+    [['doors','tuer'],['windows','fenster'],['openings','offen']].forEach(([key,type])=>(rm[key]||[]).forEach(o=>{ if(!o.transform||!o.dimensions) return; const p=T(R(P(o.transform))), q=scSide(r,p,o.dimensions[0]*100); if(!q) return;
+      const hh=o.dimensions[1]*100, sill=Math.max(0,(o.transform[13]-floorY)*100-hh/2);
+      state.openings.push(Object.assign({id:uid('o'),roomId:r.id,type,sill:type==='fenster'?Math.round(sill):0,height:Math.round(hh)||(type==='fenster'?130:205)},{side:q.side,pos:Math.round(q.pos),width:Math.round(q.width)})); out.ops++; }));
+    (rm.objects||[]).forEach(o=>{ if(!o.transform||!o.dimensions) return; const cat=o.category&&typeof o.category==='object'?Object.keys(o.category)[0]:String(o.category||''); const m=SC_KIND[cat]||['box','Objekt'];
+      const p=T(R(P(o.transform))), a=((ang(o.transform)-th)*180/Math.PI), rot=((Math.round(-a/90)*90)%360+360)%360;
+      state.items.push({id:uid('i'),name:m[1],kind:m[0],x:Math.round(p[0]),z:Math.round(p[1]),w:Math.max(5,Math.round(o.dimensions[0]*100)),d:Math.max(5,Math.round(o.dimensions[2]*100)),h:Math.max(5,Math.round(o.dimensions[1]*100)),rot,elev:Math.max(0,Math.round((o.transform[13]-floorY-o.dimensions[1]/2)*100)),color:'#a9a196'}); out.items++; }); });
+  scUnder(segs); return out; }
+function scDxf(txt){ const L=txt.split(/\r?\n/); const pr=[]; for(let i=0;i+1<L.length;i+=2) pr.push([L[i].trim(),L[i+1].trim()]);
+  let unit=0; for(let i=0;i<pr.length;i++) if(pr[i][1]==='$INSUNITS'){ const n=pr.slice(i+1,i+4).find(p=>p[0]==='70'); if(n) unit=+n[1]; break; }
+  const segs=[], polys=[]; let i=pr.findIndex(p=>p[0]==='2'&&p[1]==='ENTITIES'); if(i<0) i=0;
+  for(; i<pr.length; i++){ const [c,v]=pr[i]; if(c!=='0') continue;
+    if(v==='LINE'){ const e={}; for(let j=i+1;j<pr.length&&pr[j][0]!=='0';j++) e[pr[j][0]]=+pr[j][1]; if(e[10]!==undefined) segs.push([[e[10],e[20]],[e[11],e[21]]]); }
+    if(v==='LWPOLYLINE'){ const pts=[]; let cl=false; for(let j=i+1;j<pr.length&&pr[j][0]!=='0';j++){ if(pr[j][0]==='10') pts.push([+pr[j][1],0]); if(pr[j][0]==='20'&&pts.length) pts[pts.length-1][1]=+pr[j][1]; if(pr[j][0]==='70') cl=(+pr[j][1]&1)===1; }
+      for(let k=0;k+1<pts.length;k++) segs.push([pts[k],pts[k+1]]); if(cl&&pts.length>2){ segs.push([pts[pts.length-1],pts[0]]); polys.push(pts); } }
+    if(v==='POLYLINE'){ const pts=[]; let cl=false; for(let j=i+1;j<pr.length;j++){ if(pr[j][0]==='70'&&!pts.length) cl=(+pr[j][1]&1)===1; if(pr[j][0]==='0'&&pr[j][1]==='SEQEND') break; if(pr[j][0]==='0'&&pr[j][1]==='VERTEX') pts.push([0,0]); if(pts.length&&pr[j][0]==='10') pts[pts.length-1][0]=+pr[j][1]; if(pts.length&&pr[j][0]==='20') pts[pts.length-1][1]=+pr[j][1]; }
+      for(let k=0;k+1<pts.length;k++) segs.push([pts[k],pts[k+1]]); if(cl&&pts.length>2){ segs.push([pts[pts.length-1],pts[0]]); polys.push(pts); } } }
+  if(!segs.length) throw new Error('Keine Linien in der DXF-Datei gefunden');
+  let k={1:2.54,2:30.48,4:0.1,5:1,6:100}[unit]; if(!k){ const xs=segs.flat().map(p=>p[0]), ext=Math.max(...xs)-Math.min(...xs); k=ext>3000?0.1:ext<80?100:1; }
+  const C=p=>[p[0]*k,-p[1]*k]; let S=segs.map(([a,b])=>[C(a),C(b)]); const th=scAngle(S), c=Math.cos(th), s=Math.sin(th);
+  S=S.map(([a,b])=>[scRot(a,c,s),scRot(b,c,s)]); const minX=Math.min(...S.flat().map(p=>p[0])), minZ=Math.min(...S.flat().map(p=>p[1])), [ox,oz]=scPlaceOffset(), T=p=>[p[0]-minX+ox+40,p[1]-minZ+oz+40];
+  S=S.map(([a,b])=>[T(a),T(b)]); let rooms=0;
+  polys.forEach(pts=>{ const q=pts.map(p=>T(scRot(C(p),c,s))); if(q.length<4||q.length>5) return; const xs=q.map(p=>p[0]), zs=q.map(p=>p[1]), x=Math.min(...xs), z=Math.min(...zs), w=Math.max(...xs)-x, d=Math.max(...zs)-z;
+    const rect=q.every(p=>(Math.abs(p[0]-x)<3||Math.abs(p[0]-x-w)<3)&&(Math.abs(p[1]-z)<3||Math.abs(p[1]-z-d)<3)); if(!rect||w<80||d<80||w>3000||d>3000) return;
+    const f=floorFor(''); state.rooms.push({id:uid('r'),name:'Raum '+(state.rooms.length+1),x:Math.round(x),z:Math.round(z),w:Math.round(w),d:Math.round(d),h:state.roomH||250,floor:f[0],pattern:f[1],auto:true}); rooms++; });
+  scUnder(S); return {rooms,ops:0,items:0}; }
+function scObj(txt){ const V=[]; const re=/^v\s+(\S+)\s+(\S+)\s+(\S+)/gm; let m, n=0; while((m=re.exec(txt))){ if((n++)%2) continue; V.push([+m[1],+m[2],+m[3]]); if(V.length>400000) break; }
+  if(V.length<50) throw new Error('Zu wenige Punkte in der OBJ-Datei');
+  const ys=V.map(v=>v[1]).sort((a,b)=>a-b), q=f=>ys[Math.floor(f*(ys.length-1))]; let k=1; const ext=q(0.98)-q(0.02); k=ext>20?1:100; // Meter → cm
+  const fy=q(0.02), cy=q(0.98), H=(cy-fy)*k; const mid=V.filter(v=>v[1]>fy+(cy-fy)*0.25 && v[1]<fy+(cy-fy)*0.8).map(v=>[v[0]*k,v[2]*k]);
+  const sample=mid.filter((_,i)=>i%Math.max(1,Math.floor(mid.length/4000))===0), th=scAngleBox(sample), c=Math.cos(th), s=Math.sin(th);
+  let pts=mid.map(p=>scRot(p,c,s)); const xs=pts.map(p=>p[0]).sort((a,b)=>a-b), zs=pts.map(p=>p[1]).sort((a,b)=>a-b), qq=(a,f)=>a[Math.floor(f*(a.length-1))];
+  const x0=qq(xs,0.002), x1=qq(xs,0.998), z0=qq(zs,0.002), z1=qq(zs,0.998), [ox,oz]=scPlaceOffset(), T=p=>[p[0]-x0+ox+40,p[1]-z0+oz+40];
+  pts=pts.map(T); const step=Math.max(1,Math.floor(pts.length/150000)); const dots=pts.filter((_,i)=>i%step===0);
+  const f=floorFor(''), r={id:uid('r'),name:'Gescannter Raum',x:Math.round(T([x0,0])[0]),z:Math.round(T([0,z0])[1]),w:Math.round(x1-x0),d:Math.round(z1-z0),h:Math.round(H)||250,floor:f[0],pattern:f[1],auto:true};
+  if(r.w>=80&&r.d>=80&&r.w<4000&&r.d<4000) state.rooms.push(r);
+  scUnder([],dots); return {rooms:state.rooms.includes(r)?1:0,ops:0,items:0}; }
+function scLoad(file){ const ext=(file.name.split('.').pop()||'').toLowerCase();
+  if(ext==='usdz'||ext==='usd'){ toast('USDZ kann der Browser nicht lesen. Bitte in der Scan-App als OBJ, DXF oder RoomPlan-JSON exportieren.'); return; }
+  const fr=new FileReader(); fr.onload=()=>{ let res; snap(); const keep=JSON.stringify({r:state.rooms,o:state.openings,i:state.items,u:state.under});
+    try{ if(ext==='json'){ res=scRoomPlan(JSON.parse(fr.result)); } else if(ext==='dxf'){ res=scDxf(fr.result); } else if(ext==='obj'){ res=scObj(fr.result); } else throw new Error('Dieses Dateiformat kenne ich nicht');
+    }catch(e){ const k=JSON.parse(keep); state.rooms=k.r; state.openings=k.o; state.items=k.i; state.under=k.u; toast('Import ging nicht: '+(e.message||e)); return; }
+    persist(); if(!ED.on) edShow(true); ED.dirty=true; requestAnimationFrame(()=>{ edFit(); edDraw(); ufPanel(); const bx=$('ufBox'); if(bx){ bx.classList.add('min'); ufPanel(); } });
+    const parts=[]; if(res.rooms) parts.push(res.rooms+(res.rooms===1?' Raum':' Räume')); if(res.ops) parts.push(res.ops+' Türen/Fenster'); if(res.items) parts.push(res.items+' Möbel');
+    toast(parts.length?'Scan geladen: '+parts.join(', ')+'. Prüfe die Maße und zieh fehlende Räume auf der Vorlage nach.':'Scan als Vorlage geladen. Zieh die Räume jetzt mit „Raum“ nach.'); };
+  fr.onerror=()=>toast('Datei ließ sich nicht lesen'); fr.readAsText(file); }
+// Foto-Knopf nimmt auch Scans an
+{ const inp=$('ufFile'); inp.accept='image/*,.json,.dxf,.obj,.usdz'; const b=$('ufBtn'); b.title='Foto, Grundriss-Datei (DXF) oder Raumscan (RoomPlan-JSON, OBJ) unterlegen und nachzeichnen'; b.lastChild.textContent='Foto/Scan';
+  const l0=ufLoad; ufLoad=function(file){ if(file && /\.(json|dxf|obj|usdz?)$/i.test(file.name||'')) return scLoad(file); return l0.apply(this,arguments); }; }
+window.__sc={load:scLoad,rp:scRoomPlan,dxf:scDxf,obj:scObj};
+
+// ---------- Sonne übers Jahr: direkte Sonnenstunden je Raum und Monat (ohne Verschattung durch Nachbarhäuser) ----------
+const SY_MON=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+function syWindows(r){ const t=state.wall; return state.openings.filter(o=>o.roomId===r.id && (o.type==='fenster' || o.type==='tuer'&&['balkon','hebeschiebe'].includes(o.style))).filter(o=>{
+    const hz=o.side==='N'||o.side==='S', m=(hz?r.x:r.z)+o.pos+o.width/2, out=t+8;
+    const p=o.side==='N'?[m,r.z-out]:o.side==='S'?[m,r.z+r.d+out]:o.side==='W'?[r.x-out,m]:[r.x+r.w+out,m];
+    return !state.rooms.some(q=>q!==r && p[0]>q.x && p[0]<q.x+q.w && p[1]>q.z && p[1]<q.z+q.d); }); }
+function syRoom(r){ const W=syWindows(r); if(!W.length) return null; const N={N:[0,-1],S:[0,1],O:[1,0],W:[-1,0]}, nd=NORTH_DEG*Math.PI/180;
+  const mon=[], spans=[]; for(let m=0;m<12;m++){ const day=Math.floor(30.44*m+15); let min=0; const seg=[]; let prev=-99;
+    for(let c=240;c<=1320;c+=10){ const {alt,az}=sunPos(day,c); if(alt<0.05) continue; const pa=az-nd, sx=Math.sin(pa), sz=-Math.cos(pa);
+      if(W.some(o=>{ const n=N[o.side]; return sx*n[0]+sz*n[1]>0.12; })){ min+=10; if(c-prev>10) seg.push([c,c]); else seg[seg.length-1][1]=c; prev=c; } }
+    mon.push(min/60); spans.push(seg.length?seg:null); }
+  return {mon, spans, sides:[...new Set(W.map(o=>o.side))]}; }
+const syT=c=>Math.floor(c/60)+':'+String(c%60).padStart(2,'0');
+function syWhen(sp){ if(!sp) return 'keine direkte Sonne'; return sp.map(([a,b])=>{ const m=(a+b)/2, k=b-a>9*60?'fast den ganzen Tag,':b-a>5*60?'von':m<11*60?'morgens':m<14.5*60?'mittags':m<17.5*60?'nachmittags':'abends'; return `${k} ${syT(a)} bis ${syT(b+10)} Uhr`; }).join(', '); }
+function syOpen(){ let d=$('syDlg'); if(!d){ d=document.createElement('dialog'); d.className='help sydlg'; d.id='syDlg'; document.body.appendChild(d); d.addEventListener('click',e=>{ if(e.target.closest('[data-sy="close"]')) d.close(); }); }
+  const rows=state.rooms.map(r=>({r,s:syRoom(r)}));
+  const cell=h=>{ const k=Math.min(1,h/9); return `<td style="background:color-mix(in srgb, #f2b33d ${Math.round(k*85)}%, var(--field))" title="${fmt1(h)} Std.">${h<0.25?'·':h<1?'<1':Math.round(h)}</td>`; };
+  const NV={N:[0,-1],S:[0,1],O:[1,0],W:[-1,0]}, WIND=['Norden','Nordosten','Osten','Südosten','Süden','Südwesten','Westen','Nordwesten'];
+  const side=s=>{ const n=NV[s], b=(Math.atan2(n[0],-n[1])*180/Math.PI+NORTH_DEG+720)%360; return WIND[Math.round(b/45)%8]; };
+  d.innerHTML=`<h3>Sonne übers Jahr</h3>
+    <p class="muted syi">Direkte Sonnenstunden durch die Fenster, je Raum und Monat (Mitte des Monats). Berechnet aus Ort und Nordrichtung des Plans. Bäume und Nachbarhäuser kennt Grundrizz nicht, in der Stadt ist es oft weniger.</p>
+    <div class="syw"><table class="syt"><thead><tr><th></th>${SY_MON.map(m=>`<th>${m}</th>`).join('')}</tr></thead><tbody>
+    ${rows.map(({r,s})=>`<tr><th>${esc(r.name)}${s?`<small>Fenster nach ${[...new Set(s.sides.map(side))].join(' und ')}</small>`:''}</th>${s?s.mon.map(cell).join(''):`<td colspan="12" class="syn">keine Außenfenster</td>`}</tr>`).join('')}</tbody></table></div>
+    <h4>Wann scheint die Sonne herein?</h4>
+    <ul class="syl">${rows.filter(x=>x.s).map(({r,s})=>`<li><b>${esc(r.name)}</b><span>Sommer: ${syWhen(s.spans[5])}<br>Winter: ${syWhen(s.spans[11])}</span></li>`).join('')||'<li>Noch keine Fenster in Außenwänden.</li>'}</ul>
+    <p class="muted syi">Ort und Nordrichtung stellst du im Zeichnen-Modus ein (Nordpfeil drehen). Im 3D-Modus zeigt der Zeit-Regler, wie das Licht im Raum fällt.</p>
+    <div class="row"><button type="button" class="btn" data-sy="close">Schließen</button></div>`;
+  try{ d.showModal(); }catch(e){ d.setAttribute('open',''); } }
+{ const pane=$('p-raeume'); const b=document.createElement('button'); b.className='btn'; b.id='syBtn'; b.type='button'; b.textContent='☀ Sonne übers Jahr'; b.title='Wie viel Sonne bekommt jeder Raum im Jahreslauf?'; b.onclick=syOpen;
+  const row=pane.querySelector('.row'); row.appendChild(b); }
+window.__sy={room:syRoom,open:syOpen};
+
+// ---------- Plan per Link teilen: ganzer Plan steckt gepackt im Link (#plan=...), nichts liegt auf einem Server ----------
+const SH_BASE='https://carstenwinter77.github.io/grundrizz/';
+const b64u=u8=>{ let s=''; for(let i=0;i<u8.length;i+=0x8000) s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000)); return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); };
+const u8b=s=>{ s=s.replace(/-/g,'+').replace(/_/g,'/'); const b=atob(s), u=new Uint8Array(b.length); for(let i=0;i<b.length;i++) u[i]=b.charCodeAt(i); return u; };
+async function shPack(obj){ const raw=new TextEncoder().encode(JSON.stringify(obj));
+  if(typeof CompressionStream==='function'){ try{ const cs=new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate-raw')); return 'z'+b64u(new Uint8Array(await new Response(cs).arrayBuffer())); }catch(e){} }
+  return 'j'+b64u(raw); }
+async function shUnpack(s){ const k=s[0], u=u8b(s.slice(1)); if(k==='z'){ const ds=new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate-raw')); return JSON.parse(await new Response(ds).text()); } return JSON.parse(new TextDecoder().decode(u)); }
+function shName(){ try{ const v=V.list.find(x=>x.id===V.active); return v?v.name:'Grundriss'; }catch(e){ return 'Grundriss'; } }
+async function shMake(){ const o=JSON.parse(JSON.stringify(state)); delete o.under; const name=shName(); const data=await shPack({n:name,s:o});
+  const url=SH_BASE+'#plan='+data; const inp=$('shUrl'); inp.value=url; $('shOut').hidden=false;
+  $('shMsg').textContent=`Link mit „${name}“ erstellt.${url.length>30000?' Recht lang, manche Messenger kürzen so lange Links. Dann lieber als Datei schicken.':''}`; return url; }
+async function shCopy(){ const inp=$('shUrl'); try{ await navigator.clipboard.writeText(inp.value); $('shMsg').textContent='Link kopiert. Wer ihn öffnet, bekommt eine eigene Kopie deines Plans.'; }
+  catch(e){ inp.focus(); inp.select(); $('shMsg').textContent='Link ist markiert. Jetzt kopieren (Strg+C oder lange tippen).'; } }
+{ const pane=$('p-daten'), boxes=pane.querySelectorAll('.box'), before=[...boxes].find(b=>b.querySelector('#fileSave'));
+  const box=document.createElement('div'); box.className='box'; box.id='shBox';
+  box.innerHTML=`<h2>Per Link teilen</h2><p class="muted">Erzeugt einen Link mit deinem ganzen Plan. Wer ihn öffnet, bekommt eine eigene Kopie und kann damit weiterplanen. Der Plan liegt dabei auf keinem Server, er steckt nur im Link. Fotos und Scans als Vorlage kommen nicht mit.</p>
+    <div class="row"><button class="btn pri" id="shBtn" type="button">Link erzeugen</button></div>
+    <div id="shOut" hidden><input id="shUrl" readonly aria-label="Link zum Plan" style="width:100%"><div class="row"><button class="btn" id="shCp" type="button">Kopieren</button><button class="btn" id="shSh" type="button" hidden>Teilen …</button></div></div>
+    <p class="muted" id="shMsg" aria-live="polite"></p>`;
+  pane.insertBefore(box, before||null);
+  $('shBtn').onclick=async()=>{ try{ await shMake(); $('shSh').hidden=!navigator.share; }catch(e){ $('shMsg').textContent='Link ließ sich nicht erzeugen.'; } };
+  $('shCp').onclick=shCopy;
+  $('shSh').onclick=()=>{ try{ navigator.share({title:'Grundriss: '+shName(), url:$('shUrl').value}).catch(()=>{}); }catch(e){} }; }
+// Geteilten Plan beim Öffnen anbieten
+async function shIncoming(){ const h=location.hash||''; if(!h.startsWith('#plan=')) return; let p; try{ p=await shUnpack(h.slice(6)); if(!p||!p.s||!Array.isArray(p.s.rooms)) throw 0; }catch(e){ toast('Der Link enthält keinen lesbaren Plan'); return; }
+  const clear=()=>{ try{ history.replaceState(null,'',location.pathname+location.search); }catch(e){} };
+  let d=$('shDlg'); if(!d){ d=document.createElement('dialog'); d.className='help'; d.id='shDlg'; document.body.appendChild(d); }
+  const nF=(p.s.floors||[]).length, nR=p.s.rooms.length+(p.s.floors||[]).reduce((a,f)=>a+((f.rooms||[]).length),0), nI=(p.s.items||[]).length+(p.s.floors||[]).reduce((a,f)=>a+((f.items||[]).length),0);
+  d.innerHTML=`<h3>Geteilter Plan</h3><p>Jemand hat dir „${esc(p.n||'Grundriss')}“ geschickt: ${nF>1?nF+' Stockwerke, ':''}${nR} ${nR===1?'Raum':'Räume'}, ${nI} Möbel.</p><p class="muted">Er wird als neues Projekt angelegt. Deine eigenen Projekte bleiben, wie sie sind.</p><div class="row"><button class="btn pri" id="shOpen" type="button">Als neues Projekt öffnen</button><button class="btn" id="shNo" type="button">Nicht jetzt</button></div>`;
+  $('shOpen').onclick=()=>{ d.close(); clear(); try{ const sd=$('startDlg'); if(sd&&sd.open) sd.close(); }catch(e){} vNew(p.n||'Geteilter Plan',false,p.s); try{ fit(); }catch(e){} toast('Geteilter Plan geöffnet'); };
+  $('shNo').onclick=()=>{ d.close(); clear(); };
+  setTimeout(()=>{ try{ const sd=$('startDlg'); if(sd&&sd.open) sd.close(); d.showModal(); }catch(e){ d.setAttribute('open',''); } },600); }
+setTimeout(shIncoming,1200); addEventListener('hashchange',shIncoming);
+window.__sh={pack:shPack,unpack:shUnpack,make:shMake,incoming:shIncoming};
+
+// ---------- Hilfe: Einführung beim ersten Start, durchsuchbare Hilfe, Hinweise an Knöpfen (auch per langem Tippen) ----------
+const HP_TOPICS=[
+ ['start','Erste Schritte','Wie fange ich an?','anfang neu leer vorlage beispiel start',`Unter <b>Projekte → Neues Projekt</b> wählst du eine leere Fläche oder eine fertige Vorlage, zum Beispiel eine eingerichtete 2-Zimmer-Wohnung oder ein ganzes Haus. Vorlagen kannst du beliebig umbauen. Alles wird automatisch in deinem Browser gespeichert, ein Konto brauchst du nicht.`],
+ ['start','Erste Schritte','Die vier Ansichten','3d grundriss begehen zeichnen ansicht modus',`<b>Zeichnen</b>: Räume, Türen und Fenster anlegen. <b>3D</b>: von schräg oben einrichten. <b>Grundriss</b>: von oben wie ein Plan. <b>Begehen</b>: in Augenhöhe durch die Wohnung laufen. Umschalten oben links oder mit den Tasten <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd>.`],
+ ['start','Erste Schritte','Wo wird gespeichert?','speichern daten browser privat sicher verloren',`Dein Plan bleibt in diesem Browser auf diesem Gerät. Andere sehen ihn nicht. Wenn du Browserdaten löschst, ist er weg, darum ab und zu unter <b>Projekte → Datei speichern</b> sichern. Auf ein anderes Gerät bringst du ihn per Datei oder Link.`],
+ ['plan','Grundriss','Räume zeichnen','raum rechteck aufziehen zeichnen wand größe',`Oben auf <b>Zeichnen</b>, dann unten <b>Raum</b> und ein Rechteck aufziehen. Neue Räume rasten an vorhandenen ein. Antippen allein legt einen Raum mit 4 × 3 m an. Wände und Ecken eines Raums kannst du ziehen, eine gemeinsame Wand verschiebt beide Räume. Genaue Maße trägst du im Feld rechts (auf dem Handy unten) ein.`],
+ ['plan','Grundriss','Türen, Fenster und Durchgänge','tür fenster durchgang balkon schiebetür rollladen sprossen',`Werkzeug <b>Tür</b>, <b>Fenster</b> oder <b>Durchgang</b> wählen und auf eine Wand tippen. Danach verschieben, an den Griffen die Breite ändern und rechts die Ausführung wählen: Drehtür, Schiebetür, Balkontür, Fenster mit Sprossen, Rollladen und mehr. Neue Öffnungen übernehmen die zuletzt gewählte Ausführung.`],
+ ['plan','Grundriss','Raum ausmessen und eintippen','messen ausmessen maße zollstock laser kamera ar android iphone eingeben',`Im Zeichnen-Modus unten <b>Messen</b>. Du trägst Breite, Tiefe und Höhe ein und dazu jede Tür und jedes Fenster mit Abstand zur Ecke. Grundrizz baut den Raum und hängt ihn an den Grundriss an. Auf vielen Android-Handys erscheint zusätzlich <b>Mit Kamera messen</b>: zwei Punkte am Boden anpeilen, die Länge wird eingetragen. Das ist auf etwa 2 bis 5 cm genau. Auf dem iPhone erlaubt der Browser das leider nicht, dort bitte Zollstock oder Laser nehmen.`],
+ ['plan','Grundriss','Foto eines Grundrisses nachzeichnen','foto bild grundriss exposé makler vorlage maßstab nachzeichnen screenshot',`Im Zeichnen-Modus unten <b>Foto/Scan</b> und ein Foto oder einen Screenshot des Grundrisses wählen, zum Beispiel aus dem Exposé. Dann <b>Maßstab</b>: Anfang und Ende einer Wand antippen, deren Länge du kennst, und die Länge eintragen. Jetzt passt das Foto in echter Größe, und du ziehst die Räume mit <b>Raum</b> einfach nach. Mit <b>Deutlichkeit</b> blendest du das Foto heller oder dunkler. Räume erkennt Grundrizz auf Fotos nicht von allein, das Nachziehen geht aber schnell.`],
+ ['plan','Grundriss','Raumscan vom Handy laden (LiDAR)','scan lidar polycam 3d scanner app roomplan obj dxf usdz import iphone pro',`Ein Browser kann den LiDAR-Sensor nicht selbst benutzen. Du scannst den Raum also mit einer App wie <b>3D Scanner App</b> oder <b>Polycam</b> und exportierst die Datei. Dann im Zeichnen-Modus <b>Foto/Scan</b> und die Datei wählen.<br>• <b>RoomPlan-JSON</b>: beste Wahl, Räume, Türen, Fenster und große Möbel werden übernommen.<br>• <b>DXF</b> (Grundriss): Linien werden zur Vorlage, rechteckige Räume werden erkannt.<br>• <b>OBJ</b> (3D-Modell): der Raum wird als Rechteck erkannt, der Rest als Vorlage zum Nachziehen.<br>USDZ kann der Browser nicht lesen, bitte in der App als OBJ, DXF oder JSON exportieren. Schräge oder L-förmige Räume werden als Rechteck angelegt, die genaue Form siehst du auf der Vorlage.`],
+ ['plan','Grundriss','Stockwerke, Treppen und Dachschrägen','stockwerk etage keller dachgeschoss treppe dach schräge kniestock haus',`Oben in der Leiste das Stockwerk wählen oder „+ Stockwerk darüber“ und „+ Keller“ anlegen. Die Etage darunter siehst du gestrichelt. <b>Treppe</b> im Zeichnen-Modus setzen: gerade, L, U, Wendel oder Raumspar, beim Begehen läufst du sie hoch und runter. Dachschräge: Raum antippen und „Dachschräge an der Wand“ wählen. „Ganzes Haus ansehen“ zeigt alle Etagen mit Dach.`],
+ ['plan','Grundriss','Freie und schräge Wände','wand schräg frei stütze säule',`Werkzeug <b>Wand</b> zieht freistehende Wände, auch schräg, und Stützen.`],
+ ['plan','Grundriss','Ort und Himmelsrichtung','norden nordpfeil ort stadt himmelsrichtung sonne ausrichtung',`Im Zeichnen-Modus den <b>Nordpfeil</b> mit dem Finger drehen, bis er stimmt. Unter „Einstellungen für die ganze Wohnung“ wählst du den Ort. Beides braucht Grundrizz für Sonne und Schatten.`],
+ ['moebel','Einrichten','Möbel aus dem Katalog','katalog möbel hinzufügen ziehen suchen skandinavisch modern',`Im Tab <b>Katalog</b> suchen oder nach Bereich filtern und ein Möbel direkt in den Raum ziehen oder antippen. Unter <b>Maße</b> trägst du die echten Maße ein, falls dein Möbel anders ist.`],
+ ['moebel','Einrichten','Möbel bewegen, drehen, kopieren','verschieben drehen löschen kopieren duplizieren auswählen mehrere',`Antippen wählt aus, ziehen verschiebt. Möbel rasten an Wänden und anderen Möbeln ein. Drehen, Duplizieren und Löschen findest du in der Leiste am ausgewählten Möbel, am Computer auch mit <kbd>R</kbd>, <kbd>D</kbd> und <kbd>Entf</kbd>. Rot markierte Möbel überschneiden sich mit etwas.`],
+ ['moebel','Einrichten','Umzugs-Check: eigene Möbel mitnehmen','umzug umzugs-check eigene möbel mitnehmen tür passt durch neue wohnung',`Im Tab <b>Möbel</b> unter „Umzugs-Check“ merkst du dir deine eigenen Möbel, aus der Ansicht oder von Hand mit Maßen. In einem anderen Projekt, etwa der neuen Wohnung, prüft Grundrizz, ob jedes Möbel durch die Wohnungstür und die schmalste Tür passt und in welchem Raum Platz ist. <b>Alle in diese Wohnung stellen</b> setzt sie neben den Grundriss, von dort ziehst du sie in die Räume.`],
+ ['moebel','Einrichten','Farben und Böden gestalten','farbe boden wand gestalten stil tapete parkett fliesen',`<b>Gestalten</b> in der Leiste (Taste <kbd>G</kbd>): Boden, Wände und Möbelfarben per Klick ändern. Unter <b>Projekte → Stil ausprobieren</b> färbst du eine Kopie in einem ganzen Stil.`],
+ ['erleben','Erleben','Durch die Wohnung laufen','begehen laufen gehen joystick augenhöhe handy bewegen',`<b>Begehen</b> oben links. Am Computer mit <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> laufen und mit der Maus umsehen. Auf dem Handy mit dem Joystick laufen und wischen zum Umsehen, oder „Handy bewegen“ und dich selbst drehen. Treppen läufst du einfach hoch.`],
+ ['erleben','Erleben','Licht, Tageszeit und Sonne','sonne licht uhrzeit tag nacht schatten datum lampen',`Oben bei <b>Sonne</b> Datum und Uhrzeit wählen, dann fallen Licht und Schatten so wie in echt. <kbd>N</kbd> schaltet auf Nacht, dann leuchten die Lampen.`],
+ ['erleben','Erleben','Sonne übers Jahr je Raum','sonnenstunden jahr monat sonnig hell dunkel winter sommer morgensonne abendsonne',`Im Tab <b>Räume</b> auf <b>Sonne übers Jahr</b>. Du siehst für jeden Raum, wie viele Stunden die Sonne in jedem Monat direkt hereinscheint und zu welcher Tageszeit. Bäume und Nachbarhäuser kennt Grundrizz nicht, in der Stadt ist es daher oft weniger.`],
+ ['erleben','Erleben','Fernseher, Kino, Saugroboter, Haustiere','fernseher tv kino beamer leinwand saugroboter katze hund tier',`Fernseher aus „TV &amp; Technik“ auswählen und mit <kbd>L</kbd> einschalten. Beamer und Leinwand aufstellen, dann <kbd>K</kbd> für Kino. Ein Saugroboter braucht seine Station aus dem Katalog und fährt dann los. Katzen und Hunde holst du über den Tier-Knopf oben, antippen zum Spielen.`],
+ ['teilen','Teilen und sichern','Plan per Link teilen','teilen link schicken senden whatsapp mail freund partner',`Unter <b>Projekte → Per Link teilen</b>. Der ganze Plan steckt im Link, er liegt auf keinem Server. Wer ihn öffnet, bekommt eine eigene Kopie. Änderungen danach sieht der andere nicht, dafür einfach einen neuen Link schicken. Fotos als Vorlage kommen nicht mit.`],
+ ['teilen','Teilen und sichern','Projekte, Kopien und Dateien','projekt kopie variante datei sichern laden backup anderes gerät',`Unter <b>Projekte</b> legst du mehrere Pläne an, etwa „Ist-Zustand“ und „Umbau“. Vor einem Umbau eine Kopie anlegen, dann bleibt der alte Stand. <b>Datei speichern</b> sichert das offene Projekt, <b>Datei laden</b> holt es als neues Projekt zurück, auch auf einem anderen Gerät.`],
+ ['teilen','Teilen und sichern','Rückgängig','rückgängig zurück fehler undo wiederholen',`Pfeil nach links oben in der Leiste, am Computer <kbd>Strg</kbd>+<kbd>Z</kbd>. Wiederholen mit dem Pfeil nach rechts oder <kbd>Strg</kbd>+<kbd>Y</kbd>.`],
+ ['geraet','Geräte','Als App installieren','installieren app startbildschirm home-bildschirm offline qr code verschicken',`Grundrizz lässt sich wie eine App auf iPhone, iPad, Android und Computer installieren, kostenlos und ohne App Store. Danach startet es im Vollbild und auch ohne Internet. Die Anleitung mit QR-Code und Link zum Weitergeben findest du auf <a href="https://carstenwinter77.github.io/grundrizz/installieren/" target="_blank" rel="noopener">grundrizz/installieren</a>.`],
+ ['geraet','Geräte','Auf Handy und Tablet','handy tablet iphone ipad android touch finger zoom quer',`Mit zwei Fingern verschieben und zoomen. Hältst du das Handy quer, steht die Leiste neben der Ansicht. Halte den Finger auf einen Knopf, dann erscheint ein kurzer Hinweis, was er tut. Beim Begehen ist die Ansicht bildschirmfüllend.`]];
+const HP_CATS=[['','Alles'],['start','Erste Schritte'],['plan','Grundriss'],['moebel','Einrichten'],['erleben','Erleben'],['teilen','Teilen'],['geraet','Geräte'],['keys','Tastenkürzel']];
+let HP_KEYS='';
+function hpInit(){ const d=$('helpDlg'); if(!HP_KEYS){ HP_KEYS=[...d.querySelectorAll('h4')].filter(h=>h.nextElementSibling&&h.nextElementSibling.tagName==='UL').map(h=>`<h5>${h.textContent}</h5><ul class="hpk">${h.nextElementSibling.innerHTML}</ul>`).join(''); }
+  d.classList.add('hpdlg');
+  d.innerHTML=`<div class="hph"><h3>Hilfe</h3><button type="button" class="x" id="hpX" aria-label="Hilfe schließen">×</button></div>
+    <input id="hpQ" type="search" placeholder="Wonach suchst du? z. B. Foto, Treppe, teilen" autocomplete="off" aria-label="Hilfe durchsuchen">
+    <div class="hpc" role="group" aria-label="Themen">${HP_CATS.map(([k,v])=>`<button type="button" data-hc="${k}" aria-pressed="${k===''}">${v}</button>`).join('')}</div>
+    <div class="hpl" id="hpL"></div>
+    <div class="row hpf"><button type="button" class="btn" id="hpIntro">Einführung ansehen</button><button type="button" class="btn pri" id="helpClose">Verstanden</button></div>`;
+  let cat=''; const draw=()=>{ const q=$('hpQ').value.trim().toLowerCase(), words=q.split(/\s+/).filter(Boolean);
+    const hit=t=>{ const s=(t[2]+' '+t[3]+' '+t[4].replace(/<[^>]+>/g,'')).toLowerCase(); return words.every(w=>s.includes(w)); };
+    let list=HP_TOPICS.filter(t=>(!cat||t[0]===cat)&&(!words.length||hit(t)));
+    let h=cat==='keys'?'':list.map(t=>`<details${words.length||list.length<4?' open':''}><summary><small>${t[1]}</small>${t[2]}</summary><div>${t[4]}</div></details>`).join('');
+    if((cat==='keys'||(!cat&&!words.length))) h+=`<details${cat==='keys'?' open':''}><summary><small>Tastenkürzel</small>Alle Tastenkürzel und Gesten</summary><div>${HP_KEYS}</div></details>`;
+    else if(words.length && HP_KEYS.toLowerCase().includes(q)) h+=`<details open><summary><small>Tastenkürzel</small>Passende Tastenkürzel</summary><div>${HP_KEYS}</div></details>`;
+    $('hpL').innerHTML=h||`<p class="muted">Dazu habe ich nichts gefunden. Versuch ein anderes Wort, zum Beispiel „Möbel“, „Raum“ oder „Licht“.</p>`; };
+  $('hpQ').addEventListener('input',draw);
+  d.querySelector('.hpc').addEventListener('click',e=>{ const b=e.target.closest('[data-hc]'); if(!b) return; cat=b.dataset.hc; d.querySelectorAll('[data-hc]').forEach(x=>x.setAttribute('aria-pressed',x===b)); draw(); });
+  $('helpClose').onclick=()=>d.close(); $('hpX').onclick=()=>d.close(); $('hpIntro').onclick=()=>{ d.close(); hpIntro(true); };
+  draw(); }
+openHelp=function(topic){ const d=$('helpDlg'); if(!d.classList.contains('hpdlg')) hpInit(); const q=$('hpQ'); q.value=typeof topic==='string'?topic:''; q.dispatchEvent(new Event('input'));
+  try{ d.showModal(); }catch(e){ d.setAttribute('open',''); } if(!matchMedia('(pointer:coarse)').matches) setTimeout(()=>q.focus(),30); };
+$('tHelp').onclick=()=>openHelp(); $('tHelp').title='Hilfe und Anleitung (?)';
+// Einführung beim ersten Start
+const GZ_MARK='<g transform="translate(80 80)" fill="none" stroke-linecap="round"><path d="M82 92 H270 V270 H82 V92 M176 92 V159 M82 177 H151 M151 177 V215 M210 177 H270 M210 177 V217" stroke="currentColor" stroke-width="18" stroke-linejoin="round"/><path d="M143 270 V239 A53 53 0 0 1 196 186" stroke="currentColor" stroke-width="15"/><path d="M57 94 Q62 55 100 55 H273" stroke="#C9773A" stroke-width="21"/></g>';
+const HP_SLIDES=[
+ ['Willkommen bei Grundrizz','Plane deine Wohnung oder dein Haus in 3D. Kostenlos, ohne Konto, alles bleibt auf deinem Gerät.','<rect x="10" y="14" width="44" height="36" rx="2"/><path d="M10 34h22v16M32 14v12"/>'],
+ ['Grundriss anlegen','Nimm eine Vorlage, zeichne Räume mit dem Finger, tippe Maße ein oder lege ein Foto vom Exposé darunter und zieh es nach. Auch Raumscans vom Handy lassen sich laden.','<rect x="8" y="12" width="48" height="40" rx="2"/><path d="M8 30h30v22M38 12v18" /><circle cx="48" cy="22" r="3"/>'],
+ ['Einrichten','Zieh Möbel aus dem Katalog in die Räume. Mit dem Umzugs-Check merkst du dir deine eigenen Möbel und prüfst, ob sie in die neue Wohnung passen.','<path d="M10 40v-10a4 4 0 0 1 4-4h36a4 4 0 0 1 4 4v10z"/><path d="M14 40v6M50 40v6M16 26v-6h32v6"/>'],
+ ['Erleben','Lauf durch die Räume, stell Datum und Uhrzeit ein und sieh, wie die Sonne hereinfällt. Mach das Licht aus, schalte den Fernseher an oder hol dir eine Katze dazu.','<circle cx="22" cy="22" r="8"/><path d="M22 6v4M22 34v4M6 22h4M34 22h4M11 11l3 3M30 30l3 3M11 33l3-3M30 14l3-3"/><path d="M36 54l8-20 8 20"/>'],
+ ['Teilen und Hilfe','Schick deinen Plan per Link oder sichere ihn als Datei. Hilfe findest du jederzeit oben über das Fragezeichen. Halte den Finger auf einen Knopf, dann siehst du, was er tut.','<circle cx="32" cy="32" r="20"/><path d="M26 26a6 6 0 1 1 8 5.6c-1.4.6-2 1.6-2 3V36"/><circle cx="32" cy="43" r="1.5"/>']];
+function hpIntro(force){ let seen=false; try{ seen=!!localStorage.getItem(LS+'.intro'); }catch(e){} if(seen && !force) return false;
+  let d=$('introDlg'); if(!d){ d=document.createElement('dialog'); d.className='help intro'; d.id='introDlg'; document.body.appendChild(d); }
+  let i=0; const done=()=>{ try{ localStorage.setItem(LS+'.intro','1'); }catch(e){} d.close(); };
+  const draw=()=>{ const s=HP_SLIDES[i]; d.innerHTML=`<div class="ins">${i===0?'<svg class="brandmk" viewBox="125 123 246 248" aria-hidden="true">'+GZ_MARK+'</svg>':'<svg viewBox="0 0 64 64" aria-hidden="true">'+s[2]+'</svg>'}<h3>${i===0?'Willkommen bei Grundri<span class="zz">zz</span>':s[0]}</h3><p>${s[1]}</p></div>
+      <div class="indots" aria-hidden="true">${HP_SLIDES.map((_,k)=>`<span${k===i?' class="on"':''}></span>`).join('')}</div>
+      <div class="row inb"><button type="button" class="btn lnk" id="inSkip">${i<HP_SLIDES.length-1?'Überspringen':''}</button><span style="flex:1"></span>${i?'<button type="button" class="btn" id="inBack">Zurück</button>':''}<button type="button" class="btn pri" id="inNext" autofocus>${i<HP_SLIDES.length-1?'Weiter':'Los geht’s'}</button></div>`;
+    $('inNext').onclick=()=>{ if(i<HP_SLIDES.length-1){ i++; draw(); } else done(); };
+    const bk=$('inBack'); if(bk) bk.onclick=()=>{ i--; draw(); }; $('inSkip').onclick=done; };
+  d.onclose=()=>{ try{ localStorage.setItem(LS+'.intro','1'); }catch(e){} const sd=$('startDlg'); if(sd && d.dataset.restart==='1' && !sd.open){ d.dataset.restart=''; try{ sd.showModal(); }catch(e){} } };
+  draw(); try{ d.showModal(); }catch(e){ d.setAttribute('open',''); } return true; }
+setTimeout(()=>{ if(location.hash.startsWith('#plan=')) return; const sd=$('startDlg'); let seen=false; try{ seen=!!localStorage.getItem(LS+'.intro'); }catch(e){} if(seen) return;
+  const was=sd && sd.open; if(was) sd.close(); if(hpIntro(false) && was) $('introDlg').dataset.restart='1'; },1500);
+// Hinweise an Knöpfen: fehlende ergänzen, auf Touch-Geräten per langem Tippen anzeigen
+const HP_TIPS={'#v3d':'3D-Ansicht von schräg oben (1)','#vplan':'Grundriss von oben (2)','#vwalk':'In Augenhöhe durch die Wohnung laufen (3)','#vdraw':'Räume, Türen und Fenster zeichnen',
+  '[data-walls="full"]':'Wände in voller Höhe','[data-walls="half"]':'Wände halb hoch, so siehst du in die Räume','[data-walls="off"]':'Wände ausblenden','#tLabels':'Namen von Räumen und Möbeln zeigen',
+  '#camSel':'Kamera auf einen Raum richten oder Rundflug starten','#vSel':'Projekt wechseln','#sunDate':'Datum für den Sonnenstand','#preset':'Möbel zum Hinzufügen wählen','#addItem':'Gewähltes Möbel in den Raum in der Bildmitte stellen',
+  '[data-tab="moebel"]':'Möbel im Projekt, Umzugs-Check','[data-tab="ikea"]':'Katalog mit Möbeln zum Hineinziehen','[data-tab="raeume"]':'Räume mit Maßen, Sonne übers Jahr','[data-tab="daten"]':'Projekte, Vorlagen, Teilen und Sichern'};
+function hpTips(){ for(const [s,t] of Object.entries(HP_TIPS)) document.querySelectorAll(s).forEach(e=>{ if(!e.title) e.title=t; }); }
+hpTips();
+{ let tm=null, tip=null, start=null, fired=false; const hide=()=>{ if(tip){ tip.remove(); tip=null; } };
+  addEventListener('pointerdown',e=>{ if(e.pointerType!=='touch') return; hide(); fired=false; const el=e.target.closest('[title]'); if(!el || el.closest('svg#drawSvg')) return; start=[e.clientX,e.clientY];
+    tm=setTimeout(()=>{ fired=true; const r=el.getBoundingClientRect(); tip=document.createElement('div'); tip.className='hptip'; tip.textContent=el.title; document.body.appendChild(tip);
+      const w=tip.offsetWidth, h=tip.offsetHeight; let x=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2)), y=r.top-h-8; if(y<8) y=r.bottom+8; tip.style.left=x+'px'; tip.style.top=y+'px'; setTimeout(hide,2600); },480); },true);
+  addEventListener('pointermove',e=>{ if(tm && start && Math.hypot(e.clientX-start[0],e.clientY-start[1])>10){ clearTimeout(tm); tm=null; } },true);
+  addEventListener('pointerup',()=>{ clearTimeout(tm); tm=null; },true); addEventListener('pointercancel',()=>{ clearTimeout(tm); tm=null; },true);
+  addEventListener('click',e=>{ if(fired){ fired=false; e.preventDefault(); e.stopImmediatePropagation(); } },true);
+  addEventListener('contextmenu',e=>{ if(tip||tm) e.preventDefault(); },true); }
+window.__hp={open:openHelp,intro:hpIntro,topics:HP_TOPICS};
+
+{ const sd=$('startDlg'), h=sd&&sd.querySelector('h3'); if(h && !h.querySelector('.brandmk')){ h.classList.add('gzh'); h.innerHTML='<svg class="brandmk" viewBox="125 123 246 248" aria-hidden="true">'+GZ_MARK+'</svg><span>'+h.innerHTML.replace('Grundrizz','Grundri<span class="zz">zz</span>')+'</span>'; } }
+
+// ---------- Bäume, die zwischen Kamera und Wohnung stehen, durchsichtig machen ----------
+setInterval(()=>{ const T=window.ENV_TREES; if(!T||!T.length||typeof camera==='undefined') return; const walkOn=typeof walk!=='undefined'&&walk;
+  const k=1/S, c={x:camera.position.x*k,y:camera.position.y*k,z:camera.position.z*k}, t0=(camera===persp&&ctlP)?ctlP.target:null, tg=t0?{x:t0.x*k,z:t0.z*k}:null; let ch=false;
+  T.forEach(t=>{ let f=false; if(tg && !walkOn){ const dx=tg.x-c.x, dz=tg.z-c.z, L2=dx*dx+dz*dz||1, u=Math.max(0,Math.min(1,((t.x-c.x)*dx+(t.z-c.z)*dz)/L2));
+      const px=c.x+dx*u, pz=c.z+dz*u, d=Math.hypot(t.x-px,t.z-pz); f=u<0.98 && d<t.r*1.6 && c.y<GROUND+t.h*1.6+600; }
+    if(f!==t.fade){ t.fade=f; ch=true; t.ms.forEach(m=>{ m.transparent=f; m.opacity=f?0.12:1; m.depthWrite=!f; m.needsUpdate=true; }); } });
+  if(ch) try{ wake(); }catch(e){} },250);
+// Neues Projekt (Datei, Link, Kopie): Umgebung passend zum neuen Grundriss neu aufbauen
+// Grundriss-Umriss geändert (Projekt gewechselt, Datei, Link, Räume gezeichnet): Umgebung neu aufbauen
+let envSig=''; { const r0=rebuildAll; rebuildAll=function(){ const r=r0.apply(this,arguments); try{ const b=bounds(), sig=[b.x0,b.z0,b.x1,b.z1,state.level||0,(state.floors||[]).length,state.floorId||''].map(v=>typeof v==='number'?Math.round(v/50):v).join(',');
+  if(sig!==envSig){ const first=!envSig; envSig=sig; if(!first){ buildEnv(); try{ if(typeof setEnvVis==='function') setEnvVis(); }catch(e){} placeSun(); } } }catch(e){} return r; }; }
 
 
 // ---------- Fernseher: Bildschirm mit laufendem Programm, Licht in den Raum ----------
@@ -4661,4 +5153,5 @@ let lastT=performance.now(), lastCatF=0;
 })();
 </script>
 
+<script>if("serviceWorker" in navigator) addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script>
 </body></html>
