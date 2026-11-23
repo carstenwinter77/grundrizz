@@ -598,7 +598,7 @@ const IKEA_CATS = ['Sofas & Sessel','Tische & Stühle','Regale & TV','TV & Techn
 const IKEA = (()=>{ const L=[]; const P=(cat,n,t,dims,w,d,h,kind,cols,ex,wall)=>L.push({id:'ik'+L.length,cat,n,t,dims,w,d,h,kind,cols,ex:ex||{},wall:wall!==false});
   const sofaC=[['Tibbleby beige/grau','#bdb7a8'],['Hillared anthrazit','#4b4e52'],['Kelinge grautürkis','#5f7c7c']];
   const ektC=[['Hallarp beige','#d2c7b2'],['Remmarn hellgrau','#b9bab6'],['Kilanda dunkelblau','#2f3d52']];
-  const c0=IKEA_CATS, C=n=>c0[IKEA_CATS.indexOf(n)];
+  const c0=['Sofas & Sessel','Tische & Stühle','Regale & TV','Schlafzimmer','Kleiderschränke','Arbeitszimmer','Küche','Bad & Flur','Teppiche','Lampen','Deko & Pflanzen','Aufbewahrung','Kinderzimmer','Eigene'], C=n=>n;
   P(c0[0],'KIVIK','3er-Sofa','228×95×83',228,95,83,'sofa',sofaC);
   P(c0[0],'KIVIK','2er-Sofa','190×95×83',190,95,83,'sofa',sofaC);
   P(c0[0],'EKTORP','3er-Sofa','218×88×88',218,88,88,'sofa',ektC);
@@ -874,7 +874,10 @@ const TEMPLATES = [
   {k:'raum', n:'Ein Raum', d:'4,5 × 4 m mit Tür und Fenster'},
   {k:'1zi', n:'1-Zimmer-Wohnung', d:'Wohnraum, Küche, Bad, Flur · ca. 39 m²'},
   {k:'2zi', n:'2-Zimmer-Wohnung', d:'plus Schlafzimmer · ca. 50 m²'},
-  {k:'haus', n:'Einfamilienhaus', d:'Erdgeschoss und Dachgeschoss mit Treppe · ca. 130 m²'}
+  {k:'haus', n:'Einfamilienhaus', d:'Erd- und Dachgeschoss mit Treppe, eingerichtet · ca. 130 m²'},
+  {k:'studio', n:'Studio-Apartment', d:'Fertig eingerichtet, mit Katze · ca. 36 m²'},
+  {k:'familie', n:'Familienwohnung', d:'4 Zimmer, komplett eingerichtet · ca. 90 m²'},
+  {k:'loft', n:'Loft', d:'Offen, 3,20 m hoch, Designermöbel, Hund · ca. 80 m²'}
 ];
 const TFLOORS = {wood:['#b8956a','dielen'], oak:['#c4a578','parkett'], tileW:['#e9e8e3','fliesen'], tileG:['#b9b6ae','fliesen-gross'], plain:['#d6d2c8','glatt']};
 function floorFor(name){ const n=(name||'').toLowerCase();
@@ -903,27 +906,91 @@ function tplState(k){
       base.items.push(I('Bett 160×200',821,422,166,206,45,'#cfc6b8',90), I('Nachttisch',904,316,40,40,55,'#b08a62',90), I('Nachttisch',904,528,40,40,55,'#b08a62',90),
         I('Kleiderschrank 3-türig',700,281,150,58,201,'#e8e4dc',0)); }
     return base; }
+  // ---- Fertig eingerichtete Beispiele ----
+  const KAT=id=>IKEA.find(p=>p.id===id);
+  const mkI=spec=>typeof spec==='string' ? ikItem(KAT(spec),0,0) : Object.assign({id:uid('i'),name:spec[0],w:spec[1],d:spec[2],h:spec[3],color:spec[4]||'#9aa7b0',rot:0,elev:0,x:0,z:0}, JSON.parse(JSON.stringify(spec[5]||{})));
+  const A=(r,side,along,spec,ex)=>{ const it=Object.assign(mkI(spec),ex||{}); const g=0.5;
+    if(side==='N'){ it.rot=0; it.x=r.x+along; it.z=r.z+it.d/2+g; } if(side==='S'){ it.rot=180; it.x=r.x+along; it.z=r.z+r.d-it.d/2-g; }
+    if(side==='W'){ it.rot=270; it.z=r.z+along; it.x=r.x+it.d/2+g; } if(side==='O'){ it.rot=90; it.z=r.z+along; it.x=r.x+r.w-it.d/2-g; } base.items.push(it); return it; };
+  const F=(r,lx,lz,spec,rot,ex)=>{ const it=Object.assign(mkI(spec),{x:r.x+lx,z:r.z+lz,rot:rot||0},ex||{}); base.items.push(it); return it; };
+  const FRIDGE=['Kühlschrank',60,65,185,'#dfe3e6',{kind:'fridge'}], WCs=['WC',37,65,40,'#f4f4f2',{kind:'wc'}], TUB=['Badewanne',170,75,58,'#f4f4f2',{kind:'tub'}],
+    SHOWER=(w,d)=>['Dusche',w,d,200,'#e9eef0',{kind:'shower'}], WASHER=['Waschmaschine',60,60,85,'#f0f0ee',{kind:'washer'}], TOWEL=['Handtuchheizkörper',50,10,120,'#f2f2f2',{kind:'towelrad',elev:30}],
+    RAD=w=>['Heizkörper',w,10,60,'#f2f2f2',{kind:'radiator',elev:15}], KETTLE=['Wasserkocher',18,15,25,'#e8e8e8',{kind:'kettle',elev:90}], COFFEE=['Kaffeemaschine',25,30,35,'#2b2b2b',{kind:'coffeemk',elev:90}],
+    COAT=['Garderobe',100,35,180,'#b08a62',{kind:'coatrack'}], CATTREE=['Kratzbaum',60,60,150,'#c9b79c',{kind:'cattree'}], LITTER=['Katzenklo',50,40,40,'#d8d4cc',{kind:'litter'}],
+    KITCHEN=(w,c)=>['Küchenzeile',w,62,90,c||'#e8e4dc',{kind:'kitchen'}];
+  if(k==='studio'){ base.roomH=250;
+    const Fl=R('Flur',0,0,200,180), B=R('Bad',0,192,200,220), W=R('Wohnraum',212,0,480,412); base.rooms=[Fl,B,W];
+    base.openings=[O(Fl,'W','tuer',40,95,{leaf:'kassette',color:'anthrazit'}),O(Fl,'O','tuer',50,85),O(Fl,'S','tuer',60,80),O(W,'S','fenster',40,120),O(W,'S','fenster',300,120),O(W,'O','fenster',150,120),O(B,'W','fenster',80,60,{sill:140,height:70,style:'kipp'})];
+    A(W,'N',330,KITCHEN(180)); A(W,'N',450,FRIDGE); F(W,300,30,KETTLE); F(W,370,30,COFFEE);
+    F(W,330,150,'ik92'); F(W,260,150,'ik21',270); F(W,400,150,'ik21',90); F(W,330,150,'ik164');
+    A(W,'W',300,'ik36'); A(W,'W',190,'ik44'); F(W,24,190,'ik171',0,{elev:55}); A(W,'W',300,'ik176'); F(W,105,300,'ik166');
+    F(W,300,300,'ik7',270); F(W,395,300,'ik12',90); A(W,'O',300,'ik35'); A(W,'O',300,'tx219'); F(W,385,300,'ik158',90); F(W,385,300,'ik168');
+    A(W,'N',150,'ik49'); F(W,465,400,'ik173'); F(W,230,395,'ik77'); A(W,'S',100,RAD(100)); A(W,'S',360,RAD(100));
+    A(B,'W',50,'ik149'); A(B,'W',50,'ik155',{elev:95}); A(B,'S',40,WCs); F(B,155,175,SHOWER(90,90)); A(B,'O',100,TOWEL); A(B,'N',170,WASHER); F(B,100,110,'ik168');
+    A(Fl,'N',100,COAT); A(Fl,'S',170,'ik153'); F(Fl,100,90,'ik168');
+    base.pets=[{id:uid('p'),art:'katze',rasse:'ekh',farbe:0}]; return base; }
+  if(k==='familie'){ base.roomH=250;
+    const W=R('Wohnzimmer',0,0,620,440), K=R('Küche',632,0,300,300), K2=R('Kinderzimmer',632,312,300,280), Fl=R('Flur',0,452,620,140), E=R('Schlafzimmer',0,604,300,400), B=R('Bad',312,604,200,400), K1=R('Jugendzimmer',524,604,408,400);
+    base.rooms=[W,K,K2,Fl,E,B,K1];
+    base.openings=[O(Fl,'W','tuer',25,95,{leaf:'kassette',color:'anthrazit'}),O(W,'S','tuer',100,90),O(W,'O','offen',100,120),O(K2,'W','tuer',150,85,{swing:'aus'}),O(E,'N','tuer',190,85),O(B,'N','tuer',60,80),O(K1,'N','tuer',10,85),
+      O(W,'N','fenster',80,160,{panes:2}),O(W,'N','fenster',380,160,{panes:2}),O(W,'W','tuer',150,180,{style:'hebeschiebe',height:220}),O(K,'N','fenster',90,120),O(K2,'O','fenster',90,110),
+      O(E,'S','fenster',90,120),O(E,'W','fenster',150,100),O(B,'S','fenster',70,70,{sill:130,height:90,style:'kipp'}),O(K1,'S','fenster',140,140,{panes:2}),O(K1,'O','fenster',150,100)];
+    // Wohnen
+    A(W,'N',310,'tx221'); F(W,270,315,'ik5',180); F(W,270,190,'ik14'); F(W,270,220,'ik73'); F(W,160,210,'ik10',270); F(W,130,120,'ik76'); F(W,270,220,'ik168');
+    F(W,515,330,'ik94'); F(W,515,251,'ik96'); F(W,515,409,'ik96',180); F(W,436,330,'ik96',270); F(W,594,330,'ik96',90); F(W,515,330,'ik164');
+    A(W,'S',300,'ik103'); A(W,'S',300,'ik176'); F(W,590,30,'ik172'); F(W,30,60,'ik78'); A(W,'W',395,'ik29'); A(W,'N',160,RAD(100)); A(W,'N',460,RAD(100));
+    // Küche
+    A(K,'O',150,KITCHEN(300)); A(K,'S',40,FRIDGE); F(K,269,60,KETTLE); F(K,269,120,COFFEE); F(K,130,170,'ik92'); F(K,130,103,'ik21'); F(K,130,237,'ik21',180); F(K,130,170,'ik166'); A(K,'N',150,RAD(80));
+    // Kinderzimmer
+    A(K2,'N',60,'ik184'); A(K2,'N',180,'ik189'); F(K2,200,170,'ik187'); F(K2,200,113,'ik188'); A(K2,'S',220,'ik186'); F(K2,180,120,'ik159'); F(K2,150,140,'ik168');
+    // Flur
+    A(Fl,'N',300,COAT); A(Fl,'N',430,'ik151'); A(Fl,'N',540,'ik155'); A(Fl,'N',215,'tx232'); F(Fl,300,70,'ik161'); F(Fl,150,70,'ik168'); F(Fl,450,70,'ik168');
+    // Schlafzimmer
+    A(E,'O',230,'ik37'); A(E,'O',110,'ik44'); A(E,'O',350,'ik44'); F(E,276,110,'ik171',0,{elev:55}); F(E,276,350,'ik171',0,{elev:55}); A(E,'W',75,'ik50'); A(E,'W',320,'ik41'); A(E,'O',230,'ik176'); F(E,150,230,'ik75',90); F(E,190,230,'ik167'); A(E,'S',150,RAD(100));
+    // Bad
+    A(B,'W',300,TUB); A(B,'O',150,WCs); A(B,'O',260,'ik68'); A(B,'O',260,'ik155',{elev:95}); A(B,'W',40,WASHER); A(B,'O',60,TOWEL); F(B,180,380,'ik173'); F(B,100,200,'ik168');
+    // Jugendzimmer
+    A(K1,'W',200,'ik117'); A(K1,'S',210,'ik134'); F(K1,210,300,'ik138'); A(K1,'N',200,'ik49'); A(K1,'O',80,'ik25'); F(K1,250,200,'ik157'); F(K1,370,350,CATTREE); F(K1,370,260,LITTER); F(K1,200,200,'ik165');
+    base.pets=[{id:uid('p'),art:'katze',rasse:'ekh',farbe:0},{id:uid('p'),art:'katze',rasse:'bkh',farbe:0}]; return base; }
+  if(k==='loft'){ base.roomH=320; const H=320, Rh=(n,x,z,w,d)=>Object.assign(R(n,x,z,w,d),{h:H});
+    const L=Rh('Loft',0,0,1000,600), B=Rh('Bad',1012,0,240,300), An=Rh('Ankleide',1012,312,240,288); base.rooms=[L,B,An];
+    base.openings=[O(L,'S','tuer',780,100,{color:'anthrazit'}),O(L,'O','tuer',215,80,{style:'schiebe'}),O(L,'O','offen',400,100),O(B,'N','fenster',60,100,{sill:150,height:80,style:'kipp'})];
+    [60,280,500,720].forEach(p=>base.openings.push(O(L,'N','fenster',p,160,{sill:20,height:250,panes:2,frame:'anthrazit'}))); base.openings.push(O(L,'W','fenster',300,180,{sill:20,height:250,panes:2,frame:'anthrazit'}));
+    A(L,'S',200,KITCHEN(360,'#2f3336')); A(L,'S',415,FRIDGE); F(L,100,569,KETTLE); F(L,160,569,COFFEE); F(L,200,420,'ik145'); F(L,170,345,'ik146'); F(L,230,345,'ik146'); F(L,200,420,'ik166');
+    F(L,520,420,'dk198'); F(L,520,330,'dk199'); F(L,520,510,'dk199',180); F(L,433,420,'dk199',270); F(L,607,420,'dk199',90); F(L,520,420,'dk213');
+    A(L,'W',170,'dk209'); A(L,'W',170,'tx223'); F(L,330,170,'dk206',90); F(L,170,170,'dk212',90); F(L,190,170,'ik73',90); F(L,450,100,'dk200',270); F(L,520,100,'dk201',270); F(L,450,200,'dk214');
+    base.items.push({id:uid('i'),name:'Raumteiler',kind:'freewall',x:640,z:160,w:280,d:12,h:200,rot:90,elev:0,color:'#b9b6af'});
+    F(L,751,160,'ik38',270); F(L,667,40,'ik123',270); F(L,667,280,'ik123',270); A(L,'S',700,'dk210'); F(L,960,560,'ik172'); F(L,960,40,'ik78'); F(L,40,40,'ik172'); F(L,750,160,'ik167');
+    F(B,195,60,SHOWER(90,120)); A(B,'O',180,WCs); A(B,'S',120,'ik148'); A(B,'S',120,'ik155',{elev:95}); A(B,'W',80,TOWEL);
+    A(An,'O',144,'ik51'); A(An,'N',60,'ik70'); F(An,120,250,'ik85');
+    base.pets=[{id:uid('p'),art:'hund',rasse:'labrador',farbe:0}]; return base; }
   if(k==='haus'){ base.roomH=250;
     const wz=R('Wohnzimmer',0,0,560,460), az=R('Arbeitszimmer',580,0,300,220), wc=R('Gäste-WC',580,240,140,220), ab=R('Abstellraum',740,240,140,220), ku=R('Küche',0,480,300,300), fl=R('Flur',320,480,560,300);
     base.rooms=[wz,az,wc,ab,ku,fl];
     base.openings=[O(wz,'N','fenster',70,160,{panes:2}),O(wz,'N','fenster',330,160,{panes:2}),O(wz,'W','tuer',150,180,{style:'balkon',panes:2,height:215}),O(wz,'S','offen',380,120),
-      O(az,'N','fenster',90,120),O(az,'W','tuer',120,85,{hinge:'b'}),O(wc,'S','tuer',30,75),O(wc,'O','fenster',80,50,{sill:140,height:70,style:'kipp'}),O(ab,'S','tuer',30,75),
+      O(az,'N','fenster',90,120),O(az,'W','tuer',120,85,{hinge:'b'}),O(wc,'S','tuer',20,75),O(wc,'O','fenster',80,50,{sill:140,height:70,style:'kipp'}),O(ab,'S','tuer',30,75),
       O(ku,'N','offen',60,140),O(ku,'W','fenster',100,120),O(ku,'S','fenster',90,120),O(fl,'O','tuer',80,100,{leaf:'kassette',color:'anthrazit'}),O(fl,'O','fenster',200,40,{sill:20,height:180,style:'fest'})];
-    base.items=[I('Ecksofa',260,330,280,180,85,'#6f7f8c',180,{kind:'cornersofa'}),I('Couchtisch',260,195,110,60,42,'#b08a62',0),I('Teppich',260,215,240,170,1,'#9a8f7c',0),I('TV-Board',260,22,180,40,45,'#4a4f55',0),
-      I('Esstisch',430,130,160,90,75,'#b08a62',90),I('Stuhl',355,90,42,49,90,'#3a2f2a',90),I('Stuhl',355,170,42,49,90,'#3a2f2a',90),I('Stuhl',505,90,42,49,90,'#3a2f2a',270),I('Stuhl',505,170,42,49,90,'#3a2f2a',270),
+    base.items=[Object.assign(ikItem(IKEA.find(p=>p.id==='ik1'),260,315),{rot:180}),I('Couchtisch',230,210,110,60,42,'#b08a62',0),I('Teppich',240,215,240,170,1,'#9a8f7c',0),I('TV-Board',260,22,180,40,45,'#4a4f55',0),
+      I('Esstisch',400,130,160,90,75,'#b08a62',90),I('Stuhl',325,90,42,49,90,'#3a2f2a',90),I('Stuhl',325,170,42,49,90,'#3a2f2a',90),I('Stuhl',475,90,42,49,90,'#3a2f2a',270),I('Stuhl',475,170,42,49,90,'#3a2f2a',270),
       I('Schreibtisch',730,40,140,70,74,'#e8e4dc',0),I('Bürostuhl',730,112,60,60,100,'#2d2d2d',180),I('Regal',858,130,100,40,190,'#e8e4dc',90),
-      I('WC',690,420,37,65,40,'#f4f4f2',180),I('Waschbecken',612,300,50,40,20,'#f4f4f2',90,{elev:65}),
+      I('WC',702,420,37,65,40,'#f4f4f2',180),I('Waschbecken',612,300,50,40,20,'#f4f4f2',90,{elev:65}),
       I('Küchenzeile',150,750,280,60,90,'#e8e4dc',180,{kind:'kitchen'}),I('Kühlschrank',34,650,60,65,185,'#dfe3e6',90),
       I('Garderobe',860,725,100,35,180,'#b08a62',90),
       I('Treppe Gerade',505,728,100,330,275,'#b8915f',90,{kind:'stairs',stype:'gerade',rail:'rechts'})];
+    A(wz,'N',260,'tx221'); F(wz,400,130,'ik164'); F(wz,30,410,'ik172'); F(wz,530,40,'ik78'); A(wz,'S',300,'ik29'); F(wz,260,215,'ik168'); A(wz,'S',300,'ik174',{elev:205});
+    F(az,150,110,'ik168'); F(az,30,30,'ik173'); F(ku,150,150,'ik166'); F(ku,100,269,KETTLE); F(ku,200,269,COFFEE);
+    F(fl,150,150,'ik168'); F(fl,450,100,'ik168'); A(fl,'N',240,'ik153'); A(ab,'N',70,'tx232'); F(wc,70,110,'ik168');
     const SL=(side,win)=>({side,knee:100,depth:230,win});
     const sz=R('Schlafzimmer',0,0,430,460), kz=R('Kinderzimmer',450,0,430,460), bd=R('Bad',0,480,300,300), f2=R('Flur',320,480,560,300);
     sz.slopes=[SL('N',2)]; kz.slopes=[SL('N',1)]; bd.slopes=[SL('S',1)];
     const og={id:'f1',name:'Dachgeschoss',lv:1,h:275,rooms:[sz,kz,bd,f2],
-      openings:[O(sz,'W','fenster',220,100),O(sz,'S','tuer',340,85,{hinge:'b'}),O(kz,'O','fenster',220,100),O(kz,'S','tuer',40,85),O(bd,'O','tuer',40,80),O(f2,'S','fenster',400,100),O(f2,'O','fenster',100,100)],
-      items:[I('Bett 180×200',215,355,186,206,45,'#cfc6b8',180),I('Nachttisch',95,430,40,40,55,'#b08a62',180),I('Nachttisch',335,430,40,40,55,'#b08a62',180),I('Kleiderschrank 3-türig',35,300,150,58,201,'#e8e4dc',90),
-        I('Bett 90×200',815,350,96,206,40,'#d9c7a6',180),I('Schreibtisch',560,420,120,60,74,'#ffffff',180),I('Kommode',560,260,80,45,90,'#e8e4dc',90),
-        I('Badewanne',150,735,170,75,58,'#f4f4f2',0),I('WC',35,560,37,65,40,'#f4f4f2',90),I('Waschbecken',150,505,60,45,20,'#f4f4f2',0,{elev:65}),I('Dusche',255,540,90,90,200,'#e9eef0',0)]};
+      openings:[O(sz,'W','fenster',220,100),O(sz,'S','tuer',345,85,{hinge:'b'}),O(kz,'O','fenster',220,100),O(kz,'S','tuer',40,85),O(bd,'O','tuer',40,80),O(f2,'S','fenster',400,100),O(f2,'O','fenster',100,100)],
+      items:[I('Bett 180×200',215,355,186,206,45,'#cfc6b8',180),I('Nachttisch',95,430,40,40,55,'#b08a62',180),I('Nachttisch',328,430,40,40,55,'#b08a62',180),I('Kleiderschrank 3-türig',35,300,150,58,201,'#e8e4dc',90),
+        I('Bett 90×200',815,350,96,206,40,'#d9c7a6',180),I('Schreibtisch',700,420,120,60,74,'#ffffff',180),I('Kommode',560,260,80,45,90,'#e8e4dc',90),
+        I('Badewanne',150,735,170,75,58,'#f4f4f2',0),I('WC',35,640,37,65,40,'#f4f4f2',90),I('Waschbecken',150,505,60,45,20,'#f4f4f2',0,{elev:65}),I('Dusche',45,525,90,90,200,'#e9eef0',0)]};
+    { const sv=base.items; base.items=og.items; F(sz,215,230,'ik167'); F(sz,95,430,'ik171',0,{elev:55}); F(sz,328,430,'ik171',0,{elev:55}); F(sz,215,330,'ik75'); A(sz,'S',215,'ik176');
+      F(kz,215,300,'ik165'); A(kz,'W',250,'ik186'); F(kz,215,330,'ik159'); F(bd,150,150,'ik168'); F(f2,150,150,'ik168'); F(f2,500,150,'ik168'); base.items=sv; }
+    base.pets=[{id:uid('p'),art:'hund',rasse:'golden',farbe:0}];
     base.floors=[{id:'f0',name:'Erdgeschoss',lv:0,h:275},og]; base.floorId='f0'; return base; }
   return base; }
 function plan(){ return tplState('leer'); }
