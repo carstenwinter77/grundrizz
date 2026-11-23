@@ -515,7 +515,7 @@ label.pshow input{width:auto;margin:0;flex:none}
   <h4>Grundriss zeichnen</h4>
   <ul><li><span>Zeichnen</span><span>oben links: Räume als Rechteck aufziehen, sie rasten an anderen Räumen ein</span></li>
   <li><span>Tür, Fenster</span><span>Werkzeug wählen und auf eine Wand tippen, danach ziehen zum Verschieben, Griffe ändern die Breite</span></li>
-  <li><span>Stockwerke</span><span>oben in der Leiste wählen oder „+ Stockwerk darüber“ / „+ Keller“. Die Etage darunter ist im Grundriss gestrichelt zu sehen</span></li>
+  <li><span>Stockwerke</span><span>oben in der Leiste wählen oder „+ Stockwerk darüber“ / „+ Keller“. Die Etage darunter ist im Grundriss gestrichelt zu sehen. „Ganzes Haus ansehen“ zeigt alle Etagen mit Dach von außen</span></li>
   <li><span>Treppe</span><span>im Zeichnen-Modus „Treppe“ antippen: gerade, L, U, Wendel oder Raumspar. Beim Begehen läufst du sie hoch und runter</span></li>
   <li><span>Dachschräge</span><span>Raum antippen, unten „Dachschräge an der Wand“ wählen, Kniestock, Tiefe und Dachfenster einstellen</span></li>
   <li><span>Wand</span><span>freie Wände ziehen, auch schräg, und Stützen</span></li>
@@ -874,7 +874,7 @@ const TEMPLATES = [
   {k:'raum', n:'Ein Raum', d:'4,5 × 4 m mit Tür und Fenster'},
   {k:'1zi', n:'1-Zimmer-Wohnung', d:'Wohnraum, Küche, Bad, Flur · ca. 39 m²'},
   {k:'2zi', n:'2-Zimmer-Wohnung', d:'plus Schlafzimmer · ca. 50 m²'},
-  {k:'haus', n:'Einfamilienhaus', d:'Erd- und Dachgeschoss mit Treppe, eingerichtet · ca. 130 m²'},
+  {k:'haus', n:'Einfamilienhaus', d:'Keller, Erdgeschoss, Dachgeschoss mit Satteldach, alles eingerichtet · ca. 230 m²'},
   {k:'studio', n:'Studio-Apartment', d:'Fertig eingerichtet, mit Katze · ca. 36 m²'},
   {k:'familie', n:'Familienwohnung', d:'4 Zimmer, komplett eingerichtet · ca. 90 m²'},
   {k:'loft', n:'Loft', d:'Offen, 3,20 m hoch, Designermöbel, Hund · ca. 80 m²'}
@@ -965,33 +965,69 @@ function tplState(k){
     A(An,'O',144,'ik51'); A(An,'N',60,'ik70'); F(An,120,250,'ik85');
     base.pets=[{id:uid('p'),art:'hund',rasse:'labrador',farbe:0}]; return base; }
   if(k==='haus'){ base.roomH=250;
-    const wz=R('Wohnzimmer',0,0,560,460), az=R('Arbeitszimmer',580,0,300,220), wc=R('Gäste-WC',580,240,140,220), ab=R('Abstellraum',740,240,140,220), ku=R('Küche',0,480,300,300), fl=R('Flur',320,480,560,300);
-    base.rooms=[wz,az,wc,ab,ku,fl];
-    base.openings=[O(wz,'N','fenster',70,160,{panes:2}),O(wz,'N','fenster',330,160,{panes:2}),O(wz,'W','tuer',150,180,{style:'balkon',panes:2,height:215}),O(wz,'S','offen',380,120),
-      O(az,'N','fenster',90,120),O(az,'W','tuer',120,85,{hinge:'b'}),O(wc,'S','tuer',20,75),O(wc,'O','fenster',80,50,{sill:140,height:70,style:'kipp'}),O(ab,'S','tuer',30,75),
-      O(ku,'N','offen',60,140),O(ku,'W','fenster',100,120),O(ku,'S','fenster',90,120),O(fl,'O','tuer',80,100,{leaf:'kassette',color:'anthrazit'}),O(fl,'O','fenster',200,40,{sill:20,height:180,style:'fest'})];
-    base.items=[Object.assign(ikItem(IKEA.find(p=>p.id==='ik1'),260,315),{rot:180}),I('Couchtisch',230,210,110,60,42,'#b08a62',0),I('Teppich',240,215,240,170,1,'#9a8f7c',0),I('TV-Board',260,22,180,40,45,'#4a4f55',0),
-      I('Esstisch',400,130,160,90,75,'#b08a62',90),I('Stuhl',325,90,42,49,90,'#3a2f2a',90),I('Stuhl',325,170,42,49,90,'#3a2f2a',90),I('Stuhl',475,90,42,49,90,'#3a2f2a',270),I('Stuhl',475,170,42,49,90,'#3a2f2a',270),
-      I('Schreibtisch',730,40,140,70,74,'#e8e4dc',0),I('Bürostuhl',730,112,60,60,100,'#2d2d2d',180),I('Regal',858,130,100,40,190,'#e8e4dc',90),
-      I('WC',702,420,37,65,40,'#f4f4f2',180),I('Waschbecken',612,300,50,40,20,'#f4f4f2',90,{elev:65}),
-      I('Küchenzeile',150,750,280,60,90,'#e8e4dc',180,{kind:'kitchen'}),I('Kühlschrank',34,650,60,65,185,'#dfe3e6',90),
-      I('Garderobe',860,725,100,35,180,'#b08a62',90),
-      I('Treppe Gerade',505,728,100,330,275,'#b8915f',90,{kind:'stairs',stype:'gerade',rail:'rechts'})];
-    A(wz,'N',260,'tx221'); F(wz,400,130,'ik164'); F(wz,30,410,'ik172'); F(wz,530,40,'ik78'); A(wz,'S',300,'ik29'); F(wz,260,215,'ik168'); A(wz,'S',300,'ik174',{elev:205});
-    F(az,150,110,'ik168'); F(az,30,30,'ik173'); F(ku,150,150,'ik166'); F(ku,100,269,KETTLE); F(ku,200,269,COFFEE);
-    F(fl,150,150,'ik168'); F(fl,450,100,'ik168'); A(fl,'N',240,'ik153'); A(ab,'N',70,'tx232'); F(wc,70,110,'ik168');
-    const SL=(side,win)=>({side,knee:100,depth:230,win});
-    const sz=R('Schlafzimmer',0,0,430,460), kz=R('Kinderzimmer',450,0,430,460), bd=R('Bad',0,480,300,300), f2=R('Flur',320,480,560,300);
-    sz.slopes=[SL('N',2)]; kz.slopes=[SL('N',1)]; bd.slopes=[SL('S',1)];
-    const og={id:'f1',name:'Dachgeschoss',lv:1,h:275,rooms:[sz,kz,bd,f2],
-      openings:[O(sz,'W','fenster',220,100),O(sz,'S','tuer',345,85,{hinge:'b'}),O(kz,'O','fenster',220,100),O(kz,'S','tuer',40,85),O(bd,'O','tuer',40,80),O(f2,'S','fenster',400,100),O(f2,'O','fenster',100,100)],
-      items:[I('Bett 180×200',215,355,186,206,45,'#cfc6b8',180),I('Nachttisch',95,430,40,40,55,'#b08a62',180),I('Nachttisch',328,430,40,40,55,'#b08a62',180),I('Kleiderschrank 3-türig',35,300,150,58,201,'#e8e4dc',90),
-        I('Bett 90×200',815,350,96,206,40,'#d9c7a6',180),I('Schreibtisch',700,420,120,60,74,'#ffffff',180),I('Kommode',560,260,80,45,90,'#e8e4dc',90),
-        I('Badewanne',150,735,170,75,58,'#f4f4f2',0),I('WC',35,640,37,65,40,'#f4f4f2',90),I('Waschbecken',150,505,60,45,20,'#f4f4f2',0,{elev:65}),I('Dusche',45,525,90,90,200,'#e9eef0',0)]};
-    { const sv=base.items; base.items=og.items; F(sz,215,230,'ik167'); F(sz,95,430,'ik171',0,{elev:55}); F(sz,328,430,'ik171',0,{elev:55}); F(sz,215,330,'ik75'); A(sz,'S',215,'ik176');
-      F(kz,215,300,'ik165'); A(kz,'W',250,'ik186'); F(kz,215,330,'ik159'); F(bd,150,150,'ik168'); F(f2,150,150,'ik168'); F(f2,500,150,'ik168'); base.items=sv; }
+    // 11 × 9 m, Satteldach (First Nord-Süd), Keller, Erdgeschoss, Dachgeschoss. Treppen liegen übereinander im Flur.
+    const TUR=(r,side,pos,w,ex)=>O(r,side,'tuer',pos,w,ex), FEN=(r,side,pos,w,ex)=>O(r,side,'fenster',pos,w,ex);
+    const STAIR=(x,z,h)=>({id:uid('i'),name:'Treppe gerade',x,z,w:100,d:380,h,color:'#b8915f',rot:180,elev:0,kind:'stairs',stype:'gerade',rail:'beide'});
+    const onFloor=(fn)=>{ const sv=base.items; base.items=[]; fn(); const out=base.items; base.items=sv; return out; };
+    const TROCKNER=['Wäschetrockner',60,60,85,'#f0f0ee',{kind:'washer'}], TRUHE=['Gefriertruhe',110,65,85,'#f2f2f2',{kind:'box'}];
+    // ---- Erdgeschoss ----
+    const wz=R('Wohnzimmer',0,0,388,560), ku=R('Küche',0,572,388,328), fl=R('Flur',400,0,340,700), wc=R('Gäste-WC',400,712,340,188),
+      az=R('Arbeitszimmer',752,0,348,440), gz=R('Gästezimmer',752,452,348,448);
+    base.rooms=[wz,ku,fl,wc,az,gz];
+    base.openings=[TUR(fl,'N',120,100,{leaf:'kassette',color:'anthrazit'}),FEN(fl,'N',20,50,{sill:20,height:180,style:'fest'}),
+      TUR(fl,'W',30,85,{hinge:'b'}),TUR(fl,'O',30,85),TUR(fl,'W',585,85),TUR(fl,'O',560,80),TUR(fl,'S',140,75),
+      O(wz,'S','offen',60,130),FEN(wz,'W',40,120),TUR(wz,'W',380,160,{style:'balkon',panes:2,height:215}),FEN(wz,'N',250,110),
+      FEN(ku,'W',100,120,{sill:105,height:110}),FEN(ku,'S',130,120),
+      FEN(az,'N',110,130),FEN(az,'O',160,130),FEN(gz,'O',180,100),FEN(gz,'S',120,120),FEN(wc,'S',140,60,{sill:140,height:70,style:'kipp'})];
+    base.items=[];
+    // Wohnzimmer
+    A(wz,'N',120,'ik33'); A(wz,'N',120,'tx221'); F(wz,120,330,'ik0',180); F(wz,120,200,'ik14'); F(wz,150,240,'ik73'); F(wz,300,210,'ik10',90); F(wz,300,290,'ik84',90);
+    A(wz,'O',420,'ik29'); F(wz,355,525,'ik172'); F(wz,140,230,'ik164'); F(wz,250,450,'ik168'); A(wz,'S',300,'ik176'); A(wz,'N',305,RAD(100)); A(wz,'W',100,RAD(100)); F(wz,350,300,'ik77');
+    // Küche mit Essplatz
+    A(ku,'W',170,KITCHEN(300)); A(ku,'S',100,FRIDGE); F(ku,30,60,KETTLE); F(ku,30,110,COFFEE);
+    F(ku,250,150,'ik91',90); F(ku,180,130,'ik21',270); F(ku,180,205,'ik21',270); F(ku,320,130,'ik21',90); F(ku,320,205,'ik21',90); F(ku,250,150,'ik166'); A(ku,'S',300,RAD(80)); F(ku,250,150,'ik173',0,{elev:74});
+    // Flur
+    A(fl,'S',280,COAT); A(fl,'S',30,'ik153'); F(fl,170,70,'ik168'); F(fl,170,610,'ik168'); A(fl,'W',620,'ik155',{elev:90});
+    // Gäste-WC
+    A(wc,'S',40,WCs); A(wc,'O',60,'ik149'); A(wc,'O',60,'ik155',{elev:95}); F(wc,295,143,SHOWER(90,90)); A(wc,'W',100,TOWEL); F(wc,170,94,'ik168');
+    // Arbeitszimmer
+    A(az,'N',230,'ik60'); F(az,230,125,'ik62',180); A(az,'S',100,'ik24'); A(az,'S',260,'ik29'); F(az,290,330,'ik9',270); F(az,320,410,'ik77'); F(az,174,220,'ik168'); A(az,'N',60,RAD(80)); A(az,'W',300,'tx232');
+    // Gästezimmer
+    A(gz,'O',230,'ik8'); A(gz,'N',100,'ik126'); A(gz,'S',220,'ik43'); F(gz,200,230,'ik74'); F(gz,174,224,'ik165'); F(gz,30,420,'ik169'); F(gz,315,395,'ik172');
+    base.items.push(STAIR(685,330,275));
+    // ---- Dachgeschoss: Schrägen an West- und Ostseite, Kniestock 1 m ----
+    const SL=(side,win)=>({side,knee:100,depth:200,win});
+    const sz=R('Schlafzimmer',0,0,508,440), bd=R('Bad',0,452,508,308), ab=R('Abstellraum',0,772,508,128), f2=R('Flur',520,0,220,900),
+      k1=R('Kinderzimmer',752,0,348,440), k2=R('Jugendzimmer',752,452,348,448);
+    sz.slopes=[SL('W',2)]; bd.slopes=[SL('W',1)]; ab.slopes=[SL('W',0)]; k1.slopes=[SL('O',1)]; k2.slopes=[SL('O',1)];
+    const dgO=[TUR(f2,'W',200,85),TUR(f2,'W',560,80),TUR(f2,'W',800,75),TUR(f2,'O',30,85),TUR(f2,'O',560,85),
+      FEN(sz,'N',300,120),FEN(f2,'N',60,100),FEN(f2,'S',60,100),FEN(k1,'N',30,100),FEN(k2,'S',30,100),FEN(ab,'S',300,60,{sill:110,height:60,style:'kipp'})];
+    const dgI=onFloor(()=>{
+      A(sz,'S',300,'ik38'); A(sz,'S',180,'ik44'); A(sz,'S',420,'ik44'); F(sz,180,416,'ik171',0,{elev:55}); F(sz,420,416,'ik171',0,{elev:55});
+      A(sz,'O',100,'ik50'); A(sz,'W',220,'ik41'); F(sz,300,300,'ik75'); F(sz,330,200,'ik167'); A(sz,'S',300,'ik176',{elev:120}); F(sz,250,60,'ik86',180); F(sz,160,40,'ik77'); F(sz,30,420,'ik173');
+      A(bd,'W',150,TUB); F(bd,458,50,SHOWER(90,90)); A(bd,'S',250,WCs); A(bd,'S',370,'ik148'); A(bd,'S',370,'ik150',{elev:120}); A(bd,'N',300,TOWEL); A(bd,'N',200,'ik69'); F(bd,330,150,'ik168'); F(bd,30,280,'ik173');
+      A(ab,'N',250,'ik32'); A(ab,'N',350,'ik32'); F(ab,300,64,'ik168');
+      A(k1,'O',300,'ik40'); A(k1,'S',80,'ik57'); F(k1,80,340,'ik139',180); A(k1,'W',220,'ik189'); A(k1,'O',120,'ik186'); F(k1,150,250,'ik159'); F(k1,74,220,'ik165'); F(k1,150,150,'ik188');
+      A(k2,'O',300,'ik117'); A(k2,'S',90,'ik134'); F(k2,90,350,'ik138',180); A(k2,'N',60,'ik127'); A(k2,'W',280,'ik25'); F(k2,150,250,'ik158'); F(k2,74,224,'ik163'); F(k2,140,425,'ik170',0,{elev:76});
+      F(f2,57,300,'ik168'); F(f2,110,700,'ik168'); A(f2,'W',420,'ik174',{elev:140}); F(f2,180,840,'ik172'); });
+    // ---- Keller ----
+    const KR=(n,x,z,w,d,fin)=>{ const r=R(n,x,z,w,d); r.h=230; if(!fin){ r.floor='#b9b6ae'; r.pattern='glatt'; } return r; };
+    const hb=KR('Hobbyraum',0,0,388,560,true), ws=KR('Werkstatt',0,572,388,328), kf=KR('Kellerflur',400,0,340,700), vr=KR('Vorratskeller',400,712,340,188),
+      hz=KR('Heizungsraum',752,0,348,440), wk=KR('Waschkeller',752,452,348,448);
+    const KF=(r,side,pos,w)=>FEN(r,side,pos,w,{sill:170,height:45,style:'kipp'});
+    const kO=[TUR(kf,'W',30,85),TUR(kf,'O',30,85),TUR(kf,'W',585,85),TUR(kf,'O',560,80),TUR(kf,'S',140,75),
+      KF(hb,'W',100,100),KF(hb,'N',200,100),KF(ws,'W',100,100),KF(hz,'O',200,80),KF(wk,'O',250,100),KF(vr,'S',200,60)];
+    const kI=onFloor(()=>{
+      F(hb,194,300,['Tischtennisplatte',274,152,76,'#1f5f8b',{kind:'table'}],90); A(hb,'N',194,'ik7'); A(hb,'S',100,'ik180'); A(hb,'S',230,'ik28'); F(hb,194,150,'ik168'); F(hb,194,450,'ik168');
+      A(ws,'W',180,['Werkbank',200,70,90,'#a0805a',{kind:'table'}]); A(ws,'S',150,'ik178'); A(ws,'S',260,'ik180'); F(ws,194,164,'ik168');
+      A(hz,'N',120,['Gas-Brennwerttherme',45,35,75,'#f4f4f2',{kind:'boiler',elev:120}]); A(hz,'N',220,['Warmwasserspeicher 300 l',70,70,180,'#e8e8e8',{kind:'box'}]); A(hz,'S',120,'ik179'); F(hz,174,220,'ik168');
+      A(wk,'O',60,WASHER); A(wk,'O',125,TROCKNER); A(wk,'O',200,['Ausgussbecken',60,45,20,'#f4f4f2',{kind:'sink',elev:65}]); A(wk,'S',150,'ik32'); A(wk,'N',150,TRUHE); F(wk,174,224,'ik168');
+      A(vr,'S',60,'ik32'); A(vr,'S',160,'ik32'); A(vr,'S',260,'ik32'); F(vr,170,94,'ik168');
+      F(kf,170,70,'ik168'); F(kf,170,610,'ik168'); A(kf,'S',290,'ik177');
+      base.items.push(STAIR(455,330,255)); });
     base.pets=[{id:uid('p'),art:'hund',rasse:'golden',farbe:0}];
-    base.floors=[{id:'f0',name:'Erdgeschoss',lv:0,h:275},og]; base.floorId='f0'; return base; }
+    base.floors=[{id:'fk',name:'Keller',lv:-1,h:255,rooms:[hb,ws,kf,vr,hz,wk],openings:kO,items:kI},{id:'f0',name:'Erdgeschoss',lv:0,h:275},{id:'f1',name:'Dachgeschoss',lv:1,h:275,rooms:[sz,bd,ab,f2,k1,k2],openings:dgO,items:dgI}];
+    base.floorId='f0'; return base; }
   return base; }
 function plan(){ return tplState('leer'); }
 
@@ -2198,8 +2234,12 @@ function buildEnv(){ setTimeout(()=>{ try{ applyEnvK(); wake(); }catch(e){} },0)
   const lvl=state.level||0, b=bounds(), t=state.wall||12;
   const fe=state.floors?flElev(flCur()):0, low=state.floors?!!flBelow():false;
   GROUND = (lvl>0 ? -(lvl*290+18) : -16) - fe;
-  if(fe>=0) envGround(envG,-60000,-60000,60000,60000,'#7f9459',0);
-  const pad=900; if(fe>=0) envGround(envG,b.x0-pad,b.z0-pad,b.x1+pad,b.z1+pad,'#86995f',0.6);
+  // Mit Keller darunter: Rasen nur rund ums Haus, damit man durchs Treppenloch in den Keller sieht
+  const hx0=b.x0-t, hx1=b.x1+t, hz0=b.z0-t, hz1=b.z1+t;
+  const GR=(x0,z0,x1,z1,c,o)=>{ if(!low) return envGround(envG,x0,z0,x1,z1,c,o);
+    envGround(envG,x0,z0,x1,hz0,c,o); envGround(envG,x0,hz1,x1,z1,c,o); envGround(envG,x0,hz0,hx0,hz1,c,o); envGround(envG,hx1,hz0,x1,hz1,c,o); };
+  if(fe>=0) GR(-60000,-60000,60000,60000,'#7f9459',0);
+  const pad=900; if(fe>=0) GR(b.x0-pad,b.z0-pad,b.x1+pad,b.z1+pad,'#86995f',0.6);
   if(lvl>0 && !low){ const wallM=envMat('#ebe6dc',0.92), w=b.x1-b.x0, d=b.z1-b.z0;
     envBox(envG,(b.x0+b.x1)/2,GROUND,(b.z0+b.z1)/2,w,-fe-2-GROUND,d,0,wallM); }
   const R=rngFrom('baeume'+Math.round(b.x1)+Math.round(b.z1)), cx=(b.x0+b.x1)/2, cz=(b.z0+b.z1)/2, rad=Math.max(b.x1-b.x0,b.z1-b.z0)/2+500;
@@ -4189,7 +4229,7 @@ function flElev(f){ let e=0; flSorted().forEach(q=>{ if(f.lv>=0 && q.lv>=0 && q.
 function flAt(lv){ return (state.floors||[]).find(f=>f.lv===lv)||null; }
 function flBelow(){ return flAt(flCur().lv-1); }
 function flAbove(){ return flAt(flCur().lv+1); }
-function flSwitch(id, quiet){ const cur=flCur(), nf=(state.floors||[]).find(f=>f.id===id); if(!nf||nf===cur) return;
+function flSwitch(id, quiet){ const cur=flCur(), nf=(state.floors||[]).find(f=>f.id===id); if(!nf||nf===cur) return; flAll=false;
   cur.rooms=state.rooms; cur.openings=state.openings; cur.items=state.items;
   state.rooms=nf.rooms||[]; state.openings=nf.openings||[]; state.items=nf.items||[]; delete nf.rooms; delete nf.openings; delete nf.items; state.floorId=id;
   sel=null; try{ multi.clear(); }catch(e){}
@@ -4208,8 +4248,11 @@ function flDel(id){ if((state.floors||[]).length<2) return; const f=state.floors
   state.floors.forEach(q=>{ const auto=q.name===flAutoName(q.lv); if(f.lv>=0 && q.lv>f.lv) q.lv--; if(f.lv<0 && q.lv<f.lv) q.lv++; if(auto) q.name=flAutoName(q.lv); });
   persist(); rebuildAll(); try{ buildEnv(); }catch(e){} renderAll(); if(ED.on){ edSheet(); edDraw(); } toast(f.name+' gelöscht · Rückgängig holt es zurück'); }
 function flUi(){ const s=$('flSel'); if(!s) return; const fs=flSorted().reverse();
-  s.innerHTML=fs.map(f=>`<option value="${f.id}"${f.id===state.floorId?' selected':''}>${esc(f.name)}</option>`).join('')+'<option value="+1">+ Stockwerk darüber</option><option value="-1">+ Keller darunter</option>'; }
-$('flSel').addEventListener('change',e=>{ const v=e.target.value; if(v==='+1'||v==='-1') flAdd(+v); else flSwitch(v); flUi(); });
+  s.innerHTML=fs.map(f=>`<option value="${f.id}"${f.id===state.floorId?' selected':''}>${esc(f.name)}</option>`).join('')+(fs.length>1?`<option value="all"${flAll?' selected':''}>Ganzes Haus ansehen</option>`:'')+'<option value="+1">+ Stockwerk darüber</option><option value="-1">+ Keller darunter</option>';
+  if(flAll) s.value='all'; }
+$('flSel').addEventListener('change',e=>{ const v=e.target.value;
+  if(v==='all'){ flAll=true; if(walls!=='full'){ walls='full'; try{ syncWalls(); }catch(e){} } if(typeof setView==='function' && view!=='3d') setView('3d'); rebuildAll(); try{ fit(); }catch(e){} toast('Ganzes Haus · zum Einrichten oben eine Etage wählen'); flUi(); return; }
+  const was=flAll; flAll=false; if(v==='+1'||v==='-1') flAdd(+v); else if(v===state.floorId && was) rebuildAll(); else flSwitch(v); flUi(); });
 function flSheet(){ const f=flCur(); return `<details class="dset"${(state.floors||[]).length>1?' open':''}><summary>Stockwerk: ${esc(f.name)}</summary>
   ${state.floors.length>1?`<div class="dseg">${flSorted().reverse().map(q=>`<button type="button" data-fl="${q.id}" aria-pressed="${q.id===f.id}">${esc(q.name)}</button>`).join('')}</div>`:''}
   <div class="grid g2"><label class="f">Name<input id="dFlName" value="${esc(f.name)}" maxlength="30" autocomplete="off"></label><label class="f">Geschosshöhe (Boden bis Boden)<input type="number" inputmode="decimal" id="dFlH" value="${f.h}" min="180" max="600"></label></div>
@@ -4253,9 +4296,28 @@ function slopeRoof(r){ if(!r.slopes||!r.slopes.length||walls!=='full') return; c
       const fr=new THREE.Shape(shapeRect(w[0]-5,w[1]-5,w[2]+5,w[3]+5)); fr.holes.push(new THREE.Path(shapeRect(w[0]+2,w[1]+2,w[2]-2,w[3]-2)));
       mesh(new THREE.ExtrudeGeometry(fr,{depth:24,bevelEnabled:false}),dfFrame,0); }); });
   // flaches Dachstück über dem Rest
-  const f=flatRect(r); if(f.x1-f.x0>1 && f.z1-f.z0>1) wbox(worldG,f.x0-t/2,f.x1+t/2,r.h+20,r.h+26,f.z0-t/2,f.z1+t/2,roofMat); }
-function topFloorRoof(r){ if(walls!=='full' || r.slopes&&r.slopes.length || walk) return; if(!state.rooms.some(q=>q.slopes&&q.slopes.length)) return; const t=state.wall||12;
+  const f=flatRect(r); if(!BW.gable && f.x1-f.x0>1 && f.z1-f.z0>1) wbox(worldG,f.x0-t/2,f.x1+t/2,r.h+20,r.h+26,f.z0-t/2,f.z1+t/2,roofMat); }
+function topFloorRoof(r){ if(BW.gable || walls!=='full' || r.slopes&&r.slopes.length || walk) return; if(!state.rooms.some(q=>q.slopes&&q.slopes.length)) return; const t=state.wall||12;
   wbox(worldG,r.x-t,r.x+r.w+t,r.h+20,r.h+26,r.z-t,r.z+r.d+t,roofMat); }
+// Satteldach: gegenüberliegende Schrägen an den Außenwänden bis zum First weiterführen, Giebeldreiecke dazu
+function gableInfo(rooms){ if(!rooms.length) return null; const x0=Math.min(...rooms.map(r=>r.x)), x1=Math.max(...rooms.map(r=>r.x+r.w)), z0=Math.min(...rooms.map(r=>r.z)), z1=Math.max(...rooms.map(r=>r.z+r.d));
+  const find=side=>{ for(const r of rooms) for(const s of r.slopes||[]) if(s.side===side && (side==='W'?Math.abs(r.x-x0)<2:side==='O'?Math.abs(r.x+r.w-x1)<2:side==='N'?Math.abs(r.z-z0)<2:Math.abs(r.z+r.d-z1)<2)) return {k:Math.min(s.knee,r.h),dep:s.depth,h:r.h}; return null; };
+  const w=find('W'), o=find('O'), n=find('N'), sd=find('S');
+  if(w&&o) return {ax:'z',a:w,x0,x1,z0,z1}; if(n&&sd) return {ax:'x',a:n,x0,x1,z0,z1}; return null; }
+function gableRoof(G){ const g=BW.gable; if(!g || walls!=='full' || walk) return; const t=state.wall||12, {k,dep,h}=g.a;
+  const alongZ=g.ax==='z', lo=alongZ?g.x0:g.z0, hi=alongZ?g.x1:g.z1, mid=(lo+hi)/2, p=(h-k)/dep, ridge=k+p*(mid-lo), L=Math.hypot(dep,h-k), co=dep/L, si=(h-k)/L;
+  const a0=(alongZ?g.z0:g.x0)-t-30, a1=(alongZ?g.z1:g.x1)+t+30, vEnd=(mid-lo+24*si)/co;
+  [1,-1].forEach(sg=>{ // sg 1: von lo nach innen, -1: von hi nach innen
+    const sh=new THREE.Shape(shapeRect(a0,L,a1,vEnd)); const geo=new THREE.ShapeGeometry(sh);
+    const U=alongZ?new THREE.Vector3(0,0,1):new THREE.Vector3(1,0,0), Vv=alongZ?new THREE.Vector3(sg*dep,h-k,0):new THREE.Vector3(0,h-k,sg*dep), V=Vv.clone().normalize(), N=new THREE.Vector3().crossVectors(U,V), up=N.y<0?N.clone().negate():N;
+    const O=alongZ?new THREE.Vector3(sg>0?lo:hi,k,0):new THREE.Vector3(0,k,sg>0?lo:hi);
+    geo.applyMatrix4(new THREE.Matrix4().makeBasis(U,V,N).setPosition(O)); geo.translate(up.x*24,up.y*24,up.z*24); geo.scale(S,S,S);
+    const m=new THREE.Mesh(geo,roofMat); m.castShadow=true; m.receiveShadow=true; G.add(m); });
+  // Giebel
+  const tri=new THREE.Shape([new THREE.Vector2(lo+dep-1,h-1),new THREE.Vector2(hi-dep+1,h-1),new THREE.Vector2(mid,ridge+20)].map(v=>v));
+  const wm=(typeof wallMat!=='undefined'&&wallMat)||roofInMat;
+  [[alongZ?g.z0-t:g.x0-t],[alongZ?g.z1:g.x1]].forEach(([c])=>{ const geo=new THREE.ExtrudeGeometry(tri,{depth:t,bevelEnabled:false});
+    if(alongZ) geo.translate(0,0,c); else { geo.rotateY(-Math.PI/2); geo.translate(c+t,0,0); } geo.scale(S,S,S); const m=new THREE.Mesh(geo,wm); m.castShadow=true; m.receiveShadow=true; G.add(m); }); }
 function slopeSheet(r){ const has=new Set((r.slopes||[]).map(s=>s.side)), s0=(r.slopes||[])[0]||{knee:100,depth:220,win:1};
   return `<div class="oplab">Dachschräge an der Wand</div><div class="dseg">${SLOPE_SIDES.map(([k,v])=>`<button type="button" data-slope="${k}" aria-pressed="${has.has(k)}">${v}</button>`).join('')}</div>
   ${has.size?`<div class="grid"><label class="f">Kniestock<input type="number" inputmode="decimal" data-sk="knee" value="${s0.knee}" min="0" max="${r.h}"></label><label class="f">Tiefe der Schräge<input type="number" inputmode="decimal" data-sk="depth" value="${s0.depth}" min="20"></label><label class="f">Dachfenster<input type="number" inputmode="numeric" data-sk="win" value="${s0.win|0}" min="0" max="4"></label></div>`:''}`; }
@@ -4348,14 +4410,16 @@ function flHoles(below,n0,slab){ const st=below?flData(below).items.filter(i=>ki
       segs.forEach(([u0,u1])=>{ const P=u=>stWorld(it,a[0]+(b[0]-a[0])*u,a[1]+(b[1]-a[1])*u), p=P(u0), q=P(u1), m=P((u0+u1)/2); if(near(p,q)||!inRoomAny(m[0],m[1])) return;
         railAlong(g,[[p[0],95,p[1]],[q[0],95,q[1]]],railMat,12); }); });
     g.scale.setScalar(S); worldG.add(g); }); }
+let flAll=false;
 function buildWorld(){ disposeGroup(worldG); BW.sub=true;
-  try{ const cur=flCur(), e0=flElev(cur); flSorted().filter(f=>f!==cur && (f.lv<cur.lv || (walk && f.lv===cur.lv+1))).forEach(f=>{ try{ flGhost(f,flElev(f)-e0); }catch(e){ console.warn(e); } });
-    const n0=worldG.children.length; buildWorld0(); flHoles(flBelow(),n0,true); }
-  finally{ BW.sub=false; } }
+  try{ const cur=flCur(), e0=flElev(cur); flSorted().filter(f=>f!==cur && (f.lv<cur.lv || (walk && f.lv===cur.lv+1) || (flAll && !walk))).forEach(f=>{ try{ flGhost(f,flElev(f)-e0); }catch(e){ console.warn(e); } });
+    BW.gable=flAt(cur.lv+1)?null:gableInfo(state.rooms);
+    const n0=worldG.children.length; buildWorld0(); flHoles(flBelow(),n0,true); gableRoof(worldG); }
+  finally{ BW.sub=false; BW.gable=null; } }
 function flGhost(f,dy){ const sv=[state.rooms,state.openings,state.items,walls,labels], n0=worldG.children.length;
-  state.rooms=f.rooms||[]; state.openings=f.openings||[]; state.items=f.items||[]; walls='full'; labels=false; BW.ghost=true;
-  try{ buildWorld0(); flHoles(flAt(f.lv-1),n0,true); if(walk && dy>0) ceilBuild(worldG); const ig=new THREE.Group(); state.items.forEach(it=>{ try{ ig.add(makeItem(it).g); }catch(e){} }); worldG.add(ig); }
-  finally{ [state.rooms,state.openings,state.items,walls,labels]=sv; BW.ghost=false; }
+  state.rooms=f.rooms||[]; state.openings=f.openings||[]; state.items=f.items||[]; walls='full'; labels=false; BW.ghost=true; BW.gable=flAt(f.lv+1)?null:gableInfo(state.rooms);
+  try{ buildWorld0(); flHoles(flAt(f.lv-1),n0,true); gableRoof(worldG); if(walk && dy>0) ceilBuild(worldG); const ig=new THREE.Group(); state.items.forEach(it=>{ try{ ig.add(makeItem(it).g); }catch(e){} }); worldG.add(ig); }
+  finally{ [state.rooms,state.openings,state.items,walls,labels]=sv; BW.ghost=false; BW.gable=null; }
   worldG.children.slice(n0).forEach(c=>{ c.position.y+=dy*S; delete c.userData.room; c.userData.rooms=['\u0000'];
     c.traverse(o=>{ o.userData.noHit=true; if(o.userData.id) delete o.userData.id; }); }); }
 function buildCeil(){ disposeGroup(ceilG); ceilBuild(ceilG); }
