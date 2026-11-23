@@ -416,8 +416,11 @@ label.pshow input{width:auto;margin:0;flex:none}
 .ufbox small{font-size:11.5px;line-height:1.35}
 #drawSvg .ufimg{pointer-events:none}
 #drawSvg .ufmv{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:6 4}
-#drawSvg .ufl{stroke:#e0483e;stroke-width:2.5}
-#drawSvg .ufp{fill:#e0483e;stroke:#fff;stroke-width:2}
+#drawSvg .ufl{stroke:#e0483e;stroke-width:2}
+#drawSvg .ufp{fill:#e0483e;stroke:#fff;stroke-width:1.5}
+#drawSvg .ufh{fill:rgb(224 72 62 / .12);stroke:#e0483e;stroke-width:2}
+#drawSvg .ufh.on{fill:none;stroke-dasharray:4 3}
+#drawSvg .ufx{stroke:#e0483e;stroke-width:1;stroke-dasharray:6 5;opacity:.8}
 @media (max-width:760px){ .ufbox{left:54px;right:10px;width:auto;top:56px;padding:8px 10px} .draw:has(.dsheet:not([hidden]):not(.min)) .ufbox{display:none} }
 
 /* Raum ausmessen */
@@ -4112,7 +4115,7 @@ function ufLoad(file){ if(!file || !/^image\//.test(file.type)){ toast('Bitte ei
       if(!stored) toast('Foto ist zu groß zum Speichern. Es bleibt sichtbar, bis du die Seite schließt.'); };
     im.onerror=()=>toast('Das Bild ließ sich nicht öffnen'); im.src=fr.result; }; fr.readAsDataURL(file); }
 function ufMode(m){ UF.mode=m; if(m) { const el=$('ufBox'); if(el) el.classList.remove('min'); } UF.pts=[]; ufPanel(); ufHint(); edDraw(); }
-function ufHint(){ const h=$('dHint'); if(!h) return; if(UF.mode==='scale') h.textContent=UF.pts.length<2?'Maßstab: Tippe auf den Anfang und das Ende einer Wand, deren Länge du kennst':'Jetzt die echte Länge eintragen'; else if(UF.mode==='move') h.textContent='Foto mit dem Finger oder der Maus verschieben'; }
+function ufHint(){ const h=$('dHint'); if(!h) return; if(UF.mode==='scale') h.textContent=UF.sdrag?'Loslassen, wenn der Punkt genau sitzt':UF.pts.length<2?'Maßstab: Tippe auf den Anfang und das Ende einer Wand, deren Länge du kennst':'Punkte ziehen zum genauen Ausrichten, mit zwei Fingern zoomen. Dann die echte Länge eintragen'; else if(UF.mode==='move') h.textContent='Foto mit dem Finger oder der Maus verschieben'; }
 function ufPanel(){ let el=$('ufBox'); const u=ufCur();
   if(!el){ el=document.createElement('div'); el.id='ufBox'; el.className='ufbox'; edEl.appendChild(el);
     el.addEventListener('click',e=>{ const b=e.target.closest('[data-uf]'); if(!b) return; const a=b.dataset.uf, u=ufCur();
@@ -4121,18 +4124,19 @@ function ufPanel(){ let el=$('ufBox'); const u=ufCur();
       if(a==='hide' && u){ u.show=!u.show; persist(); edDraw(); ufPanel(); }
       if(a==='del' && u){ snap(); try{ localStorage.removeItem(LS+'.img.'+u.id); }catch(e){} delete state.under[ufKey()]; persist(); ufMode(null); toast('Foto entfernt'); }
       if(a==='ok'){ const L=+$('ufLen').value; if(!(L>0)){ toast('Bitte die Länge in cm eintragen'); return; } ufApplyScale(L); }
+      if(a==='reset'){ UF.pts=[]; ufHint(); ufPanel(); edDraw(); }
       if(a==='min') { el.classList.toggle('min'); ufPanel(); }
       if(a==='new') $('ufFile').click(); });
     el.addEventListener('input',e=>{ if(e.target.id==='ufOp'){ const u=ufCur(); if(u){ u.op=+e.target.value; edDraw(); } } });
     el.addEventListener('change',e=>{ if(e.target.id==='ufOp') persist(); }); }
-  el.hidden=!u || !ED.on; if(el.hidden) return;
+  el.hidden=!u || !ED.on; if(el.hidden) return; const keepLen=$('ufLen')?$('ufLen').value:'', hadFocus=document.activeElement&&document.activeElement.id==='ufLen';
   const need=UF.mode==='scale' && UF.pts.length===2;
   el.innerHTML=`<div class="ufh"><b>Vorlage</b><button type="button" class="lnk" data-uf="hide">${u.show!==false?'Ausblenden':'Zeigen'}</button><button type="button" class="x" data-uf="min" aria-label="${el.classList.contains('min')?'Aufklappen':'Einklappen'}">${el.classList.contains('min')?'▾':'▴'}</button></div>
-    ${need?`<label class="uff">Echte Länge dieser Strecke<span><input id="ufLen" type="number" inputmode="decimal" min="10" placeholder="z. B. 420"> cm</span></label><div class="ufr"><button type="button" class="btn pri sm" data-uf="ok">Maßstab übernehmen</button><button type="button" class="btn sm" data-uf="scale">Abbrechen</button></div>`
+    ${need?`<label class="uff">Echte Länge dieser Strecke<span><input id="ufLen" type="number" inputmode="decimal" min="10" placeholder="z. B. 420" value="${keepLen}"> cm</span></label><div class="ufr"><button type="button" class="btn pri sm" data-uf="ok">Maßstab übernehmen</button><button type="button" class="btn sm" data-uf="reset">Neu setzen</button><button type="button" class="btn sm" data-uf="scale">Abbrechen</button></div>`
     :`<div class="ufr"><button type="button" class="btn sm${UF.mode==='scale'?' on':''}" data-uf="scale" title="Zwei Punkte antippen und die echte Länge eintragen">Maßstab</button><button type="button" class="btn sm${UF.mode==='move'?' on':''}" data-uf="move" title="Foto verschieben">Verschieben</button><button type="button" class="btn sm" data-uf="new" title="Anderes Foto wählen">Neu</button><button type="button" class="btn sm" data-uf="del" title="Foto entfernen">Entfernen</button></div>
       <label class="uff">Deutlichkeit<input id="ufOp" type="range" min="0.15" max="1" step="0.05" value="${u.op}"></label>
       <small class="muted">${u.scaled?'Maßstab gesetzt. Jetzt mit „Raum“ die Räume auf dem Foto nachziehen.':'Tipp: Erst den Maßstab setzen, dann die Räume nachziehen.'}</small>`}`;
-  if(need) setTimeout(()=>{ const i=$('ufLen'); if(i) i.focus(); },30); }
+  if(need && (hadFocus || !keepLen && !matchMedia('(pointer:coarse)').matches)) setTimeout(()=>{ const i=$('ufLen'); if(i) i.focus(); },30); }
 function ufApplyScale(L){ const u=ufCur(); if(!u || UF.pts.length<2) return; const [p,q]=UF.pts, d=Math.hypot(q[0]-p[0],q[1]-p[1]); if(d<1) return; const k=L/d;
   snap(); u.x=p[0]-(p[0]-u.x)*k; u.z=p[1]-(p[1]-u.z)*k; u.w*=k; u.scaled=true; persist(); $('ufBox').classList.add('min'); ufMode(null); edFit(); ufFitPhoto(); toast('Maßstab gesetzt. Jetzt die Räume nachziehen.'); edSetTool('room'); }
 function ufFitPhoto(){ const u=ufCur(); if(!u) return; const R=edRect(), P=edPads(), h=u.w*u.ar; const s=Math.min((R.width-P.left-P.right)/u.w,(R.height-P.top-P.bot)/h);
@@ -4144,11 +4148,22 @@ function ufFitPhoto(){ const u=ufCur(); if(!u) return; const R=edRect(), P=edPad
       if(UF.mode==='move') edSvg.insertAdjacentHTML('beforeend',`<rect class="ufmv" x="${a.toFixed(1)}" y="${b.toFixed(1)}" width="${W.toFixed(1)}" height="${H.toFixed(1)}"/>`); }
     if(UF.mode==='scale'){ let s=''; const P=UF.pts.map(p=>w2s(p[0],p[1]));
       if(P.length===2) s+=`<line class="ufl" x1="${P[0][0]}" y1="${P[0][1]}" x2="${P[1][0]}" y2="${P[1][1]}"/>`;
-      P.forEach(p=>{ s+=`<circle class="ufp" cx="${p[0]}" cy="${p[1]}" r="7"/>`; }); edSvg.insertAdjacentHTML('beforeend',s); } }; }
+      const D=UF.sdrag, R=edRect(), coarse=matchMedia('(pointer:coarse)').matches;
+      if(D && P[D.i]){ const [x,y]=P[D.i]; s+=`<path class="ufx" d="M0 ${y}H${R.width}M${x} 0V${R.height}"/>`; }
+      P.forEach((p,i)=>{ const on=D&&D.i===i; s+=`<circle class="ufh${on?' on':''}" cx="${p[0]}" cy="${p[1]}" r="${coarse?18:12}"/><circle class="ufp" cx="${p[0]}" cy="${p[1]}" r="${on?3:4.5}"/>`; });
+      edSvg.insertAdjacentHTML('beforeend',s); } }; }
 // Eingaben abfangen, solange Maßstab oder Verschieben aktiv ist (zwei Finger zoomen weiter)
 edSvg.addEventListener('pointerdown',e=>{ if(!UF.mode || !ufCur() || ED.pts.size>0 || e.isPrimary===false) return; const [px,py]=ptr(e), w=s2w(px,py);
-  if(UF.mode==='scale'){ e.stopImmediatePropagation(); e.preventDefault(); if(UF.pts.length>=2) UF.pts=[]; UF.pts.push(w); ufHint(); ufPanel(); edDraw(); }
+  if(UF.mode==='scale'){ const tol=e.pointerType==='touch'?30:14; let i=UF.pts.findIndex(q=>{ const a=w2s(q[0],q[1]); return Math.hypot(a[0]-px,a[1]-py)<tol; });
+    if(i<0 && UF.pts.length>=2) return; // freie Stelle: Ansicht verschieben wie sonst
+    e.stopImmediatePropagation(); e.preventDefault(); edSvg.setPointerCapture(e.pointerId);
+    if(i<0){ UF.pts.push(w); i=UF.pts.length-1; UF.sdrag={pid:e.pointerId,i,orig:null,off:[0,0]}; }
+    else { const a=UF.pts[i]; UF.sdrag={pid:e.pointerId,i,orig:a.slice(),off:[a[0]-w[0],a[1]-w[1]]}; }
+    ufHint(); edDraw(); return; }
   else if(UF.mode==='move'){ e.stopImmediatePropagation(); e.preventDefault(); const u=ufCur(); edSvg.setPointerCapture(e.pointerId); UF.drag={pid:e.pointerId,w0:w,x:u.x,z:u.z}; snap(); } },true);
+edSvg.addEventListener('pointerdown',e=>{ const D=UF.sdrag; if(D && D.pid!==e.pointerId){ if(D.orig) UF.pts[D.i]=D.orig; else UF.pts.splice(D.i,1); UF.sdrag=null; edDraw(); } },true); // zweiter Finger: Ziehen abbrechen, Zoomen geht vor
+edSvg.addEventListener('pointermove',e=>{ const D=UF.sdrag; if(!D || D.pid!==e.pointerId) return; e.stopImmediatePropagation(); const [px,py]=ptr(e), w=s2w(px,py); UF.pts[D.i]=[w[0]+D.off[0],w[1]+D.off[1]]; edDraw(); },true);
+['pointerup','pointercancel'].forEach(t=>edSvg.addEventListener(t,e=>{ const D=UF.sdrag; if(!D || D.pid!==e.pointerId) return; e.stopImmediatePropagation(); UF.sdrag=null; ufHint(); ufPanel(); edDraw(); },true));
 edSvg.addEventListener('pointermove',e=>{ const D=UF.drag; if(!D || D.pid!==e.pointerId) return; e.stopImmediatePropagation(); const u=ufCur(); if(!u) return; const [px,py]=ptr(e), w=s2w(px,py); u.x=D.x+w[0]-D.w0[0]; u.z=D.z+w[1]-D.w0[1]; edDraw(); },true);
 ['pointerup','pointercancel'].forEach(t=>edSvg.addEventListener(t,e=>{ if(!UF.drag || UF.drag.pid!==e.pointerId) return; e.stopImmediatePropagation(); UF.drag=null; persist(); },true));
 // Knopf in der Werkzeugleiste und Dateiauswahl
