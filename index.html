@@ -318,6 +318,17 @@ dialog.pets{max-width:460px}
 .pshow{display:flex;align-items:center;gap:8px;font-size:13px;margin-top:14px}
 label.pshow{display:flex!important;flex-direction:row;justify-content:flex-start;align-items:center;gap:8px;width:auto}
 label.pshow input{width:auto;margin:0;flex:none}
+.dsheet .oplab{font:600 11px var(--font-ui);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 0 6px}
+.dsheet .oppre{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.dsheet .oppre button{flex:none;display:grid;gap:1px;text-align:left;padding:6px 9px;border:1px solid var(--line);border-radius:9px;background:var(--field);color:var(--fg);font:inherit;font-size:12px;cursor:pointer;max-width:150px}
+.dsheet .oppre button span{color:var(--muted);font-size:11px}
+.dsheet .oppre button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.dsheet .opcol{display:flex;gap:7px;flex-wrap:wrap}
+.dsheet .opcol button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);padding:0;cursor:pointer}
+.dsheet .opcol button[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:2px}
+.dsheet .opchk{display:flex;flex-direction:row;align-items:center;gap:8px;align-self:end;padding-bottom:8px}
+.dsheet .opchk input{width:auto;margin:0}
+.dsheet .oppre,.dsheet .opcol,.dsheet .oplab{flex:none}.dsheet .oppre{min-height:50px}.dsheet .oppre button{min-height:44px}
 
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
@@ -485,6 +496,7 @@ label.pshow input{width:auto;margin:0;flex:none}
   <h4>Grundriss zeichnen</h4>
   <ul><li><span>Zeichnen</span><span>oben links: Räume als Rechteck aufziehen, sie rasten an anderen Räumen ein</span></li>
   <li><span>Tür, Fenster</span><span>Werkzeug wählen und auf eine Wand tippen, danach ziehen zum Verschieben, Griffe ändern die Breite</span></li>
+  <li><span>Ausführung</span><span>Tür oder Fenster antippen: Drehtür, Doppeltür, Schiebetür, Glastür, Balkon- und Hebe-Schiebe-Tür, Fenster mit Sprossen, Oberlicht, bodentief, Rollladen, Farben. Neue übernehmen die zuletzt gewählte Ausführung</span></li>
   <li><span>Griffe</span><span>an den Wänden eines ausgewählten Raums ändern seine Größe, Maße auch per Zahl</span></li>
   <li><span>Zwei Finger</span><span>verschieben und zoomen, am Computer Mausrad</span></li>
   <li><span><kbd>V</kbd> <kbd>R</kbd> <kbd>T</kbd> <kbd>F</kbd> <kbd>O</kbd></span><span>Auswählen · Raum · Tür · Fenster · Durchgang</span></li></ul>
@@ -1148,29 +1160,7 @@ function buildWorld(){ setTimeout(()=>{ try{ applyEnvK(); wake(); }catch(e){} },
     let ext=t; state.rooms.forEach(q=>{ if(q===r) return; ['N','S','W','O'].forEach(sd=>{ const s2=sideInfo(q,sd); if(s2.hz===si.hz && s2.out===-si.out && Math.abs(s2.line-si.line)<=t*2.5 && s2.b>o.a && s2.a<o.b) ext=Math.max(ext,Math.abs(s2.line-si.line)); }); });
     const pIn=si.line, pOut=si.line+si.out*ext, a=o.a, b=o.b, clip=(y0,y1)=>[y0,Math.min(y1,H)];
     const part=(aa,bb,y0,y1,p,q,mat)=>{ const [c0,c1]=clip(y0,y1); if(c1-c0>0.3) sbox(worldG,si.hz,aa,bb,c0,c1,p,q,mat); };
-    if(o.type==='tuer'){
-      const pa=pIn+si.out*-1.5, pb=pOut+si.out*1.5;
-      part(a,a+4,0,o.height,pa,pb,frameMat); part(b-4,b,0,o.height,pa,pb,frameMat); part(a,b,o.height,o.height+5,pa,pb,frameMat);
-      if(isOuterDoor(o,si)){ const pm=pIn+si.out*ext*0.5; part(a+4,b-4,1,o.height-1,pm-2.5,pm+2.5,leafMat);
-        if(H>100){ const hy=Math.min(105,H-2), hb=o.hinge==='b', hxx=hb?a+12:b-12; part(hxx-6,hxx+6,hy-1,hy+1,pIn-si.out*6,pIn,metalMat); part(hxx-1.5,hxx+1.5,hy-1,hy+1,pIn,pm,metalMat); }
-        return; }
-      const lw=b-a-8, hingeB=o.hinge==='b', hx=hingeB?b-4:a+4, dirA=hingeB?-1:1;
-      const sDir = o.swing==='aus' ? si.out : -si.out, face = o.swing==='aus' ? pOut : pIn;
-      const leafA = hingeB ? [hx-4,hx] : [hx,hx+4];
-      part(leafA[0],leafA[1],1,o.height-1,face,face+sDir*lw,leafMat);
-      const hy=Math.min(105,H-2); if(H>100){ const hp=face+sDir*(lw-7); part(leafA[0]-2,leafA[1]+2,hy-1,hy+1,hp-6,hp,metalMat); }
-      const pts=[]; for(let i=0;i<=24;i++){ const th=i/24*Math.PI/2, al=hx+dirA*lw*Math.cos(th), pp=face+sDir*lw*Math.sin(th);
-        pts.push(si.hz ? new THREE.Vector3(al*S,0.006,pp*S) : new THREE.Vector3(pp*S,0.006,al*S)); }
-      worldG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),arcMat));
-    } else {
-      const y0=o.sill, y1=o.sill+o.height, pm=si.line+si.out*Math.min(ext,t)*0.55, fa=pm-3.5, fb=pm+3.5;
-      part(a,a+6,y0,y1,fa,fb,frameMat); part(b-6,b,y0,y1,fa,fb,frameMat); part(a,b,y0,y0+6,fa,fb,frameMat); part(a,b,y1-6,y1,fa,fb,frameMat);
-      const nPanes = Math.max(1, Math.round((b-a)/90));
-      for(let i=1;i<nPanes;i++){ const mx=a+(b-a)*i/nPanes; part(mx-3,mx+3,y0,y1,fa,fb,frameMat); }
-      part(a+6,b-6,y0+6,y1-6,pm-0.4,pm+0.4,glassMat);
-      for(let i=0;i<nPanes;i++){ const mx=a+(b-a)*(i+0.5)/nPanes; if(H>y0+40) part(mx-1,mx+1,y0+(y1-y0)*0.5-6,y0+(y1-y0)*0.5+6,fb,fb-si.out*-3,metalMat); }
-      part(a-4,b+4,y0-3,y0,pIn-si.out*5,fa,sillMat);
-    }
+    opDraw(o,r,si,H,ext,pIn,pOut,a,b,part);
   }
   const b=bounds(), cx=(b.x0+b.x1)/2*S, cz=(b.z0+b.z1)/2*S, R=Math.max(b.x1-b.x0,b.z1-b.z0)*S;
   sunC={cx,cz,R}; placeSun(); applyIso();
@@ -3430,13 +3420,21 @@ function edDraw(){ if(!ED.on) return; const R=edRect(), W=R.width, H=R.height, t
   state.openings.forEach(o=>{ const G=opGeo(o); if(!G) return; const {si,a,b,ext,r}=G, hz=si.hz, l0=si.line, l1=si.line+si.out*ext, isSel=sel&&sel.t==='op'&&sel.id===o.id;
     const gap=svgPoly([P2(hz,a,l0-si.out*0.6),P2(hz,b,l0-si.out*0.6),P2(hz,b,l1+si.out*0.6),P2(hz,a,l1+si.out*0.6)], `class="gap" fill="${tint(r.floor,0.62)}"`);
     g+=gap;
-    if(o.type==='tuer'){ const hb=o.hinge==='b', hx=hb?b:a, dirA=hb?-1:1, lw=b-a, sDir=o.swing==='aus'?si.out:-si.out, face=o.swing==='aus'?l1:l0;
-      const tip=P2(hz,hx,face+sDir*lw), end=P2(hz,hx+dirA*lw,face), [tx,ty]=w2s(...tip), [ex,ey]=w2s(...end), rr=(lw*s).toFixed(1);
-      const cross=(tip[0]-P2(hz,hx,face)[0])*(end[1]-P2(hz,hx,face)[1])-(tip[1]-P2(hz,hx,face)[1])*(end[0]-P2(hz,hx,face)[0]);
-      g+=svgLineW(...P2(hz,hx,face),...tip,`class="leaf${isSel?' on':''}"`)+`<path class="arc${isSel?' on':''}" d="M${tx.toFixed(1)} ${ty.toFixed(1)} A${rr} ${rr} 0 0 ${cross>0?1:0} ${ex.toFixed(1)} ${ey.toFixed(1)}"/>`;
-      g+=svgLineW(...P2(hz,a,l0),...P2(hz,a,l1),'class="jamb"')+svgLineW(...P2(hz,b,l0),...P2(hz,b,l1),'class="jamb"'); }
-    else if(o.type==='fenster'){ const m1=l0+si.out*ext*0.3, m2=l0+si.out*ext*0.7;
-      g+=svgPoly([P2(hz,a,l0),P2(hz,b,l0),P2(hz,b,l1),P2(hz,a,l1)],`class="win${isSel?' on':''}"`)+svgLineW(...P2(hz,a,m1),...P2(hz,b,m1),'class="winl"')+svgLineW(...P2(hz,a,m2),...P2(hz,b,m2),'class="winl"'); }
+    const arc2=(hx,dirA,face,sDir,lw,cls)=>{ const tip=P2(hz,hx,face+sDir*lw), end=P2(hz,hx+dirA*lw,face), base=P2(hz,hx,face), [tx,ty]=w2s(...tip), [ex,ey]=w2s(...end), rr=(lw*s).toFixed(1);
+      const cross=(tip[0]-base[0])*(end[1]-base[1])-(tip[1]-base[1])*(end[0]-base[0]);
+      return svgLineW(...base,...tip,`class="leaf${isSel?' on':''}"`)+`<path class="arc${isSel?' on':''}${cls||''}" d="M${tx.toFixed(1)} ${ty.toFixed(1)} A${rr} ${rr} 0 0 ${cross>0?1:0} ${ex.toFixed(1)} ${ey.toFixed(1)}"/>`; };
+    const winSym=(nP,slide)=>{ const m1=l0+si.out*ext*0.3, m2=l0+si.out*ext*0.7; let q=svgPoly([P2(hz,a,l0),P2(hz,b,l0),P2(hz,b,l1),P2(hz,a,l1)],`class="win${isSel?' on':''}"`);
+      if(slide){ const mid=(a+b)/2; q+=svgLineW(...P2(hz,a,m1),...P2(hz,mid+6,m1),'class="winl"')+svgLineW(...P2(hz,mid-6,m2),...P2(hz,b,m2),'class="winl"'); }
+      else { q+=svgLineW(...P2(hz,a,m1),...P2(hz,b,m1),'class="winl"')+svgLineW(...P2(hz,a,m2),...P2(hz,b,m2),'class="winl"'); for(let i=1;i<nP;i++){ const mx=a+(b-a)*i/nP; q+=svgLineW(...P2(hz,mx,l0),...P2(hz,mx,l1),'class="winl"'); } } return q; };
+    if(o.type==='tuer'){ const st=o.style||'dreh', hb=o.hinge==='b', sDir=o.swing==='aus'?si.out:-si.out, face=o.swing==='aus'?l1:l0, jam=svgLineW(...P2(hz,a,l0),...P2(hz,a,l1),'class="jamb"')+svgLineW(...P2(hz,b,l0),...P2(hz,b,l1),'class="jamb"');
+      if(st==='dreh'||st==='balkon'){ if(st==='balkon') g+=winSym(o.panes||1,false); if(st==='balkon' && (o.panes||1)>1){ const lw=(b-a)/2; g+=arc2(a,1,face,sDir,lw)+arc2(b,-1,face,sDir,lw); } else g+=arc2(hb?b:a,hb?-1:1,face,sDir,b-a); }
+      else if(st==='pendel'){ g+=arc2(hb?b:a,hb?-1:1,face,sDir,b-a)+arc2(hb?b:a,hb?-1:1,o.swing==='aus'?l0:l1,-sDir,b-a,' dash'); }
+      else if(st==='doppel'){ const lw=(b-a)/2; g+=arc2(a,1,face,sDir,lw)+arc2(b,-1,face,sDir,lw); }
+      else if(st==='schiebe'){ const side=hb?-1:1, open=0.55*(b-a), u0=side>0?a+open:a-open, fp=l0-si.out*3; g+=svgLineW(...P2(hz,u0,fp),...P2(hz,u0+(b-a),fp),`class="leaf${isSel?' on':''}"`)+svgLineW(...P2(hz,Math.min(a,u0)-4,fp-si.out*3),...P2(hz,Math.max(b,u0+(b-a))+4,fp-si.out*3),'class="jamb dash"'); }
+      else if(st==='tasche'){ const side=hb?-1:1, mid=si.line+si.out*ext/2, u0=side>0?b-0.25*(b-a):a-0.75*(b-a); g+=svgLineW(...P2(hz,u0,mid),...P2(hz,u0+(b-a),mid),`class="leaf${isSel?' on':''}"`)+svgLineW(...P2(hz,side>0?b:a-(b-a),mid),...P2(hz,side>0?b+(b-a)*0.75:a,mid),'class="jamb dash"'); }
+      else if(st==='hebeschiebe'){ g+=winSym(2,true); }
+      g+=jam; }
+    else if(o.type==='fenster'){ g+=winSym(opPanes(o),o.style==='schiebe'); }
     else { g+=svgLineW(...P2(hz,a,l0),...P2(hz,a,l1),'class="jamb dash"')+svgLineW(...P2(hz,b,l0),...P2(hz,b,l1),'class="jamb dash"'); if(isSel) g+=svgPoly([P2(hz,a,l0),P2(hz,b,l0),P2(hz,b,l1),P2(hz,a,l1)],'class="win on" style="fill:none"'); }
   });
   // Beschriftung
@@ -3554,8 +3552,8 @@ function edUp(e){ const had=ED.pts.has(e.pointerId); ED.pts.delete(e.pointerId);
     setTimeout(()=>{ const i=$('dName'); if(i && innerWidth>700){ i.focus(); i.select(); } },30); return; }
   if(A.k==='place'){ ED.act=null; const t=ED.tool, nw=nearestWall(x,z,e.pointerType==='touch'?44:30);
     if(!nw){ toast('Tippe direkt auf eine Wand'); edDraw(); return; }
-    const len=nw.si.b-nw.si.a, wd=Math.min(len, t==='fenster'?120:t==='tuer'?85:90), pos=r1(Math.max(0,Math.min(len-wd,nw.al-nw.si.a-wd/2)));
-    const o={id:uid('o'),roomId:nw.r.id,side:nw.side,type:t,pos,width:wd,sill:90,height:t==='fenster'?130:205};
+    const LP=(ED.lastOp||{})[t]||{}, len=nw.si.b-nw.si.a, wd=Math.min(len, LP.width||(t==='fenster'?120:t==='tuer'?85:90)), pos=r1(Math.max(0,Math.min(len-wd,nw.al-nw.si.a-wd/2)));
+    const o={id:uid('o'),roomId:nw.r.id,side:nw.side,type:t,pos,width:wd,sill:90,height:t==='fenster'?130:205}; Object.assign(o,JSON.parse(JSON.stringify(LP)),{width:wd});
     // Türen in Innenwänden: so ausrichten, dass sie in den angetippten Raum aufgehen
     snap(); state.openings.push(o); persist(); ED.dirty=true; edSelect({t:'op',id:o.id});
     toast(TYPES[t]+' eingesetzt'+(t==='tuer'?'. „Aufschlag“ und „Anschlag“ unten ändern die Richtung.':'')); return; }
@@ -3593,7 +3591,8 @@ function edSheet(){ const sh=$('dSheet'), sel=ED.sel; let h='';
     h=`<div class="dh"><b>${TYPES[o.type]}</b><span class="dar">in ${esc(G?G.r.name:'')}</span><button class="x" data-a="close" aria-label="Schließen">×</button></div>
     <div class="dseg">${Object.entries(TYPES).map(([k,v])=>`<button type="button" data-type="${k}" aria-pressed="${o.type===k}">${v}</button>`).join('')}</div>
     <div class="grid"><label class="f">Breite<input type="number" inputmode="decimal" data-ok="width" value="${o.width}" min="20"></label>${o.type!=='offen'?`<label class="f">Höhe<input type="number" inputmode="decimal" data-ok="height" value="${o.height}" min="30"></label>`:''}${o.type==='fenster'?`<label class="f">Brüstung<input type="number" inputmode="decimal" data-ok="sill" value="${o.sill}" min="0"></label>`:''}<label class="f">Abstand Ecke<input type="number" inputmode="decimal" data-ok="pos" value="${o.pos}" min="0"></label></div>
-    ${o.type==='tuer'?`<div class="row"><button class="btn sm" data-a="hinge">Anschlag wechseln</button><button class="btn sm" data-a="swing">Aufschlag wechseln</button></div>`:''}
+    ${opSheet(o)}
+    ${o.type==='tuer'&&o.style!=='hebeschiebe'?`<div class="row"><button class="btn sm" data-a="hinge">${['schiebe','tasche'].includes(o.style)?'Seite wechseln':'Anschlag wechseln'}</button>${['schiebe','tasche'].includes(o.style)?'':'<button class="btn sm" data-a="swing">Aufschlag wechseln</button>'}</div>`:''}
     <div class="row"><span class="muted" style="flex:1">${o.type==='tuer'?'Eine Tür ohne Raum dahinter ist die Wohnungstür.':o.type==='fenster'?'Brüstung = Höhe der Fensterunterkante über dem Boden.':'Offene Wand ohne Tür, z. B. zur offenen Küche.'}</span><button class="btn sm dan" data-a="delop">Löschen</button></div>`; }
   else { const area=state.rooms.reduce((a,r)=>a+r.w*r.d,0)/10000;
     h=`<div class="dh"><b>${state.rooms.length?state.rooms.length+' '+(state.rooms.length===1?'Raum':'Räume')+' · '+fmt1(area)+' m²':'Neuer Grundriss'}</b><button class="x" data-a="hide" aria-label="Einklappen">×</button></div>
@@ -3601,7 +3600,7 @@ function edSheet(){ const sh=$('dSheet'), sel=ED.sel; let h='';
     <div class="grid"><label class="f">Wandstärke<input type="number" inputmode="decimal" data-pk="wall" value="${state.wall}" min="5" max="60"></label><label class="f">Raumhöhe alle<input type="number" inputmode="decimal" data-pk="roomH" value="${state.roomH||(state.rooms[0]&&state.rooms[0].h)||250}" min="150" max="600"></label><label class="f">Stockwerk<select data-pk="level">${[0,1,2,3,4,5,6].map(l=>`<option value="${l}" ${(state.level||0)==l?'selected':''}>${l?l+'. OG':'Erdgeschoss'}</option>`).join('')}</select></label></div>
     <div class="grid g2"><label class="f">Ort (für den Sonnenstand)<select data-pk="city">${CITIES.map(c=>`<option ${state.city===c[0]?'selected':''}>${c[0]}</option>`).join('')}</select></label><label class="f">Norden (Grad, im Uhrzeigersinn von oben)<input type="number" inputmode="numeric" data-pk="north" value="${((state.north||0)%360+360)%360}" min="0" max="359"></label></div><p class="muted" style="margin:0">Einfacher: den Nordpfeil links im Plan mit dem Finger drehen.</p></details>
     <p class="muted" style="margin:0">Unten „Raum“ wählen und Rechtecke aufziehen. Räume mit Wandstärke Abstand teilen sich eine Wand, Räume direkt aneinander werden zu einem (z. B. für L-Formen).</p>`; }
-  sh.innerHTML=h; sh.hidden=false; sh.classList.toggle('min', !sel && ED.sheetMin); }
+  sh.innerHTML=h; sh.hidden=false; sh.classList.toggle('min', !sel && ED.sheetMin); const ap=sh.querySelector('.oppre [aria-pressed="true"]'); if(ap) ap.parentNode.scrollLeft=Math.max(0,ap.offsetLeft-ap.parentNode.offsetLeft-30); }
 function edSheetVals(){ const sel=ED.sel, sh=$('dSheet'); if(!sel) return; if(sel.t==='room'){ const r=room(sel.id); if(!r) return; ['w','d','h'].forEach(k=>{ const i=sh.querySelector(`[data-rk="${k}"]`); if(i && document.activeElement!==i) i.value=r[k]; }); const a=$('dArea'); if(a) a.textContent=fmt1(r.w*r.d/10000)+' m²'; }
   else { const o=state.openings.find(q=>q.id===sel.id); if(!o) return; ['width','height','sill','pos'].forEach(k=>{ const i=sh.querySelector(`[data-ok="${k}"]`); if(i && document.activeElement!==i) i.value=o[k]; }); } }
 $('dSheet').addEventListener('focusin',e=>{ if(e.target.matches('input,select')) snap(); });
@@ -3622,7 +3621,7 @@ $('dSheet').addEventListener('change',e=>{ if(e.target.dataset.ok==='width'||e.t
 $('dSheet').addEventListener('keydown',e=>{ if(e.key==='Enter' && e.target.id==='dName'){ e.target.blur(); edSheet(); } });
 $('dSheet').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; const sel=ED.sel;
   if(b.dataset.name){ const r=room(sel.id); snap(); r.name=b.dataset.name; const f=floorFor(r.name); if(r.auto!==false){ r.floor=f[0]; r.pattern=f[1]; } r.auto=false; persist(); ED.dirty=true; edSheet(); edDraw(); return; }
-  if(b.dataset.type){ const o=state.openings.find(q=>q.id===sel.id); snap(); o.type=b.dataset.type; if(o.type==='tuer'){ o.height=205; } if(o.type==='fenster'){ o.height=130; o.sill=90; } persist(); ED.dirty=true; edSheet(); edDraw(); return; }
+  if(b.dataset.type){ const o=state.openings.find(q=>q.id===sel.id); snap(); o.type=b.dataset.type; ['style','leaf','panes','bars','transom','shutter','color','frame','frameC'].forEach(k=>delete o[k]); if(o.type==='tuer'){ o.height=205; } if(o.type==='fenster'){ o.height=130; o.sill=90; } persist(); ED.dirty=true; edSheet(); edDraw(); return; }
   const a=b.dataset.a; if(!a) return;
   if(a==='close'){ edSelect(null); return; }
   if(a==='hide'){ ED.sheetMin=!ED.sheetMin; $('dSheet').classList.toggle('min',ED.sheetMin); return; }
@@ -3872,6 +3871,136 @@ $('paAdd').onclick=()=>{ if(!state.rooms.length){ toast('Erst unter „Zeichnen�
   snap(); list.push({id:uid('p'),art:paArt,rasse:paRasse,farbe:paFarbe}); catOn=true; persist(); petsSync(); renderPets(); toast((paArt==='hund'?'Hund':'Katze')+' ist da · antippen zum Spielen'); };
 $('petList').addEventListener('click',e=>{ const b=e.target.closest('[data-prm]'); if(!b) return; snap(); state.pets=(state.pets||[]).filter(p=>p.id!==b.dataset.prm); persist(); petsSync(); renderPets(); });
 $('paShow').onchange=e=>{ catOn=e.target.checked; cats.forEach(c=>{ if(c.g) c.g.visible=catOn; }); try{ const u=JSON.parse(localStorage.getItem(LS+'.ui')||'{}'); u.cat=catOn; localStorage.setItem(LS+'.ui',JSON.stringify(u)); }catch(e){} renderPets(); wake(); };
+
+// ---------- Türen und Fenster in vielen Ausführungen ----------
+// o.style: Tür dreh|doppel|schiebe|tasche|pendel|balkon|hebeschiebe · Fenster dreh|fest|schiebe|kipp
+// o.leaf (Türblatt): glatt|kassette|lichtaus|glas|rillen · o.color Türfarbe · o.frame Rahmenfarbe · o.panes Flügel · o.bars keine|kreuz|gitter|sprosse · o.transom Oberlicht · o.shutter Rollladen 0..1 (null = keiner)
+const OP_COLORS={weiss:['Weiß','#f5f3ee'],creme:['Cremeweiß','#ece6d6'],eiche:['Eiche','#b98a57'],nuss:['Nussbaum','#6a4a33'],grau:['Lichtgrau','#c9cbca'],anthrazit:['Anthrazit','#3c4043'],schwarz:['Schwarz','#1e1f21']};
+const OPM=new Map(); function opMat(c,r){ const k=c+'|'+(r||0.5); let m=OPM.get(k); if(!m){ m=new THREE.MeshStandardMaterial({color:c,roughness:r||0.5}); SHARED.add(m); OPM.set(k,m); } return m; }
+function opCol(k,def){ return (OP_COLORS[k]||OP_COLORS[def]||OP_COLORS.weiss)[1]; }
+const DOOR_PRESETS=[
+  {k:'dreh',n:'Drehtür',d:'einflügelig',set:{style:'dreh',leaf:'glatt',width:85,height:205}},
+  {k:'kassette',n:'Landhaustür',d:'mit Kassetten',set:{style:'dreh',leaf:'kassette',width:85,height:205}},
+  {k:'licht',n:'Tür mit Glas',d:'Lichtausschnitt',set:{style:'dreh',leaf:'lichtaus',width:85,height:205}},
+  {k:'glas',n:'Ganzglastür',d:'satiniert',set:{style:'dreh',leaf:'glas',width:85,height:205}},
+  {k:'doppel',n:'Doppeltür',d:'zweiflügelig',set:{style:'doppel',leaf:'kassette',width:140,height:205}},
+  {k:'schiebe',n:'Schiebetür',d:'vor der Wand',set:{style:'schiebe',leaf:'glatt',width:95,height:210}},
+  {k:'tasche',n:'Schiebetür',d:'in der Wand',set:{style:'tasche',leaf:'glatt',width:90,height:205}},
+  {k:'pendel',n:'Pendeltür',d:'schwingt in beide Richtungen',set:{style:'pendel',leaf:'glatt',width:85,height:205}},
+  {k:'balkon',n:'Balkontür',d:'Glas, Dreh-Kipp',set:{style:'balkon',width:90,height:220}},
+  {k:'terrasse',n:'Terrassentür',d:'zweiflügelig, Glas',set:{style:'balkon',panes:2,width:160,height:220}},
+  {k:'hebeschiebe',n:'Hebe-Schiebe-Tür',d:'große Glasfront',set:{style:'hebeschiebe',width:300,height:230}}];
+const WIN_PRESETS=[
+  {k:'dreh1',n:'Fenster',d:'einflügelig',set:{style:'dreh',panes:1,width:90,height:130,sill:90,transom:false,bars:'keine'}},
+  {k:'dreh2',n:'Fenster',d:'zweiflügelig',set:{style:'dreh',panes:2,width:140,height:140,sill:85,transom:false,bars:'keine'}},
+  {k:'dreh3',n:'Fenster',d:'dreiflügelig',set:{style:'dreh',panes:3,width:210,height:140,sill:85,transom:false,bars:'keine'}},
+  {k:'boden',n:'Bodentief',d:'französischer Balkon',set:{style:'dreh',panes:2,width:130,height:220,sill:0,transom:false,bars:'keine'}},
+  {k:'ober',n:'Mit Oberlicht',d:'Kippflügel oben',set:{style:'dreh',panes:2,width:140,height:160,sill:80,transom:true,bars:'keine'}},
+  {k:'sprossen',n:'Sprossenfenster',d:'Altbau-Stil',set:{style:'dreh',panes:2,width:120,height:160,sill:80,transom:true,bars:'gitter'}},
+  {k:'fest',n:'Festverglasung',d:'lässt sich nicht öffnen',set:{style:'fest',panes:1,width:150,height:150,sill:60,transom:false,bars:'keine'}},
+  {k:'schiebe',n:'Schiebefenster',d:'zwei Flügel',set:{style:'schiebe',panes:2,width:180,height:130,sill:90,transom:false,bars:'keine'}},
+  {k:'band',n:'Fensterband',d:'breit, niedrig',set:{style:'dreh',panes:4,width:320,height:70,sill:140,transom:false,bars:'keine'}},
+  {k:'bad',n:'Badfenster',d:'klein, Kipp',set:{style:'kipp',panes:1,width:60,height:80,sill:130,transom:false,bars:'keine'}}];
+const LEAVES={glatt:'Glatt',kassette:'Kassetten',rillen:'Rillen',lichtaus:'Glasstreifen',glas:'Ganzglas'};
+const BARS={keine:'Keine',sprosse:'Eine Sprosse',kreuz:'Kreuz',gitter:'Gitter'};
+const DSTYLES={dreh:'Drehtür',doppel:'Doppeltür',schiebe:'Schiebetür vor der Wand',tasche:'Schiebetür in der Wand',pendel:'Pendeltür',balkon:'Balkon-/Terrassentür',hebeschiebe:'Hebe-Schiebe-Tür'};
+const WSTYLES={dreh:'Dreh-Kipp',kipp:'Kipp',fest:'Fest verglast',schiebe:'Schiebefenster'};
+function opPanes(o){ return o.panes>0?o.panes:Math.max(1,Math.round(o.width/90)); }
+// Glasfeld mit Rahmen, Sprossen, Griffen (für Fenster und Glastüren). y0..y1 Höhe, fa..fb Rahmentiefe, pm Glasebene
+function glassUnit(o,a,b,y0,y1,fa,fb,pm,part,si,opts){ const fm=opMat(opCol(o.frame,'weiss'),0.45), fw=opts.fw||6, n=opts.panes||opPanes(o), sl=opts.slide, gm=opts.satin?opMat('#e8eef0',0.25):glassMat;
+  part(a,a+fw,y0,y1,fa,fb,fm); part(b-fw,b,y0,y1,fa,fb,fm); part(a,b,y0,y0+fw,fa,fb,fm); part(a,b,y1-fw,y1,fa,fb,fm);
+  let yT=y1; if(opts.transom){ yT=y1-Math.max(30,(y1-y0)*0.28); part(a,b,yT-3,yT+3,fa,fb,fm); }
+  const pw=(b-a)/n, dz=(fb-fa);
+  for(let i=0;i<n;i++){ const x0=a+pw*i, x1=x0+pw, off=sl?(i%2?-1:1)*dz*0.28:0, q0=fa+off, q1=fb+off, pmq=pm+off;
+    if(i>0 && !sl) part(x0-3.5,x0+3.5,y0,yT,fa,fb,fm);
+    const sx0=x0+(i?1.5:fw), sx1=x1-(i<n-1?1.5:fw);
+    if(sl){ part(sx0-1,sx0+4,y0+fw,yT,q0+dz*0.2,q1-dz*0.2,fm); part(sx1-4,sx1+1,y0+fw,yT,q0+dz*0.2,q1-dz*0.2,fm); }
+    else if(o.style!=='fest'){ part(sx0,sx0+4,y0+fw,yT-(opts.transom?3:fw),fa+dz*0.15,fb-dz*0.15,fm); part(sx1-4,sx1,y0+fw,yT-(opts.transom?3:fw),fa+dz*0.15,fb-dz*0.15,fm); part(sx0,sx1,y0+fw,y0+fw+4,fa+dz*0.15,fb-dz*0.15,fm); part(sx0,sx1,yT-(opts.transom?3:fw)-4,yT-(opts.transom?3:fw),fa+dz*0.15,fb-dz*0.15,fm); }
+    part(sx0+2,sx1-2,y0+fw+2,yT-(opts.transom?3:fw)-2,pmq-0.4,pmq+0.4,gm);
+    const B=o.bars||'keine', gy0=y0+fw+4, gy1=yT-4, bc=(xx0,xx1,yy0,yy1)=>{ part(xx0,xx1,yy0,yy1,pmq-1.2,pmq+1.2,fm); };
+    if(B==='sprosse'){ const my=gy0+(gy1-gy0)*0.62; bc(sx0+4,sx1-4,my-1.2,my+1.2); }
+    if(B==='kreuz'){ const mx=(sx0+sx1)/2, my=gy0+(gy1-gy0)*0.6; bc(mx-1.2,mx+1.2,gy0,gy1); bc(sx0+4,sx1-4,my-1.2,my+1.2); }
+    if(B==='gitter'){ const mx=(sx0+sx1)/2; bc(mx-1,mx+1,gy0,gy1); for(let k=1;k<3;k++){ const my=gy0+(gy1-gy0)*k/3; bc(sx0+4,sx1-4,my-1,my+1); } }
+    // Griff innen
+    if(o.style!=='fest' && !opts.noHandle && (y1-y0)>35 && (n===1||i%2===0||sl)){ const hx=sl?(i%2?sx0+8:sx1-8):(n===1?sx1-6:sx1-6), hy=Math.min(y0+(yT-y0)*0.5, y0+130), ip=fa-si.out*0; part(hx-1,hx+1,hy-7,hy+7,ip,ip-si.out*3.5,metalMat); }
+  }
+  if(opts.transom){ const ty0=yT+3, ty1=y1-fw; part(a+fw,b-fw,ty0+1,ty1-1,pm-0.4,pm+0.4,gm);
+    if(o.bars==='gitter'||o.bars==='kreuz'){ const n2=Math.max(2,n*2); for(let k=1;k<n2;k++){ const mx=a+(b-a)*k/n2; part(mx-1,mx+1,ty0,ty1,pm-1.2,pm+1.2,fm); } } } }
+// Türblatt als Platte zwischen along a0..a1 (Breite), across p0..p1 (Dicke) oder umgekehrt: "flat" = Blatt parallel zur Wand
+function doorLeaf(o,hz,flat,u0,u1,y0,y1,p0,p1,part,mirror){ const hEnd=flat&&mirror?u0:u1; if(u0>u1){ const q=u0; u0=u1; u1=q; } const lm=opMat(opCol(o.color,'weiss'),o.leaf==='glas'?0.2:0.55), L=o.leaf||'glatt', W=u1-u0, hNear1=Math.abs(hEnd-u1)<Math.abs(hEnd-u0);
+  // flat: Blatt liegt entlang der Wand (u = Wandrichtung, p = quer). sonst: Blatt steht quer (u = quer zur Wand, p = Dicke entlang der Wand)
+  const box=(uu0,uu1,yy0,yy1,pp0,pp1,m)=>{ if(flat) part(uu0,uu1,yy0,yy1,pp0,pp1,m); else part(pp0,pp1,yy0,yy1,uu0,uu1,m); };
+  const pc0=Math.min(p0,p1), pc1=Math.max(p0,p1), th=pc1-pc0;
+  if(L==='glas'){ const gm=opMat('#dfe8ea',0.12); box(u0,u1,y0,y1,pc0+th*0.3,pc1-th*0.3,gm); [pc0+th*0.3-0.1,pc1-th*0.3+0.1].forEach(pp=>box(hNear1?u1-W*0.12-1.6:u0+W*0.12,hNear1?u1-W*0.12:u0+W*0.12+1.6,y0+95,y0+110,pp-(pp<pc0+th/2?1.6:0),pp+(pp<pc0+th/2?0:1.6),metalMat)); return; }
+  box(u0,u1,y0,y1,pc0,pc1,lm);
+  const face=(fn)=>{ fn(pc0-0.6,pc0); fn(pc1,pc1+0.6); };
+  if(L==='kassette'){ const pm=opMat(opCol(o.color,'weiss'),0.62), mg=Math.max(8,W*0.16), hgt=y1-y0, rows=[[0.08,0.42],[0.5,0.92]];
+    rows.forEach(([r0,r1])=>face((q0,q1)=>{ box(u0+mg,u1-mg,y0+hgt*r0,y0+hgt*r0+1.4,q0,q1,pm); box(u0+mg,u1-mg,y0+hgt*r1-1.4,y0+hgt*r1,q0,q1,pm); box(u0+mg,u0+mg+1.4,y0+hgt*r0,y0+hgt*r1,q0,q1,pm); box(u1-mg-1.4,u1-mg,y0+hgt*r0,y0+hgt*r1,q0,q1,pm); })); }
+  if(L==='rillen'){ const pm=opMat('#2a2a2a',0.8); for(let k=1;k<5;k++){ const yy=y0+(y1-y0)*k/5; face((q0,q1)=>box(u0+3,u1-3,yy-0.3,yy+0.3,q0,q1,pm)); } }
+  if(L==='lichtaus'){ const gm=opMat('#dfe8ea',0.15), c=(u0+u1)/2; box(c-6,c+6,y0+(y1-y0)*0.35,y1-18,pc0-0.2,pc1+0.2,gm); }
+  // Drücker auf beiden Seiten nahe der Schlossseite
+  const hu=hNear1?u1-7:u0+7; if(y1-y0>120) face((q0,q1)=>{ const out=q0<pc0+0.1?-1:1; box(hu-1.2,hu+1.2,y0+102,y0+108,out<0?q0-4:q1,out<0?q0:q1+4,metalMat); box(hNear1?hu-12:hu,hNear1?hu:hu+12,y0+104,y0+106.5,out<0?q0-5:q1+3,out<0?q0-3:q1+5,metalMat); }); }
+function opDraw(o,r,si,H,ext,pIn,pOut,a,b,part){
+  const fz=opMat(opCol(o.frameC||o.frame,'weiss'),0.5);
+  if(o.type==='tuer'){ const st=o.style||'dreh';
+    if(st==='balkon'||st==='hebeschiebe'){ const pm=si.line+si.out*Math.min(ext,state.wall||12)*0.55, fa=pm-4, fb=pm+4;
+      glassUnit(o,a,b,0,o.height,fa,fb,pm,part,si,{panes:st==='hebeschiebe'?2:(o.panes||1),slide:st==='hebeschiebe',transom:!!o.transom,fw:7});
+      part(a-2,b+2,0,1.2,pIn,pOut,opMat('#8d9194',0.4)); return; }
+    const pa=pIn+si.out*-1.5, pb=pOut+si.out*1.5;
+    if(st!=='tasche'){ part(a,a+4,0,o.height,pa,pb,fz); part(b-4,b,0,o.height,pa,pb,fz); part(a,b,o.height,o.height+5,pa,pb,fz); }
+    else { part(a,a+2,0,o.height,pa,pb,fz); part(b-2,b,0,o.height,pa,pb,fz); part(a,b,o.height,o.height+3,pa,pb,fz); }
+    if(isOuterDoor(o,si) && st==='dreh'){ const pm=pIn+si.out*ext*0.5; doorLeaf(Object.assign({},o,{color:o.color||'anthrazit',leaf:o.leaf==='glatt'||!o.leaf?'rillen':o.leaf}),si.hz,true,a+4,b-4,1,o.height-1,pm-2.5,pm+2.5,part);
+      return; }
+    const hingeB=o.hinge==='b', sDir=o.swing==='aus'?si.out:-si.out, face=o.swing==='aus'?pOut:pIn;
+    if(st==='dreh'||st==='pendel'){ const lw=b-a-8, hx=hingeB?b-4:a+4, leafA=hingeB?[hx-4,hx]:[hx,hx+4];
+      doorLeaf(o,si.hz,false,face,face+sDir*lw,1,o.height-1,leafA[0],leafA[1],part,sDir<0);
+      opArc(si,hx,hingeB?-1:1,face,sDir,lw); if(st==='pendel') opArc(si,hx,hingeB?-1:1,o.swing==='aus'?pIn:pOut,-sDir,lw); return; }
+    if(st==='doppel'){ const lw=(b-a-8)/2;
+      [[a+4,1,[a+4,a+8]],[b-4,-1,[b-8,b-4]]].forEach(([hx,dir,la],i)=>{ doorLeaf(o,si.hz,false,face,face+sDir*lw,1,o.height-1,la[0],la[1],part,i===1?sDir>0:sDir<0); opArc(si,hx,dir,face,sDir,lw); }); return; }
+    if(st==='schiebe'){ const lw=b-a+6, open=0.55*(b-a), fp=pIn-si.out*1.2, side=hingeB?-1:1, u0=side>0?a-3+open:a-3-open, rail=opMat('#3a3d40',0.35);
+      doorLeaf(o,si.hz,true,u0,u0+lw,1,o.height+2,fp-si.out*4,fp,part,side>0);
+      const r0=Math.min(a-6,u0-4), r1=Math.max(b+6,u0+lw+4); part(r0,r1,o.height+8,o.height+11,fp-si.out*6,fp+si.out*0.6,rail);
+      return; }
+    if(st==='tasche'){ const pm=pIn+si.out*ext*0.5, vis=0.25*(b-a), side=hingeB?-1:1, u0=side>0?b-vis:a-(b-a)+vis; doorLeaf(o,si.hz,true,u0,u0+(b-a),1,o.height-1,pm-2,pm+2,part,side<0); return; }
+    return; }
+  // Fenster
+  const y0=o.sill, y1=o.sill+o.height, pm=si.line+si.out*Math.min(ext,state.wall||12)*0.55, fa=pm-3.5, fb=pm+3.5, st=o.style||'dreh';
+  glassUnit(o,a,b,y0,y1,fa,fb,pm,part,si,{panes:opPanes(o),slide:st==='schiebe',transom:!!o.transom});
+  if(y0>2) part(a-4,b+4,y0-3,y0,pIn-si.out*5,fa,sillMat); if(y0>2) part(a-3,b+3,y0-2.5,y0,fb,pOut+si.out*4,opMat('#9ba0a3',0.35));
+  if(o.shutter!=null && o.shutter!==false){ const sm=opMat('#d4d6d6',0.6), sd=opMat('#a7abac',0.6), k=Math.max(0,Math.min(1,+o.shutter||0)), hh=(y1-y0)*k, p0=pOut+si.out*0.3, p1=pOut+si.out*2.2;
+    part(a-1,b+1,y1,y1+3,p0,p1+si.out*1,sd); part(a-2,a,y0,y1,p0,p1,sd); part(b,b+2,y0,y1,p0,p1,sd);
+    if(hh>1){ part(a,b,y1-hh,y1,p0+si.out*0.4,p1-si.out*0.3,sm); const n=Math.min(40,Math.floor(hh/5)); for(let i=1;i<=n;i++){ const yy=y1-i*5; part(a,b,yy-0.25,yy+0.25,p1-si.out*0.3,p1,sd); } } } }
+function opArc(si,hx,dirA,face,sDir,lw,dash){ const pts=[]; for(let i=0;i<=24;i++){ const th=i/24*Math.PI/2, al=hx+dirA*lw*Math.cos(th), pp=face+sDir*lw*Math.sin(th); pts.push(si.hz?new THREE.Vector3(al*S,0.006,pp*S):new THREE.Vector3(pp*S,0.006,al*S)); }
+  worldG.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),arcMat)); }
+// Eigenschaften im Zeichenmodus
+function opPresetOn(o,p){ return Object.entries(p.set).every(([k,v])=>['width','height','sill'].includes(k) || (o[k]==null?{style:'dreh',leaf:'glatt',bars:'keine',transom:false,panes:k==='panes'?opPanes(o):0}[k]:o[k])===v); }
+function opSheet(o){ if(o.type==='offen') return ''; const P=o.type==='tuer'?DOOR_PRESETS:WIN_PRESETS, st=o.style||'dreh', chips=(attr,cur,def)=>`<div class="opcol">${Object.entries(OP_COLORS).map(([k,v])=>`<button type="button" ${attr}="${k}" title="${v[0]}" aria-label="${v[0]}" aria-pressed="${(cur||def)===k}" style="background:${v[1]}"></button>`).join('')}</div>`;
+  let h=`<div class="oplab">Ausführung</div><div class="oppre">${P.map(p=>`<button type="button" data-preset="${p.k}" aria-pressed="${opPresetOn(o,p)}"><b>${esc(p.n)}</b><span>${esc(p.d)}</span></button>`).join('')}</div>`;
+  if(o.type==='tuer'){ const glassy=st==='balkon'||st==='hebeschiebe';
+    h+=`<div class="grid g2"><label class="f">Art<select data-os="style">${Object.entries(DSTYLES).map(([k,v])=>`<option value="${k}"${k===st?' selected':''}>${v}</option>`).join('')}</select></label>`+
+      (glassy?`<label class="f">Flügel<select data-os="panes">${[1,2,3].map(n=>`<option value="${n}"${(o.panes||1)===n?' selected':''}>${n}</option>`).join('')}</select></label></div><div class="oplab">Rahmenfarbe</div>${chips('data-of',o.frame,'weiss')}`
+      :`<label class="f">Türblatt<select data-os="leaf">${Object.entries(LEAVES).map(([k,v])=>`<option value="${k}"${k===(o.leaf||'glatt')?' selected':''}>${v}</option>`).join('')}</select></label></div><div class="oplab">Farbe Türblatt</div>${chips('data-oc',o.color,'weiss')}<div class="oplab">Farbe Zarge</div>${chips('data-ofc',o.frameC,'weiss')}`); }
+  else { const sh=o.shutter==null||o.shutter===false?'':String(o.shutter);
+    h+=`<div class="grid"><label class="f">Öffnen<select data-os="style">${Object.entries(WSTYLES).map(([k,v])=>`<option value="${k}"${k===st?' selected':''}>${v}</option>`).join('')}</select></label>
+      <label class="f">Flügel<select data-os="panes">${[1,2,3,4,5,6].map(n=>`<option value="${n}"${opPanes(o)===n?' selected':''}>${n}</option>`).join('')}</select></label>
+      <label class="f">Sprossen<select data-os="bars">${Object.entries(BARS).map(([k,v])=>`<option value="${k}"${k===(o.bars||'keine')?' selected':''}>${v}</option>`).join('')}</select></label></div>
+      <div class="grid g2"><label class="f">Rollladen<select data-os="shutter"><option value=""${sh===''?' selected':''}>keiner</option><option value="0"${sh==='0'?' selected':''}>offen</option><option value="0.5"${sh==='0.5'?' selected':''}>halb zu</option><option value="0.85"${sh==='0.85'?' selected':''}>fast zu</option><option value="1"${sh==='1'?' selected':''}>zu</option></select></label>
+      <label class="f opchk"><input type="checkbox" data-ob="transom"${o.transom?' checked':''}> Oberlicht</label></div>
+      <div class="oplab">Rahmenfarbe</div>${chips('data-of',o.frame,'weiss')}`; }
+  return h; }
+function opRemember(o){ ED.lastOp=ED.lastOp||{}; const k=['style','leaf','color','frame','frameC','panes','bars','transom','shutter','width','height','sill']; ED.lastOp[o.type]={}; k.forEach(q=>{ if(o[q]!==undefined) ED.lastOp[o.type][q]=o[q]; }); }
+function opChanged(o){ const r=room(o.roomId); if(r) clampOps(r); opRemember(o); persist(); ED.dirty=true; edSheet(); edDraw(); }
+$('dSheet').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b || !ED.sel || ED.sel.t!=='op') return; const o=state.openings.find(q=>q.id===ED.sel.id); if(!o) return;
+  if(b.dataset.preset){ const p=(o.type==='tuer'?DOOR_PRESETS:WIN_PRESETS).find(x=>x.k===b.dataset.preset); if(!p) return; snap(); const keepW=o.width; Object.assign(o,JSON.parse(JSON.stringify(p.set)));
+    const G=opGeo(o); if(G){ const len=G.si.b-G.si.a; if(o.width>len-4) o.width=Math.max(40,len-4); const mid=o.pos+keepW/2; o.pos=Math.max(0,Math.min(len-o.width,mid-o.width/2)); }
+    opChanged(o); toast(p.n+(p.d?' · '+p.d:'')); e.stopPropagation(); return; }
+  if(b.dataset.oc){ snap(); o.color=b.dataset.oc; opChanged(o); return; }
+  if(b.dataset.of){ snap(); o.frame=b.dataset.of; opChanged(o); return; }
+  if(b.dataset.ofc){ snap(); o.frameC=b.dataset.ofc; opChanged(o); return; } },true);
+$('dSheet').addEventListener('change',e=>{ const el=e.target; if(!ED.sel || ED.sel.t!=='op') return; const o=state.openings.find(q=>q.id===ED.sel.id); if(!o) return;
+  if(el.dataset.os){ snap(); const k=el.dataset.os, v=el.value; if(k==='panes') o.panes=+v; else if(k==='shutter') o.shutter=v===''?null:+v; else o[k]=v;
+    if(k==='style' && o.type==='tuer' && (v==='balkon'||v==='hebeschiebe') && o.height<215) o.height=220; opChanged(o); }
+  if(el.dataset.ob){ snap(); o[el.dataset.ob]=el.checked; opChanged(o); } });
 
 // ---------- Start ----------
 syncWalls(); $('tLabels').setAttribute('aria-pressed',labels);
