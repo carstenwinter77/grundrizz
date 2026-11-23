@@ -4417,8 +4417,10 @@ function buildWorld(){ disposeGroup(worldG); BW.sub=true;
     const n0=worldG.children.length; buildWorld0(); flHoles(flBelow(),n0,true); gableRoof(worldG); }
   finally{ BW.sub=false; BW.gable=null; } }
 function flGhost(f,dy){ const sv=[state.rooms,state.openings,state.items,walls,labels], n0=worldG.children.length;
+  // Etage darunter vor dem Tauschen festhalten (die aktuelle Etage liegt in state.*), sonst fehlt das Treppenloch
+  const b0=flAt(f.lv-1), bd=b0?Object.assign({},b0,flData(b0),{id:'~'+b0.id}):null;
   state.rooms=f.rooms||[]; state.openings=f.openings||[]; state.items=f.items||[]; walls='full'; labels=false; BW.ghost=true; BW.gable=flAt(f.lv+1)?null:gableInfo(state.rooms);
-  try{ buildWorld0(); flHoles(flAt(f.lv-1),n0,true); gableRoof(worldG); if(walk && dy>0) ceilBuild(worldG); const ig=new THREE.Group(); state.items.forEach(it=>{ try{ ig.add(makeItem(it).g); }catch(e){} }); worldG.add(ig); }
+  try{ buildWorld0(); flHoles(bd,n0,true); gableRoof(worldG); if(walk && dy>0) ceilBuild(worldG); const ig=new THREE.Group(); state.items.forEach(it=>{ try{ ig.add(makeItem(it).g); }catch(e){} }); worldG.add(ig); }
   finally{ [state.rooms,state.openings,state.items,walls,labels]=sv; BW.ghost=false; BW.gable=null; }
   worldG.children.slice(n0).forEach(c=>{ c.position.y+=dy*S; delete c.userData.room; c.userData.rooms=['\u0000'];
     c.traverse(o=>{ o.userData.noHit=true; if(o.userData.id) delete o.userData.id; }); }); }
