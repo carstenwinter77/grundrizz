@@ -347,6 +347,62 @@ label.pshow input{width:auto;margin:0;flex:none}
 .draw .slph{stroke:var(--muted);stroke-width:1.2}
 #flSel{max-width:150px}
 
+/* ---- Geräte: Tablet, Handy quer, Begehen auf dem Handy ---- */
+@media (min-width:761px) and (max-width:1180px){
+  .app{grid-template-columns:minmax(0,1fr) 320px}
+  .toolbar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-right:12px}
+  .toolbar::-webkit-scrollbar{display:none}
+  .seg{flex:none}
+  .dtools button{min-width:0;padding:6px 8px}
+}
+@media (max-width:1000px) and (max-height:540px) and (orientation:landscape){
+  html,body{height:100%;overflow:hidden}
+  .app{grid-template-columns:minmax(0,1fr) min(300px,40vw);height:100dvh;height:100svh}
+  .view{height:100%}
+  .side{border-top:0;border-left:1px solid var(--line);min-height:0}
+  .pane{overflow:auto}
+  .app.noside{grid-template-columns:1fr}
+  .dsheet{left:auto;right:8px;top:56px;bottom:auto;width:min(260px,55%);max-height:calc(100% - 130px)}
+  .dzoom{top:56px}
+  .dhint{display:none}
+  .dtools{bottom:calc(6px + env(safe-area-inset-bottom,0px))}
+  .dtools button{padding:4px 6px;font-size:10px;gap:1px}
+  .dtools button svg{width:18px;height:18px}
+  .walkhud{bottom:calc(6px + env(safe-area-inset-bottom,0px))}
+}
+@media (pointer:coarse), (max-width:760px){
+  .app.walking{grid-template-columns:1fr;height:100dvh;height:100svh}
+  .app.walking .side{display:none}
+  .app.walking .view{height:100%}
+  html:has(.app.walking),body:has(.app.walking){height:100%;overflow:hidden}
+}
+@media (pointer:coarse){ input[type=text],input[type=search],input[type=number],input:not([type]),select,textarea{font-size:16px} }
+@media (hover:none) and (pointer:coarse){
+  .app.walking .compass{bottom:calc(env(safe-area-inset-bottom,0px) + 160px)}
+  .walkhud{max-width:calc(100% - 24px)}
+}
+@media (max-height:540px) and (orientation:landscape) and (pointer:coarse){
+  .app.walking .compass{bottom:auto;top:56px}
+  .walkhud{bottom:calc(env(safe-area-inset-bottom,0px) + 8px)}
+  .joy{bottom:calc(env(safe-area-inset-bottom,0px) + 16px)}
+}
+/* Umzugs-Check */
+.row.wrap{flex-wrap:wrap}
+.mv-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:4px}
+.mv-form .w2{grid-column:1/-1}
+.mv-form .row{grid-column:1/-1}
+.mv-sum{font-size:13px;color:var(--muted)}
+.mv-sum .ok,.mv-t.ok{color:#2f7d4f}
+.mv-sum .warn,.mv-t.warn{color:#a8681a}
+.mv-sum .bad,.mv-t.bad{color:#b3361f}
+.mv-list{display:flex;flex-direction:column;gap:6px}
+.mv-row{display:flex;gap:8px;align-items:flex-start;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
+.mv-n{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mv-n small{color:var(--muted);font-family:var(--font-num)}
+.mv-t{font-size:12px;color:var(--muted)}
+.mv-b{display:flex;gap:4px;flex:none}
+.mv-t{background:none!important;padding:0!important;border:0!important}
+
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
 </head><body>
@@ -418,7 +474,7 @@ label.pshow input{width:auto;margin:0;flex:none}
     </div>
     <div class="pane" id="p-ikea" hidden>
       <div class="ik-top">
-        <input id="ikQ" type="search" placeholder="Suchen, z. B. KALLAX, Eames oder Sofa" autocomplete="off">
+        <input id="ikQ" type="search" placeholder="Suchen, z. B. Sofa, Regal oder Bett" autocomplete="off">
         <div class="ik-cats ik-shops" id="ikShops"></div>
         <div class="ik-cats" id="ikCats"></div>
         <p class="muted" id="ikTip">Möbel in die 3D-Ansicht ziehen oder antippen, dann steht es in der Mitte des Raums, den du gerade ansiehst. Nah an einer Wand rastet es mit der Rückseite an der Wand ein. Farbe über die Punkte wählen.</p>
@@ -438,7 +494,7 @@ label.pshow input{width:auto;margin:0;flex:none}
       </div>
       <div class="ik-grid" id="ikGrid"></div>
       <div class="box"><h2>Einkaufsliste dieser Variante</h2><div class="ik-shop" id="ikShop"></div>
-        <p class="muted">Maße nach Herstellerangaben (Breite × Tiefe × Höhe in cm). Vor dem Kauf beim Shop prüfen, Sortiment und Maße ändern sich gelegentlich. Die Designklassiker sind vereinfachte Nachbildungen in Originalgröße.</p></div>
+        <p class="muted">Maße als Breite × Tiefe × Höhe in cm, übliche Größen. Vor dem Kauf die Maße beim Händler prüfen.</p></div>
     </div>
     <div class="pane" id="p-raeume" hidden>
       <p class="muted">Alle Maße in cm, Innenmaße des Raums. Position = Abstand der linken oberen Raumecke vom Nullpunkt. Bequemer geht es mit „Zeichnen“ oben links. Türen und Fenster: Abstand von der linken bzw. oberen Raumecke.</p>
@@ -548,7 +604,7 @@ label.pshow input{width:auto;margin:0;flex:none}
   <li><span>Rundflug</span><span>unter „Raum ansehen“, ein Klick beendet ihn</span></li>
   <li><span>Begehen</span><span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> laufen, ziehen zum Umsehen in alle Richtungen, <kbd>R</kbd>/<kbd>F</kbd> hoch/runter schauen, <kbd>Q</kbd>/<kbd>E</kbd> drehen, auf dem Handy Joystick, Wischen oder „Handy bewegen“</span></li></ul>
   <h4>Tipps</h4>
-  <p class="muted" style="margin:0">Im Tab IKEA Möbel direkt in den Raum ziehen. Unter „Projekte“ eine Kopie anlegen, bevor du umbaust, dann bleibt der alte Stand erhalten. Sonne und Uhrzeit oben einstellen, um Licht und Schatten zu sehen.</p>
+  <p class="muted" style="margin:0">Im Tab Katalog Möbel direkt in den Raum ziehen. Unter „Projekte“ eine Kopie anlegen, bevor du umbaust, dann bleibt der alte Stand erhalten. Sonne und Uhrzeit oben einstellen, um Licht und Schatten zu sehen.</p>
   <div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn pri" id="helpClose">Verstanden</button></div>
 </dialog>
 
@@ -589,253 +645,256 @@ const PRESETS = [
  ['Sonstiges', [['Box (frei)',100,50,50,'#9aa7b0'],['Garderobe',100,30,180,'#b08a62'],['Schuhschrank',80,30,100,'#e8e4dc']]]
 ];
 
-// ---------- IKEA-Katalog: Name, Typ, Maße laut IKEA (B×T×H), Modellmaße, Modellart, Farben, Zusatz ----------
+// ---------- Katalog: Name, Typ, Maße laut KATALOG (B×T×H), Modellmaße, Modellart, Farben, Zusatz ----------
 const IKC = {
   weiss:['weiß','#eeede8'], sb:['schwarzbraun','#3a3230'], ew:['Eicheneffekt weiß lasiert','#d9cbb1'], eiche:['Eicheneffekt','#c7a477'], schwarz:['schwarz','#262626'],
   hemw:['weiß gebeizt','#ebe7de'], hemsb:['schwarzbraun','#3a3230'], hemhb:['hellbraun','#ad8458'], kiefer:['Kiefer','#d9b98a'], birke:['Birke','#d6b98a']
 };
-const IKEA_CATS = ['Sofas & Sessel','Tische & Stühle','Regale & TV','TV & Technik','Schlafzimmer','Kleiderschränke','Arbeitszimmer','Küche','Bad & Flur','Teppiche','Lampen','Deko & Pflanzen','Aufbewahrung','Kinderzimmer','Treppen & Wände','Eigene'];
-const IKEA = (()=>{ const L=[]; const P=(cat,n,t,dims,w,d,h,kind,cols,ex,wall)=>L.push({id:'ik'+L.length,cat,n,t,dims,w,d,h,kind,cols,ex:ex||{},wall:wall!==false});
-  const sofaC=[['Tibbleby beige/grau','#bdb7a8'],['Hillared anthrazit','#4b4e52'],['Kelinge grautürkis','#5f7c7c']];
-  const ektC=[['Hallarp beige','#d2c7b2'],['Remmarn hellgrau','#b9bab6'],['Kilanda dunkelblau','#2f3d52']];
+const KAT_CATS = ['Sofas & Sessel','Tische & Stühle','Regale & TV','TV & Technik','Schlafzimmer','Kleiderschränke','Arbeitszimmer','Küche','Bad & Flur','Teppiche','Lampen','Deko & Pflanzen','Aufbewahrung','Kinderzimmer','Treppen & Wände','Eigene'];
+const KATALOG = (()=>{ const L=[]; const P=(cat,n,t,dims,w,d,h,kind,cols,ex,wall)=>L.push({id:'ik'+L.length,cat,n,t,dims,w,d,h,kind,cols,ex:ex||{},wall:wall!==false});
+  const sofaC=[['Stoff beige/grau','#bdb7a8'],['Stoff anthrazit','#4b4e52'],['Stoff grautürkis','#5f7c7c']];
+  const ektC=[['Stoff beige','#d2c7b2'],['Stoff hellgrau','#b9bab6'],['Stoff dunkelblau','#2f3d52']];
   const c0=['Sofas & Sessel','Tische & Stühle','Regale & TV','Schlafzimmer','Kleiderschränke','Arbeitszimmer','Küche','Bad & Flur','Teppiche','Lampen','Deko & Pflanzen','Aufbewahrung','Kinderzimmer','Eigene'], C=n=>n;
-  P(c0[0],'KIVIK','3er-Sofa','228×95×83',228,95,83,'sofa',sofaC);
-  P(c0[0],'KIVIK','2er-Sofa','190×95×83',190,95,83,'sofa',sofaC);
-  P(c0[0],'EKTORP','3er-Sofa','218×88×88',218,88,88,'sofa',ektC);
-  P(c0[0],'EKTORP','2er-Sofa','179×88×88',179,88,88,'sofa',ektC);
-  P(c0[0],'SÖDERHAMN','3er-Sofa','198×99×83',198,99,83,'sofa',[['Viarp beige/braun','#b8ab95'],['Fridtuna dunkelgrau','#55585b']]);
-  P(c0[0],'VIMLE','3er-Sofa','241×98×83',241,98,83,'sofa',[['Gunnared mittelgrau','#7b7e80'],['Hallarp beige','#d2c7b2']]);
-  P(c0[0],'LANDSKRONA','3er-Sofa','204×89×78',204,89,78,'sofa',[['Gunnared dunkelgrau','#5a5c5e'],['Grann/Bomstad schwarz','#2a2524']]);
-  P(c0[0],'KLIPPAN','2er-Sofa','180×88×66',180,88,66,'sofa',[['Vissle grau','#8f9295'],['Kilanda dunkelblau','#2f3d52']]);
-  P(c0[0],'FRIHETEN','Eckbettsofa mit Bettkasten','230×151×66',230,151,66,'cornersofa',[['Skiftebo dunkelgrau','#55585b'],['Hyllie beige','#c6bba6']],{md:88,cw:84});
-  P(c0[0],'POÄNG','Sessel','68×82×100',68,82,100,'poang',[['Knisa hellbeige','#d6cdb9'],['Hillared anthrazit','#4b4e52'],['Skiftebo gelb','#c9a440']],{},false);
-  P(c0[0],'STRANDMON','Ohrensessel','82×96×101',82,96,101,'wingchair',[['Nordvalla dunkelgrau','#5a5d60'],['Skiftebo gelb','#c9a440'],['Djuparp dunkelgrün','#3e5a4b']],{},false);
-  P(c0[0],'EKTORP','Sessel','104×88×88',104,88,88,'armchair',ektC,{},false);
-  P(c0[1],'LACK','Couchtisch','90×55×45',90,55,45,'coffeetable',[IKC.weiss,IKC.sb,IKC.ew],{},false);
-  P(c0[1],'LACK','Beistelltisch','55×55×45',55,55,45,'coffeetable',[IKC.weiss,IKC.sb,IKC.ew],{},false);
-  P(c0[1],'HEMNES','Couchtisch','118×75×46',118,75,46,'coffeetable',[IKC.hemsb,IKC.hemw,IKC.hemhb],{},false);
-  P(c0[1],'LISTERBY','Couchtisch','140×60×50',140,60,50,'coffeetable',[['Eichenfurnier braun lasiert','#7a5538'],['Eichenfurnier weiß lasiert','#d4c4a8']],{},false);
-  P(c0[1],'MELLTORP','Tisch','125×75×74',125,75,74,'table',[IKC.weiss],{},false);
-  P(c0[1],'LISABO','Tisch','140×78×74',140,78,74,'table',[['Eschenfurnier','#d9c09a'],IKC.schwarz],{},false);
-  P(c0[1],'EKEDALEN','Ausziehtisch (bis 180)','120×80×75',120,80,75,'table',[IKC.weiss,['eichenfarben','#b98f5e'],['dunkelbraun','#4a3628']],{},false);
-  P(c0[1],'MÖRBYLÅNGA','Tisch','220×100×74',220,100,74,'table',[['Eichenfurnier braun lasiert','#7a5538']],{},false);
-  P(c0[1],'DOCKSTA','Tisch rund','Ø103×75',103,103,75,'table',[IKC.weiss,IKC.schwarz],{shape:'rund'},false);
-  P(c0[1],'STEFAN','Stuhl','42×49×90',42,49,90,'chair',[['braunschwarz','#3a2f2a']],{},false);
-  P(c0[1],'ADDE','Stuhl','39×47×77',39,47,77,'chair',[IKC.weiss,IKC.schwarz],{},false);
-  P(c0[1],'TEODORES','Stuhl','46×52×80',46,52,80,'chair',[IKC.weiss,['grün','#5d6b55'],IKC.schwarz],{},false);
+  P(c0[0],'','3er-Sofa','228×95×83',228,95,83,'sofa',sofaC);
+  P(c0[0],'','2er-Sofa','190×95×83',190,95,83,'sofa',sofaC);
+  P(c0[0],'','3er-Sofa','218×88×88',218,88,88,'sofa',ektC);
+  P(c0[0],'','2er-Sofa','179×88×88',179,88,88,'sofa',ektC);
+  P(c0[0],'','3er-Sofa','198×99×83',198,99,83,'sofa',[['Stoff beige/braun','#b8ab95'],['Stoff dunkelgrau','#55585b']]);
+  P(c0[0],'','3er-Sofa','241×98×83',241,98,83,'sofa',[['Stoff mittelgrau','#7b7e80'],['Stoff beige','#d2c7b2']]);
+  P(c0[0],'','3er-Sofa','204×89×78',204,89,78,'sofa',[['Stoff dunkelgrau','#5a5c5e'],['Leder schwarz','#2a2524']]);
+  P(c0[0],'','2er-Sofa','180×88×66',180,88,66,'sofa',[['Stoff grau','#8f9295'],['Stoff dunkelblau','#2f3d52']]);
+  P(c0[0],'','Eckbettsofa mit Bettkasten','230×151×66',230,151,66,'cornersofa',[['Stoff dunkelgrau','#55585b'],['Stoff beige','#c6bba6']],{md:88,cw:84});
+  P(c0[0],'','Sessel','68×82×100',68,82,100,'swingchair',[['Stoff hellbeige','#d6cdb9'],['Stoff anthrazit','#4b4e52'],['Stoff gelb','#c9a440']],{},false);
+  P(c0[0],'','Ohrensessel','82×96×101',82,96,101,'wingchair',[['Stoff dunkelgrau','#5a5d60'],['Stoff gelb','#c9a440'],['Stoff dunkelgrün','#3e5a4b']],{},false);
+  P(c0[0],'','Sessel','104×88×88',104,88,88,'armchair',ektC,{},false);
+  P(c0[1],'','Couchtisch','90×55×45',90,55,45,'coffeetable',[IKC.weiss,IKC.sb,IKC.ew],{},false);
+  P(c0[1],'','Beistelltisch','55×55×45',55,55,45,'coffeetable',[IKC.weiss,IKC.sb,IKC.ew],{},false);
+  P(c0[1],'','Couchtisch','118×75×46',118,75,46,'coffeetable',[IKC.hemsb,IKC.hemw,IKC.hemhb],{},false);
+  P(c0[1],'','Couchtisch','140×60×50',140,60,50,'coffeetable',[['Eichenfurnier braun lasiert','#7a5538'],['Eichenfurnier weiß lasiert','#d4c4a8']],{},false);
+  P(c0[1],'','Tisch','125×75×74',125,75,74,'table',[IKC.weiss],{},false);
+  P(c0[1],'','Tisch','140×78×74',140,78,74,'table',[['Eschenfurnier','#d9c09a'],IKC.schwarz],{},false);
+  P(c0[1],'','Ausziehtisch (bis 180)','120×80×75',120,80,75,'table',[IKC.weiss,['eichenfarben','#b98f5e'],['dunkelbraun','#4a3628']],{},false);
+  P(c0[1],'','Tisch','220×100×74',220,100,74,'table',[['Eichenfurnier braun lasiert','#7a5538']],{},false);
+  P(c0[1],'','Tisch rund','Ø103×75',103,103,75,'table',[IKC.weiss,IKC.schwarz],{shape:'rund'},false);
+  P(c0[1],'','Stuhl','42×49×90',42,49,90,'chair',[['braunschwarz','#3a2f2a']],{},false);
+  P(c0[1],'','Stuhl','39×47×77',39,47,77,'chair',[IKC.weiss,IKC.schwarz],{},false);
+  P(c0[1],'','Stuhl','46×52×80',46,52,80,'chair',[IKC.weiss,['grün','#5d6b55'],IKC.schwarz],{},false);
   const kalC=[IKC.weiss,IKC.sb,IKC.ew,IKC.eiche];
-  P(c0[2],'KALLAX','Regal 4×4 Fächer','147×39×147',147,39,147,'kallax',kalC,{cols:4,rows:4});
-  P(c0[2],'KALLAX','Regal 2×4 Fächer','77×39×147',77,39,147,'kallax',kalC,{cols:2,rows:4});
-  P(c0[2],'KALLAX','Regal 1×4 Fächer','42×39×147',42,39,147,'kallax',kalC,{cols:1,rows:4});
-  P(c0[2],'KALLAX','Regal 2×2 Fächer','77×39×77',77,39,77,'kallax',kalC,{cols:2,rows:2});
-  P(c0[2],'KALLAX','Regal 4×2 Fächer, liegend','147×39×77',147,39,77,'kallax',kalC,{cols:4,rows:2});
-  P(c0[2],'BILLY','Bücherregal','80×28×202',80,28,202,'shelf',[IKC.weiss,IKC.sb,IKC.eiche],{cols:1,rows:6});
-  P(c0[2],'BILLY','Bücherregal schmal','40×28×202',40,28,202,'shelf',[IKC.weiss,IKC.sb,IKC.eiche],{cols:1,rows:6});
-  P(c0[2],'HEMNES','Bücherregal','90×37×197',90,37,197,'shelf',[IKC.hemw,IKC.hemsb],{cols:1,rows:5});
-  P(c0[2],'IVAR','Regal','89×30×179',89,30,179,'shelf',[IKC.kiefer],{open:true,rows:4});
-  P(c0[2],'BESTÅ','TV-Bank','180×42×39',180,42,39,'sideboard',[IKC.weiss,IKC.sb,IKC.ew]);
-  P(c0[2],'HEMNES','TV-Bank','183×47×57',183,47,57,'sideboard',[IKC.hemw,IKC.hemsb]);
-  P(c0[2],'LACK','TV-Bank','160×35×36',160,35,36,'sideboard',[IKC.weiss,IKC.sb]);
-  const malmC=[IKC.weiss,IKC.sb,IKC.ew,['Eichenfurnier weiß lasiert','#d4c4a8']];
-  P(c0[3],'MALM','Bett 140×200','156×209×100',156,209,50,'bed',malmC);
-  P(c0[3],'MALM','Bett 160×200','177×209×100',177,209,50,'bed',malmC);
-  P(c0[3],'MALM','Bett 180×200','196×209×100',196,209,50,'bed',malmC);
-  P(c0[3],'HEMNES','Bett 160×200','174×211×112',174,211,62,'bed',[IKC.hemw,IKC.hemsb]);
-  P(c0[3],'NEIDEN','Bett 90×200','97×207',97,207,40,'bed',[IKC.kiefer]);
-  P(c0[3],'MALM','Kommode, 6 Schubladen','160×48×78',160,48,78,'dresser',malmC);
-  P(c0[3],'MALM','Kommode, 4 Schubladen','80×48×100',80,48,100,'dresser',malmC);
-  P(c0[3],'MALM','Kommode, 3 Schubladen','80×48×78',80,48,78,'dresser',malmC);
-  P(c0[3],'MALM','Nachttisch, 2 Schubladen','40×48×55',40,48,55,'dresser',malmC);
-  P(c0[3],'HEMNES','Kommode, 8 Schubladen','160×50×96',160,50,96,'dresser',[IKC.hemw,IKC.hemsb]);
-  P(c0[3],'HEMNES','Kommode, 3 Schubladen','108×50×96',108,50,96,'dresser',[IKC.hemw,IKC.hemsb]);
-  P(c0[3],'HEMNES','Nachttisch','46×35×70',46,35,70,'dresser',[IKC.hemw,IKC.hemsb]);
-  P(c0[3],'KULLEN','Kommode, 3 Schubladen','70×40×72',70,40,72,'dresser',[IKC.weiss,IKC.sb]);
-  const paxC=[IKC.weiss,IKC.sb,IKC.ew];
-  P(c0[4],'PAX','Kleiderschrank, 2 Türen','100×58×201',100,58,201,'wardrobe',paxC,{doors:2});
-  P(c0[4],'PAX','Kleiderschrank, 3 Türen','150×58×201',150,58,201,'wardrobe',paxC,{doors:3});
-  P(c0[4],'PAX','Kleiderschrank, 4 Türen','200×58×236',200,58,236,'wardrobe',paxC,{doors:4});
-  P(c0[4],'PAX / HASVIK','Kleiderschrank, Schiebetüren','200×66×236',200,66,236,'wardrobe',[IKC.weiss],{doors:2,sliding:true});
-  P(c0[4],'KLEPPSTAD','Kleiderschrank, 3 Türen','117×55×176',117,55,176,'wardrobe',[IKC.weiss],{doors:3});
-  P(c0[4],'BRIMNES','Kleiderschrank, 3 Türen, Spiegel','117×50×190',117,50,190,'wardrobe',[IKC.weiss,IKC.schwarz],{doors:3,mirror:1});
-  P(c0[5],'MICKE','Schreibtisch','105×50×75',105,50,75,'desk',[IKC.weiss,IKC.sb],{bare:true,drawer:2,frame:null});
-  P(c0[5],'MICKE','Schreibtisch','142×50×75',142,50,75,'desk',[IKC.weiss,IKC.sb],{bare:true,drawer:3});
-  P(c0[5],'LAGKAPTEN / ALEX','Schreibtisch','140×60×73',140,60,73,'desk',[IKC.weiss,IKC.ew],{bare:true,drawer:5});
-  P(c0[5],'LAGKAPTEN / ADILS','Schreibtisch','140×60×74',140,60,74,'desk',[IKC.weiss,IKC.sb],{bare:true,frame:'#eeede8'});
-  P(c0[5],'TROTTEN','Schreibtisch Sitz/Steh','120×70×72–122',120,70,75,'desk',[IKC.weiss],{bare:true,frame:'#eeede8'});
-  P(c0[5],'BEKANT','Schreibtisch Sitz/Steh','160×80×65–125',160,80,75,'desk',[IKC.weiss,IKC.schwarz],{bare:true,frame:'#2e3134'});
-  P(c0[5],'ALEX','Schubladenelement','36×58×70',36,58,70,'dresser',[IKC.weiss,IKC.schwarz],{},false);
-  P(c0[5],'MARKUS','Bürostuhl','62×60×140',62,60,135,'officechair',[['Vissle dunkelgrau','#3d4248']],{},false);
-  const metC=[['VEDDINGE weiß','#f1f0ec'],['VOXTORP dunkelgrau','#55585b'],['BODARP graugrün','#7d8b79'],['HAVSTORP beige','#d3c6ae']];
-  P(c0[6],'METOD','Unterschrank mit Schubladen','60×62×88',60,62,88,'kitchen',metC,{modules:[['schub',60]],uppers:false});
-  P(c0[6],'METOD','Unterschrank mit Tür','60×62×88',60,62,88,'kitchen',metC,{modules:[['tuer',60]],uppers:false});
-  P(c0[6],'METOD','Spülenschrank','80×62×88',80,62,88,'kitchen',metC,{modules:[['spuele',80]],uppers:false});
-  P(c0[6],'METOD','Unterschrank für Backofen','60×62×88',60,62,88,'kitchen',metC,{modules:[['ofen',60]],uppers:false});
-  P(c0[6],'METOD','Hochschrank','60×62×208',60,62,208,'tall',metC);
-  P(c0[7],'GODMORGON','Waschbeckenschrank mit Becken','83×49×64',83,49,86,'vanity',[IKC.weiss,IKC.ew,['Hochglanz grau','#8f9295']]);
-  P(c0[7],'GODMORGON','Hochschrank','40×32×192',40,32,192,'wardrobe',[IKC.weiss,IKC.ew],{doors:1});
-  P(c0[7],'NISSEDAL','Spiegel','65×150',65,3,150,'mirror',[IKC.weiss,IKC.schwarz],{elev:40});
-  P(c0[7],'HEMNES','Schuhschrank, 2 Fächer','89×30×127',89,30,127,'sideboard',[IKC.hemw,IKC.hemsb]);
-  P(c0[8],'STOENSE','Teppich Kurzflor','170×240',240,170,1,'rug',[['cremeweiß','#e9e3d6'],['mittelgrau','#8f9295']],{},false);
-  P(c0[8],'STOENSE','Teppich Kurzflor','200×300',300,200,1,'rug',[['cremeweiß','#e9e3d6'],['mittelgrau','#8f9295']],{},false);
-  P(c0[8],'LOHALS','Teppich Flachgewebe','160×230',230,160,1,'rug',[['natur','#c9b48a']],{},false);
-  P(c0[8],'VINDUM','Teppich Langflor','200×270',270,200,2,'rug',[['weiß','#eeeae2'],['dunkelgrau','#55585b']],{},false);
-  P(C('Lampen'),'HEKTAR','Stehleuchte','H 181',40,40,181,'lamp',[['dunkelgrau','#4a4d50']],{},false);
-  P(C('Lampen'),'ÅRSTID','Stehleuchte','H 155',35,35,155,'lamp',[['Messing / weiß','#c9a46f']],{},false);
-  P(C('Deko & Pflanzen'),'FEJKA','Kunstpflanze im Topf','Ø ca. 50',50,50,120,'plant',[['grün','#5f8f5a']],{shape:'rund'},false);
+  P(c0[2],'','Regal 4×4 Fächer','147×39×147',147,39,147,'cubes',kalC,{cols:4,rows:4});
+  P(c0[2],'','Regal 2×4 Fächer','77×39×147',77,39,147,'cubes',kalC,{cols:2,rows:4});
+  P(c0[2],'','Regal 1×4 Fächer','42×39×147',42,39,147,'cubes',kalC,{cols:1,rows:4});
+  P(c0[2],'','Regal 2×2 Fächer','77×39×77',77,39,77,'cubes',kalC,{cols:2,rows:2});
+  P(c0[2],'','Regal 4×2 Fächer, liegend','147×39×77',147,39,77,'cubes',kalC,{cols:4,rows:2});
+  P(c0[2],'','Bücherregal','80×28×202',80,28,202,'shelf',[IKC.weiss,IKC.sb,IKC.eiche],{cols:1,rows:6});
+  P(c0[2],'','Bücherregal schmal','40×28×202',40,28,202,'shelf',[IKC.weiss,IKC.sb,IKC.eiche],{cols:1,rows:6});
+  P(c0[2],'','Bücherregal','90×37×197',90,37,197,'shelf',[IKC.hemw,IKC.hemsb],{cols:1,rows:5});
+  P(c0[2],'','Regal','89×30×179',89,30,179,'shelf',[IKC.kiefer],{open:true,rows:4});
+  P(c0[2],'','TV-Bank','180×42×39',180,42,39,'sideboard',[IKC.weiss,IKC.sb,IKC.ew]);
+  P(c0[2],'','TV-Bank','183×47×57',183,47,57,'sideboard',[IKC.hemw,IKC.hemsb]);
+  P(c0[2],'','TV-Bank','160×35×36',160,35,36,'sideboard',[IKC.weiss,IKC.sb]);
+  const bedC=[IKC.weiss,IKC.sb,IKC.ew,['Eichenfurnier weiß lasiert','#d4c4a8']];
+  P(c0[3],'','Bett 140×200','156×209×100',156,209,50,'bed',bedC);
+  P(c0[3],'','Bett 160×200','177×209×100',177,209,50,'bed',bedC);
+  P(c0[3],'','Bett 180×200','196×209×100',196,209,50,'bed',bedC);
+  P(c0[3],'','Bett 160×200','174×211×112',174,211,62,'bed',[IKC.hemw,IKC.hemsb]);
+  P(c0[3],'','Bett 90×200','97×207',97,207,40,'bed',[IKC.kiefer]);
+  P(c0[3],'','Kommode, 6 Schubladen','160×48×78',160,48,78,'dresser',bedC);
+  P(c0[3],'','Kommode, 4 Schubladen','80×48×100',80,48,100,'dresser',bedC);
+  P(c0[3],'','Kommode, 3 Schubladen','80×48×78',80,48,78,'dresser',bedC);
+  P(c0[3],'','Nachttisch, 2 Schubladen','40×48×55',40,48,55,'dresser',bedC);
+  P(c0[3],'','Kommode, 8 Schubladen','160×50×96',160,50,96,'dresser',[IKC.hemw,IKC.hemsb]);
+  P(c0[3],'','Kommode, 3 Schubladen','108×50×96',108,50,96,'dresser',[IKC.hemw,IKC.hemsb]);
+  P(c0[3],'','Nachttisch','46×35×70',46,35,70,'dresser',[IKC.hemw,IKC.hemsb]);
+  P(c0[3],'','Kommode, 3 Schubladen','70×40×72',70,40,72,'dresser',[IKC.weiss,IKC.sb]);
+  const wardC=[IKC.weiss,IKC.sb,IKC.ew];
+  P(c0[4],'','Kleiderschrank, 2 Türen','100×58×201',100,58,201,'wardrobe',wardC,{doors:2});
+  P(c0[4],'','Kleiderschrank, 3 Türen','150×58×201',150,58,201,'wardrobe',wardC,{doors:3});
+  P(c0[4],'','Kleiderschrank, 4 Türen','200×58×236',200,58,236,'wardrobe',wardC,{doors:4});
+  P(c0[4],'','Kleiderschrank, Schiebetüren','200×66×236',200,66,236,'wardrobe',[IKC.weiss],{doors:2,sliding:true});
+  P(c0[4],'','Kleiderschrank, 3 Türen','117×55×176',117,55,176,'wardrobe',[IKC.weiss],{doors:3});
+  P(c0[4],'','Kleiderschrank, 3 Türen, Spiegel','117×50×190',117,50,190,'wardrobe',[IKC.weiss,IKC.schwarz],{doors:3,mirror:1});
+  P(c0[5],'','Schreibtisch','105×50×75',105,50,75,'desk',[IKC.weiss,IKC.sb],{bare:true,drawer:2,frame:null});
+  P(c0[5],'','Schreibtisch','142×50×75',142,50,75,'desk',[IKC.weiss,IKC.sb],{bare:true,drawer:3});
+  P(c0[5],'','Schreibtisch','140×60×73',140,60,73,'desk',[IKC.weiss,IKC.ew],{bare:true,drawer:5});
+  P(c0[5],'','Schreibtisch','140×60×74',140,60,74,'desk',[IKC.weiss,IKC.sb],{bare:true,frame:'#eeede8'});
+  P(c0[5],'','Schreibtisch Sitz/Steh','120×70×72–122',120,70,75,'desk',[IKC.weiss],{bare:true,frame:'#eeede8'});
+  P(c0[5],'','Schreibtisch Sitz/Steh','160×80×65–125',160,80,75,'desk',[IKC.weiss,IKC.schwarz],{bare:true,frame:'#2e3134'});
+  P(c0[5],'','Schubladenelement','36×58×70',36,58,70,'dresser',[IKC.weiss,IKC.schwarz],{},false);
+  P(c0[5],'','Bürostuhl','62×60×140',62,60,135,'officechair',[['Stoff dunkelgrau','#3d4248']],{},false);
+  const metC=[['weiß matt','#f1f0ec'],['dunkelgrau matt','#55585b'],['graugrün','#7d8b79'],['beige','#d3c6ae']];
+  P(c0[6],'','Unterschrank mit Schubladen','60×62×88',60,62,88,'kitchen',metC,{modules:[['schub',60]],uppers:false});
+  P(c0[6],'','Unterschrank mit Tür','60×62×88',60,62,88,'kitchen',metC,{modules:[['tuer',60]],uppers:false});
+  P(c0[6],'','Spülenschrank','80×62×88',80,62,88,'kitchen',metC,{modules:[['spuele',80]],uppers:false});
+  P(c0[6],'','Unterschrank für Backofen','60×62×88',60,62,88,'kitchen',metC,{modules:[['ofen',60]],uppers:false});
+  P(c0[6],'','Hochschrank','60×62×208',60,62,208,'tall',metC);
+  P(c0[7],'','Waschbeckenschrank mit Becken','83×49×64',83,49,86,'vanity',[IKC.weiss,IKC.ew,['Hochglanz grau','#8f9295']]);
+  P(c0[7],'','Hochschrank','40×32×192',40,32,192,'wardrobe',[IKC.weiss,IKC.ew],{doors:1});
+  P(c0[7],'','Spiegel','65×150',65,3,150,'mirror',[IKC.weiss,IKC.schwarz],{elev:40});
+  P(c0[7],'','Schuhschrank, 2 Fächer','89×30×127',89,30,127,'sideboard',[IKC.hemw,IKC.hemsb]);
+  P(c0[8],'','Teppich Kurzflor','170×240',240,170,1,'rug',[['cremeweiß','#e9e3d6'],['mittelgrau','#8f9295']],{},false);
+  P(c0[8],'','Teppich Kurzflor','200×300',300,200,1,'rug',[['cremeweiß','#e9e3d6'],['mittelgrau','#8f9295']],{},false);
+  P(c0[8],'','Teppich Flachgewebe','160×230',230,160,1,'rug',[['natur','#c9b48a']],{},false);
+  P(c0[8],'','Teppich Langflor','200×270',270,200,2,'rug',[['weiß','#eeeae2'],['dunkelgrau','#55585b']],{},false);
+  P(C('Lampen'),'','Stehleuchte','H 181',40,40,181,'lamp',[['dunkelgrau','#4a4d50']],{},false);
+  P(C('Lampen'),'','Stehleuchte','H 155',35,35,155,'lamp',[['Messing / weiß','#c9a46f']],{},false);
+  P(C('Deko & Pflanzen'),'','Kunstpflanze im Topf','Ø ca. 50',50,50,120,'plant',[['grün','#5f8f5a']],{shape:'rund'},false);
   // ---- Erweiterung (IDs bleiben stabil: neue Einträge immer hinten anfügen) ----
   const gris=[['hellgrau','#c4c4c0'],['dunkelgrau','#55585b']], natur=[['natur','#d8c7a5']];
   // Sofas & Sessel
-  P(c0[0],'UPPLAND','3er-Sofa','231×89×85',231,89,85,'sofa',[['Blekinge weiß','#e9e6df'],['Hakebo dunkelgrau','#55585b'],['Totebo hellbeige','#d6cdb9']]);
-  P(c0[0],'GLOSTAD','2er-Sofa','177×89×78',177,89,78,'sofa',[['Knisa dunkelgrau','#55585b'],['Knisa mittelblau','#4a6a8a']]);
-  P(c0[0],'VIMLE','2er-Sofa','171×98×83',171,98,83,'sofa',[['Gunnared mittelgrau','#7b7e80'],['Hallarp beige','#d2c7b2']]);
-  P(c0[0],'LINANÄS','3er-Sofa','205×83×75',205,83,75,'sofa',[['Vissle dunkelgrau','#55585b'],['Vissle beige','#cbbfa8']]);
-  P(c0[0],'KIVIK','Hocker','90×70×43',90,70,43,'ottoman',sofaC,{},false);
-  P(c0[0],'STRANDMON','Fußhocker','60×40×44',60,40,44,'ottoman',[['Nordvalla dunkelgrau','#5a5d60'],['Skiftebo gelb','#c9a440']],{},false);
-  P(c0[0],'POÄNG','Hocker','68×54×39',68,54,39,'ottoman',[['Knisa hellbeige','#d6cdb9'],['Hillared anthrazit','#4b4e52']],{},false);
-  P(c0[0],'EKERÖ','Sessel','70×73×76',70,73,76,'armchair',[['Skiftebo dunkelgrau','#55585b'],['Kelinge beige','#cbbfa8']],{},false);
-  P(c0[0],'KOARP','Sessel','73×86×80',73,86,80,'armchair',[['Gunnared beige','#cbbfa8'],['Saxemara schwarzblau','#2f3d52']],{},false);
-  P(c0[0],'VEDBO','Sessel mit hoher Lehne','80×86×106',80,86,106,'wingchair',[['Gunnared dunkelgrau','#5a5c5e'],['Gunnared hellbraun','#a48a6a']],{},false);
-  P(c0[0],'LINNEBÄCK','Sessel','68×77×80',68,77,80,'armchair',[['Orrsta dunkelgrau','#55585b']],{},false);
-  P(c0[0],'SÖDERHAMN','Récamiere','93×151×83',93,151,83,'recamiere',[['Viarp beige/braun','#b8ab95'],['Fridtuna dunkelgrau','#55585b']],{backSide:'left'});
+  P(c0[0],'','3er-Sofa','231×89×85',231,89,85,'sofa',[['weiß','#e9e6df'],['Stoff dunkelgrau','#55585b'],['Stoff hellbeige','#d6cdb9']]);
+  P(c0[0],'','2er-Sofa','177×89×78',177,89,78,'sofa',[['Stoff dunkelgrau','#55585b'],['Stoff mittelblau','#4a6a8a']]);
+  P(c0[0],'','2er-Sofa','171×98×83',171,98,83,'sofa',[['Stoff mittelgrau','#7b7e80'],['Stoff beige','#d2c7b2']]);
+  P(c0[0],'','3er-Sofa','205×83×75',205,83,75,'sofa',[['Stoff dunkelgrau','#55585b'],['Stoff beige','#cbbfa8']]);
+  P(c0[0],'','Hocker','90×70×43',90,70,43,'ottoman',sofaC,{},false);
+  P(c0[0],'','Fußhocker','60×40×44',60,40,44,'ottoman',[['Stoff dunkelgrau','#5a5d60'],['Stoff gelb','#c9a440']],{},false);
+  P(c0[0],'','Hocker','68×54×39',68,54,39,'ottoman',[['Stoff hellbeige','#d6cdb9'],['Stoff anthrazit','#4b4e52']],{},false);
+  P(c0[0],'','Sessel','70×73×76',70,73,76,'armchair',[['Stoff dunkelgrau','#55585b'],['Stoff beige','#cbbfa8']],{},false);
+  P(c0[0],'','Sessel','73×86×80',73,86,80,'armchair',[['Stoff beige','#cbbfa8'],['Stoff schwarzblau','#2f3d52']],{},false);
+  P(c0[0],'','Sessel mit hoher Lehne','80×86×106',80,86,106,'wingchair',[['Stoff dunkelgrau','#5a5c5e'],['Stoff hellbraun','#a48a6a']],{},false);
+  P(c0[0],'','Sessel','68×77×80',68,77,80,'armchair',[['Stoff dunkelgrau','#55585b']],{},false);
+  P(c0[0],'','Récamiere','93×151×83',93,151,83,'recamiere',[['Stoff beige/braun','#b8ab95'],['Stoff dunkelgrau','#55585b']],{backSide:'left'});
   // Tische & Stühle
-  P(c0[1],'INGATORP','Ausziehtisch (bis 215)','155×87×74',155,87,74,'table',[IKC.weiss,IKC.schwarz],{},false);
-  P(c0[1],'NORDEN','Klapptisch (bis 152)','89×80×74',89,80,74,'table',[IKC.weiss,IKC.birke],{},false);
-  P(c0[1],'SANDSBERG','Tisch','110×67×75',110,67,75,'table',[IKC.schwarz,IKC.weiss],{},false);
-  P(c0[1],'LISABO','Tisch rund','Ø105×74',105,105,74,'table',[['Eschenfurnier','#d9c09a'],IKC.schwarz],{shape:'rund'},false);
-  P(c0[1],'INGOLF','Stuhl','43×52×91',43,52,91,'chair',[IKC.weiss,['braunschwarz','#3a2f2a']],{},false);
-  P(c0[1],'LISABO','Stuhl','45×51×76',45,51,76,'chair',[['Eiche','#c8a77a'],IKC.schwarz],{},false);
-  P(c0[1],'ODGER','Stuhl','45×51×81',45,51,81,'shellchair',[['weiß/beige','#e6e1d6'],['anthrazit','#4b4e52'],['blau','#4a6a8a']],{base:'wood'},false);
-  P(c0[1],'TOBIAS','Stuhl','55×56×82',55,56,82,'shellchair',[['transparent grau','#b8bcbe'],['transparent','#e8ecec']],{base:'chrome',arms:true},false);
-  P(c0[1],'VITTSJÖ','Couchtisch','75×75×46',75,75,46,'coffeetable',[['schwarzbraun/Glas','#3a3230']],{},false);
-  P(c0[1],'GLADOM','Tablett-Tisch','Ø45×53',45,45,53,'table',[IKC.schwarz,IKC.weiss,['dunkelgrün','#3e5a4b']],{shape:'rund'},false);
-  P(c0[1],'LISTERBY','Beistelltisch','50×50×50',50,50,50,'coffeetable',[['Eichenfurnier braun lasiert','#7a5538']],{},false);
+  P(c0[1],'','Ausziehtisch (bis 215)','155×87×74',155,87,74,'table',[IKC.weiss,IKC.schwarz],{},false);
+  P(c0[1],'','Klapptisch (bis 152)','89×80×74',89,80,74,'table',[IKC.weiss,IKC.birke],{},false);
+  P(c0[1],'','Tisch','110×67×75',110,67,75,'table',[IKC.schwarz,IKC.weiss],{},false);
+  P(c0[1],'','Tisch rund','Ø105×74',105,105,74,'table',[['Eschenfurnier','#d9c09a'],IKC.schwarz],{shape:'rund'},false);
+  P(c0[1],'','Stuhl','43×52×91',43,52,91,'chair',[IKC.weiss,['braunschwarz','#3a2f2a']],{},false);
+  P(c0[1],'','Stuhl','45×51×76',45,51,76,'chair',[['Eiche','#c8a77a'],IKC.schwarz],{},false);
+  P(c0[1],'','Stuhl','45×51×81',45,51,81,'shellchair',[['weiß/beige','#e6e1d6'],['anthrazit','#4b4e52'],['blau','#4a6a8a']],{base:'wood'},false);
+  P(c0[1],'','Stuhl','55×56×82',55,56,82,'shellchair',[['transparent grau','#b8bcbe'],['transparent','#e8ecec']],{base:'chrome',arms:true},false);
+  P(c0[1],'','Couchtisch','75×75×46',75,75,46,'coffeetable',[['schwarzbraun/Glas','#3a3230']],{},false);
+  P(c0[1],'','Tablett-Tisch','Ø45×53',45,45,53,'table',[IKC.schwarz,IKC.weiss,['dunkelgrün','#3e5a4b']],{shape:'rund'},false);
+  P(c0[1],'','Beistelltisch','50×50×50',50,50,50,'coffeetable',[['Eichenfurnier braun lasiert','#7a5538']],{},false);
   // Regale & TV
-  P(c0[2],'KALLAX','Regal 5×5 Fächer','182×39×182',182,39,182,'kallax',kalC,{cols:5,rows:5});
-  P(c0[2],'BESTÅ','Schrank mit Türen','120×42×74',120,42,74,'sideboard',[IKC.weiss,IKC.sb,IKC.ew]);
-  P(c0[2],'BESTÅ','TV-Bank','240×42×39',240,42,39,'sideboard',[IKC.weiss,IKC.sb,IKC.ew]);
-  P(c0[2],'BRIMNES','TV-Bank','180×41×53',180,41,53,'sideboard',[IKC.weiss,IKC.schwarz]);
-  P(c0[2],'HEMNES','Vitrine','90×37×197',90,37,197,'vitrine',[IKC.hemw,IKC.hemsb]);
-  P(c0[2],'DETOLF','Vitrine','43×37×163',43,37,163,'vitrine',[IKC.sb]);
-  P(c0[2],'FABRIKÖR','Vitrine','81×47×134',81,47,134,'vitrine',[['dunkelgrau','#4f5356'],['hellgrau','#c4c4c0']]);
-  P(c0[2],'VITTSJÖ','Regal','51×36×175',51,36,175,'shelf',[['schwarzbraun/Glas','#3a3230'],['weiß/Glas','#eeede8']],{open:true,rows:5});
-  P(c0[2],'BAGGEBO','Regal','50×30×160',50,30,160,'shelf',[IKC.schwarz,IKC.weiss],{open:true,rows:4});
-  P(c0[2],'HEMNES','Bücherregal schmal','49×37×197',49,37,197,'shelf',[IKC.hemw,IKC.hemsb],{cols:1,rows:5});
-  P(c0[2],'BILLY','Eckregal','135×28×202',135,28,202,'shelf',[IKC.weiss,IKC.sb],{cols:2,rows:6});
-  P(c0[2],'EKET','Schrank','70×35×70',70,35,70,'dresser',[IKC.weiss,['dunkelgrau','#55585b'],['hellgrau-blau','#a9b6bc']]);
+  P(c0[2],'','Regal 5×5 Fächer','182×39×182',182,39,182,'cubes',kalC,{cols:5,rows:5});
+  P(c0[2],'','Schrank mit Türen','120×42×74',120,42,74,'sideboard',[IKC.weiss,IKC.sb,IKC.ew]);
+  P(c0[2],'','TV-Bank','240×42×39',240,42,39,'sideboard',[IKC.weiss,IKC.sb,IKC.ew]);
+  P(c0[2],'','TV-Bank','180×41×53',180,41,53,'sideboard',[IKC.weiss,IKC.schwarz]);
+  P(c0[2],'','Vitrine','90×37×197',90,37,197,'vitrine',[IKC.hemw,IKC.hemsb]);
+  P(c0[2],'','Vitrine','43×37×163',43,37,163,'vitrine',[IKC.sb]);
+  P(c0[2],'','Vitrine','81×47×134',81,47,134,'vitrine',[['dunkelgrau','#4f5356'],['hellgrau','#c4c4c0']]);
+  P(c0[2],'','Regal','51×36×175',51,36,175,'shelf',[['schwarzbraun/Glas','#3a3230'],['weiß/Glas','#eeede8']],{open:true,rows:5});
+  P(c0[2],'','Regal','50×30×160',50,30,160,'shelf',[IKC.schwarz,IKC.weiss],{open:true,rows:4});
+  P(c0[2],'','Bücherregal schmal','49×37×197',49,37,197,'shelf',[IKC.hemw,IKC.hemsb],{cols:1,rows:5});
+  P(c0[2],'','Eckregal','135×28×202',135,28,202,'shelf',[IKC.weiss,IKC.sb],{cols:2,rows:6});
+  P(c0[2],'','Schrank','70×35×70',70,35,70,'dresser',[IKC.weiss,['dunkelgrau','#55585b'],['hellgrau-blau','#a9b6bc']]);
   // Schlafzimmer
-  P(c0[3],'BRIMNES','Bett 140×200 mit Schubladen','146×206×47',146,206,47,'bed',[IKC.weiss,IKC.schwarz]);
-  P(c0[3],'SLATTUM','Polsterbett 140×200','148×206×85',148,206,50,'bed',[['Vissle hellgrau','#b9bab6'],['Knisa dunkelgrau','#55585b']]);
-  P(c0[3],'TARVA','Bett 160×200','167×209×92',167,209,55,'bed',[IKC.kiefer]);
-  P(c0[3],'MALM','Bett 90×200','103×209×100',103,209,50,'bed',malmC);
-  P(c0[3],'BRIMNES','Kommode, 3 Schubladen','78×41×95',78,41,95,'dresser',[IKC.weiss,IKC.schwarz]);
-  P(c0[3],'KOPPANG','Kommode, 6 Schubladen','172×50×83',172,50,83,'dresser',[IKC.weiss,IKC.sb]);
-  P(c0[3],'TARVA','Kommode, 5 Schubladen','79×39×127',79,39,127,'dresser',[IKC.kiefer]);
-  P(c0[3],'RAST','Kommode, 3 Schubladen','62×30×70',62,30,70,'dresser',[IKC.kiefer]);
-  P(c0[3],'BRIMNES','Nachttisch','39×41×53',39,41,53,'dresser',[IKC.weiss,IKC.schwarz]);
-  P(c0[3],'KULLEN','Nachttisch','35×40×49',35,40,49,'dresser',[IKC.weiss,IKC.sb]);
+  P(c0[3],'','Bett 140×200 mit Schubladen','146×206×47',146,206,47,'bed',[IKC.weiss,IKC.schwarz]);
+  P(c0[3],'','Polsterbett 140×200','148×206×85',148,206,50,'bed',[['Stoff hellgrau','#b9bab6'],['Stoff dunkelgrau','#55585b']]);
+  P(c0[3],'','Bett 160×200','167×209×92',167,209,55,'bed',[IKC.kiefer]);
+  P(c0[3],'','Bett 90×200','103×209×100',103,209,50,'bed',bedC);
+  P(c0[3],'','Kommode, 3 Schubladen','78×41×95',78,41,95,'dresser',[IKC.weiss,IKC.schwarz]);
+  P(c0[3],'','Kommode, 6 Schubladen','172×50×83',172,50,83,'dresser',[IKC.weiss,IKC.sb]);
+  P(c0[3],'','Kommode, 5 Schubladen','79×39×127',79,39,127,'dresser',[IKC.kiefer]);
+  P(c0[3],'','Kommode, 3 Schubladen','62×30×70',62,30,70,'dresser',[IKC.kiefer]);
+  P(c0[3],'','Nachttisch','39×41×53',39,41,53,'dresser',[IKC.weiss,IKC.schwarz]);
+  P(c0[3],'','Nachttisch','35×40×49',35,40,49,'dresser',[IKC.weiss,IKC.sb]);
   // Kleiderschränke
-  P(c0[4],'PAX','Kleiderschrank, 1 Tür','50×58×201',50,58,201,'wardrobe',paxC,{doors:1});
-  P(c0[4],'PAX','Kleiderschrank, 2 Türen, hoch','100×58×236',100,58,236,'wardrobe',paxC,{doors:2});
-  P(c0[4],'BRIMNES','Kleiderschrank, 2 Türen','78×50×190',78,50,190,'wardrobe',[IKC.weiss,IKC.schwarz],{doors:2});
-  P(c0[4],'KLEPPSTAD','Kleiderschrank, 2 Türen','79×55×176',79,55,176,'wardrobe',[IKC.weiss,['beige','#d8ccb6']],{doors:2});
-  P(c0[4],'RAKKESTAD','Kleiderschrank, 3 Türen','117×58×176',117,58,176,'wardrobe',[IKC.sb,IKC.weiss],{doors:3});
-  P(c0[4],'MULIG','Kleiderständer','99×46×151',99,46,151,'coatrack',[IKC.weiss,IKC.schwarz],{},false);
-  P(c0[4],'RIGGA','Kleiderständer','111×51×130',111,51,130,'coatrack',[IKC.weiss],{},false);
+  P(c0[4],'','Kleiderschrank, 1 Tür','50×58×201',50,58,201,'wardrobe',wardC,{doors:1});
+  P(c0[4],'','Kleiderschrank, 2 Türen, hoch','100×58×236',100,58,236,'wardrobe',wardC,{doors:2});
+  P(c0[4],'','Kleiderschrank, 2 Türen','78×50×190',78,50,190,'wardrobe',[IKC.weiss,IKC.schwarz],{doors:2});
+  P(c0[4],'','Kleiderschrank, 2 Türen','79×55×176',79,55,176,'wardrobe',[IKC.weiss,['beige','#d8ccb6']],{doors:2});
+  P(c0[4],'','Kleiderschrank, 3 Türen','117×58×176',117,58,176,'wardrobe',[IKC.sb,IKC.weiss],{doors:3});
+  P(c0[4],'','Kleiderständer','99×46×151',99,46,151,'coatrack',[IKC.weiss,IKC.schwarz],{},false);
+  P(c0[4],'','Kleiderständer','111×51×130',111,51,130,'coatrack',[IKC.weiss],{},false);
   // Arbeitszimmer
-  P(c0[5],'LINNMON / ADILS','Tisch','120×60×74',120,60,74,'desk',[IKC.weiss,IKC.sb],{bare:true,frame:'#eeede8'});
-  P(c0[5],'LINNMON / ADILS','Tisch','100×60×74',100,60,74,'desk',[IKC.weiss,IKC.sb],{bare:true,frame:'#eeede8'});
-  P(c0[5],'MITTZON','Schreibtisch Sitz/Steh','140×80×65–125',140,80,75,'desk',[['Eichenfurnier','#c8a77a'],IKC.weiss],{bare:true,frame:'#2e3134'});
-  P(c0[5],'ALEX','Schreibtisch','132×58×76',132,58,76,'desk',[IKC.weiss,IKC.sb],{bare:true,drawer:4});
-  P(c0[5],'HEMNES','Schreibtisch','155×65×74',155,65,74,'desk',[IKC.hemw,IKC.hemsb],{drawer:3});
-  P(c0[5],'MICKE','Rollcontainer','35×50×75',35,50,75,'dresser',[IKC.weiss,IKC.sb],{},false);
-  P(c0[5],'HELMER','Schubladenelement auf Rollen','28×43×69',28,43,69,'dresser',[IKC.weiss,IKC.schwarz],{},false);
-  P(c0[5],'MILLBERGET','Drehstuhl','68×68×112',68,68,108,'officechair',[['Murum schwarz','#262626'],['Bomstad weiß','#e8e6e0']],{},false);
-  P(c0[5],'FLINTAN','Bürostuhl','66×69×95',66,69,95,'officechair',[['Vissle schwarz','#262626']],{},false);
+  P(c0[5],'','Tisch','120×60×74',120,60,74,'desk',[IKC.weiss,IKC.sb],{bare:true,frame:'#eeede8'});
+  P(c0[5],'','Tisch','100×60×74',100,60,74,'desk',[IKC.weiss,IKC.sb],{bare:true,frame:'#eeede8'});
+  P(c0[5],'','Schreibtisch Sitz/Steh','140×80×65–125',140,80,75,'desk',[['Eichenfurnier','#c8a77a'],IKC.weiss],{bare:true,frame:'#2e3134'});
+  P(c0[5],'','Schreibtisch','132×58×76',132,58,76,'desk',[IKC.weiss,IKC.sb],{bare:true,drawer:4});
+  P(c0[5],'','Schreibtisch','155×65×74',155,65,74,'desk',[IKC.hemw,IKC.hemsb],{drawer:3});
+  P(c0[5],'','Rollcontainer','35×50×75',35,50,75,'dresser',[IKC.weiss,IKC.sb],{},false);
+  P(c0[5],'','Schubladenelement auf Rollen','28×43×69',28,43,69,'dresser',[IKC.weiss,IKC.schwarz],{},false);
+  P(c0[5],'','Drehstuhl','68×68×112',68,68,108,'officechair',[['Lederoptik schwarz','#262626'],['Lederoptik weiß','#e8e6e0']],{},false);
+  P(c0[5],'','Bürostuhl','66×69×95',66,69,95,'officechair',[['Stoff schwarz','#262626']],{},false);
   // Küche
-  P(c0[6],'METOD','Unterschrank mit Schubladen','40×62×88',40,62,88,'kitchen',metC,{modules:[['schub',40]],uppers:false});
-  P(c0[6],'METOD','Unterschrank mit Schubladen','80×62×88',80,62,88,'kitchen',metC,{modules:[['schub',80]],uppers:false});
-  P(c0[6],'METOD','Unterschrank mit Tür','40×62×88',40,62,88,'kitchen',metC,{modules:[['tuer',40]],uppers:false});
-  P(c0[6],'KNOXHULT','Küchenzeile','180×61×220',180,61,90,'kitchen',[IKC.weiss,['grau','#8f9295']],{modules:[['tuer',60],['spuele',60],['schub',60]],uppers:true});
-  P(c0[6],'FÖRHÖJA','Küchenwagen','100×43×90',100,43,90,'sideboard',[IKC.birke],{},false);
-  P(c0[6],'STENSTORP','Kücheninsel','126×79×90',126,79,90,'sideboard',[['weiß/Eiche','#eeede8']],{},false);
-  P(c0[6],'INGOLF','Barhocker','40×45×102',40,45,102,'chair',[IKC.weiss,['braunschwarz','#3a2f2a']],{},false);
-  P(c0[6],'DALFRED','Barhocker','50×50×63–74',50,50,74,'roundcab',[IKC.schwarz],{},false);
+  P(c0[6],'','Unterschrank mit Schubladen','40×62×88',40,62,88,'kitchen',metC,{modules:[['schub',40]],uppers:false});
+  P(c0[6],'','Unterschrank mit Schubladen','80×62×88',80,62,88,'kitchen',metC,{modules:[['schub',80]],uppers:false});
+  P(c0[6],'','Unterschrank mit Tür','40×62×88',40,62,88,'kitchen',metC,{modules:[['tuer',40]],uppers:false});
+  P(c0[6],'','Küchenzeile','180×61×220',180,61,90,'kitchen',[IKC.weiss,['grau','#8f9295']],{modules:[['tuer',60],['spuele',60],['schub',60]],uppers:true});
+  P(c0[6],'','Küchenwagen','100×43×90',100,43,90,'sideboard',[IKC.birke],{},false);
+  P(c0[6],'','Kücheninsel','126×79×90',126,79,90,'sideboard',[['weiß/Eiche','#eeede8']],{},false);
+  P(c0[6],'','Barhocker','40×45×102',40,45,102,'chair',[IKC.weiss,['braunschwarz','#3a2f2a']],{},false);
+  P(c0[6],'','Barhocker','50×50×63–74',50,50,74,'roundcab',[IKC.schwarz],{},false);
   // Bad & Flur
-  P(c0[7],'HEMNES','Waschbeckenschrank mit Becken','83×49×89',83,49,89,'vanity',[IKC.hemw,['grau','#8f9295']]);
-  P(c0[7],'GODMORGON','Waschbeckenschrank mit Becken, schmal','63×49×58',63,49,86,'vanity',[IKC.weiss,IKC.ew]);
-  P(c0[7],'HEMNES','Spiegelschrank, 2 Türen','83×16×98',83,16,98,'mirror',[IKC.weiss],{elev:110});
-  P(c0[7],'HEMNES','Schuhschrank, 4 Fächer','107×22×101',107,22,101,'sideboard',[IKC.hemw,IKC.hemsb]);
-  P(c0[7],'STÄLL','Schuhschrank, 4 Fächer','79×29×148',79,29,148,'sideboard',[IKC.weiss,['dunkelbraun','#4a3628']]);
-  P(c0[7],'BISSA','Schuhschrank, 2 Fächer','49×28×93',49,28,93,'sideboard',[IKC.weiss,IKC.sb]);
-  P(c0[7],'MACKAPÄR','Schuhbank','78×32×40',78,32,40,'sideboard',[IKC.weiss]);
-  P(c0[7],'LINDBYN','Spiegel','60×120',60,3,120,'mirror',[IKC.schwarz],{elev:70});
+  P(c0[7],'','Waschbeckenschrank mit Becken','83×49×89',83,49,89,'vanity',[IKC.hemw,['grau','#8f9295']]);
+  P(c0[7],'','Waschbeckenschrank mit Becken, schmal','63×49×58',63,49,86,'vanity',[IKC.weiss,IKC.ew]);
+  P(c0[7],'','Spiegelschrank, 2 Türen','83×16×98',83,16,98,'mirror',[IKC.weiss],{elev:110});
+  P(c0[7],'','Schuhschrank, 4 Fächer','107×22×101',107,22,101,'sideboard',[IKC.hemw,IKC.hemsb]);
+  P(c0[7],'','Schuhschrank, 4 Fächer','79×29×148',79,29,148,'sideboard',[IKC.weiss,['dunkelbraun','#4a3628']]);
+  P(c0[7],'','Schuhschrank, 2 Fächer','49×28×93',49,28,93,'sideboard',[IKC.weiss,IKC.sb]);
+  P(c0[7],'','Schuhbank','78×32×40',78,32,40,'sideboard',[IKC.weiss]);
+  P(c0[7],'','Spiegel','60×120',60,3,120,'mirror',[IKC.schwarz],{elev:70});
   // Teppiche
-  P(C('Teppiche'),'VINDUM','Teppich Langflor','133×180',180,133,2,'rug',[['weiß','#eeeae2'],['dunkelgrau','#55585b']],{},false);
-  P(C('Teppiche'),'STOCKHOLM','Teppich Flachgewebe','170×240',240,170,1,'rug',[['gestreift beige','#c9bca2']],{},false);
-  P(C('Teppiche'),'LANGSTED','Teppich Kurzflor','133×195',195,133,1,'rug',[['beige','#cbbfa8'],['hellgrau','#b9bab6']],{},false);
-  P(C('Teppiche'),'TIPHEDE','Teppich Flachgewebe','120×180',180,120,1,'rug',[['natur/schwarz','#d7cdb8']],{},false);
-  P(C('Teppiche'),'ÅDUM','Teppich Langflor','133×195',195,133,2,'rug',[['cremeweiß','#ebe5d6'],['dunkelgrau','#55585b'],['senfgelb','#c9a440']],{},false);
-  P(C('Teppiche'),'LANGSTED','Läufer','60×240',240,60,1,'rug',[['beige','#cbbfa8']],{},false);
-  P(C('Teppiche'),'LOHALS','Teppich Jute','80×150',150,80,1,'rug',natur,{},false);
+  P(C('Teppiche'),'','Teppich Langflor','133×180',180,133,2,'rug',[['weiß','#eeeae2'],['dunkelgrau','#55585b']],{},false);
+  P(C('Teppiche'),'','Teppich Flachgewebe','170×240',240,170,1,'rug',[['gestreift beige','#c9bca2']],{},false);
+  P(C('Teppiche'),'','Teppich Kurzflor','133×195',195,133,1,'rug',[['beige','#cbbfa8'],['hellgrau','#b9bab6']],{},false);
+  P(C('Teppiche'),'','Teppich Flachgewebe','120×180',180,120,1,'rug',[['natur/schwarz','#d7cdb8']],{},false);
+  P(C('Teppiche'),'','Teppich Langflor','133×195',195,133,2,'rug',[['cremeweiß','#ebe5d6'],['dunkelgrau','#55585b'],['senfgelb','#c9a440']],{},false);
+  P(C('Teppiche'),'','Läufer','60×240',240,60,1,'rug',[['beige','#cbbfa8']],{},false);
+  P(C('Teppiche'),'','Teppich Jute','80×150',150,80,1,'rug',natur,{},false);
   // Lampen
-  P(C('Lampen'),'RANARP','Hängeleuchte','Ø38',38,38,70,'ceillamp',[IKC.schwarz,['cremeweiß','#ece6d8']],{style:'pendant',shade:'cone',elev:163},false);
-  P(C('Lampen'),'HEKTAR','Hängeleuchte','Ø49',49,49,75,'ceillamp',[['dunkelgrau','#4a4d50']],{style:'pendant',shade:'cone',elev:158},false);
-  P(C('Lampen'),'NYMÅNE','Hängeleuchte','Ø40',40,40,65,'ceillamp',[IKC.weiss,['anthrazit','#3d4043']],{style:'pendant',shade:'cone',elev:168},false);
-  P(C('Lampen'),'FADO','Hängeleuchte Kugel','Ø25',25,25,60,'ceillamp',[IKC.weiss],{style:'pendant',shade:'globe',elev:173},false);
-  P(C('Lampen'),'VINDKAST','Hängeleuchte Stoff','Ø50',50,50,55,'ceillamp',[IKC.weiss],{style:'pendant',shade:'drum',elev:178},false);
-  P(C('Lampen'),'MYRVARV','Deckenleuchte','Ø40',40,40,10,'ceillamp',[IKC.weiss],{style:'dome',elev:223},false);
-  P(C('Lampen'),'NYMÅNE','Stehleuchte','H 150',35,35,150,'lamp',[IKC.weiss,['anthrazit','#3d4043']],{},false);
-  P(C('Lampen'),'ÅRSTID','Tischleuchte','H 55',22,22,55,'lamp',[['Messing / weiß','#c9a46f']],{},false);
-  P(C('Lampen'),'LAMPAN','Tischleuchte','H 29',20,20,29,'lamp',[IKC.weiss],{},false);
+  P(C('Lampen'),'','Hängeleuchte','Ø38',38,38,70,'ceillamp',[IKC.schwarz,['cremeweiß','#ece6d8']],{style:'pendant',shade:'cone',elev:163},false);
+  P(C('Lampen'),'','Hängeleuchte','Ø49',49,49,75,'ceillamp',[['dunkelgrau','#4a4d50']],{style:'pendant',shade:'cone',elev:158},false);
+  P(C('Lampen'),'','Hängeleuchte','Ø40',40,40,65,'ceillamp',[IKC.weiss,['anthrazit','#3d4043']],{style:'pendant',shade:'cone',elev:168},false);
+  P(C('Lampen'),'','Hängeleuchte Kugel','Ø25',25,25,60,'ceillamp',[IKC.weiss],{style:'pendant',shade:'globe',elev:173},false);
+  P(C('Lampen'),'','Hängeleuchte Stoff','Ø50',50,50,55,'ceillamp',[IKC.weiss],{style:'pendant',shade:'drum',elev:178},false);
+  P(C('Lampen'),'','Deckenleuchte','Ø40',40,40,10,'ceillamp',[IKC.weiss],{style:'dome',elev:223},false);
+  P(C('Lampen'),'','Stehleuchte','H 150',35,35,150,'lamp',[IKC.weiss,['anthrazit','#3d4043']],{},false);
+  P(C('Lampen'),'','Tischleuchte','H 55',22,22,55,'lamp',[['Messing / weiß','#c9a46f']],{},false);
+  P(C('Lampen'),'','Tischleuchte','H 29',20,20,29,'lamp',[IKC.weiss],{},false);
   // Deko & Pflanzen
-  P(C('Deko & Pflanzen'),'FEJKA','Kunstpflanze Monstera','Ø ca. 60',60,60,100,'plant',[['grün','#4f7f4a']],{shape:'rund'},false);
-  P(C('Deko & Pflanzen'),'FEJKA','Kunstpflanze klein','Ø ca. 25',25,25,45,'plant',[['grün','#5f8f5a']],{shape:'rund'},false);
-  P(C('Deko & Pflanzen'),'RIBBA','Bilderrahmen','50×70',50,3,70,'picture',[IKC.schwarz,IKC.weiss],{elev:120});
-  P(C('Deko & Pflanzen'),'RIBBA','Bilderrahmen','30×40',30,3,40,'picture',[IKC.schwarz,IKC.weiss],{elev:135});
-  P(C('Deko & Pflanzen'),'BJÖRKSTA','Bild mit Rahmen','118×78',118,3,78,'picture',[['Landschaft','#8b9a86']],{elev:115});
+  P(C('Deko & Pflanzen'),'','Kunstpflanze Monstera','Ø ca. 60',60,60,100,'plant',[['grün','#4f7f4a']],{shape:'rund'},false);
+  P(C('Deko & Pflanzen'),'','Kunstpflanze klein','Ø ca. 25',25,25,45,'plant',[['grün','#5f8f5a']],{shape:'rund'},false);
+  P(C('Deko & Pflanzen'),'','Bilderrahmen','50×70',50,3,70,'picture',[IKC.schwarz,IKC.weiss],{elev:120});
+  P(C('Deko & Pflanzen'),'','Bilderrahmen','30×40',30,3,40,'picture',[IKC.schwarz,IKC.weiss],{elev:135});
+  P(C('Deko & Pflanzen'),'','Bild mit Rahmen','118×78',118,3,78,'picture',[['Landschaft','#8b9a86']],{elev:115});
   // Aufbewahrung
-  P(C('Aufbewahrung'),'IVAR','Schrank','80×30×83',80,30,83,'sideboard',[IKC.kiefer]);
-  P(C('Aufbewahrung'),'BROR','Regal','85×40×190',85,40,190,'shelf',[IKC.schwarz],{open:true,rows:4});
-  P(C('Aufbewahrung'),'HYLLIS','Regal','60×27×140',60,27,140,'shelf',[['verzinkt','#a3a8ad']],{open:true,rows:4});
-  P(C('Aufbewahrung'),'OMAR','Regal','92×36×181',92,36,181,'shelf',[['verzinkt','#a3a8ad']],{open:true,rows:5});
-  P(C('Aufbewahrung'),'PLATSA','Schrank, 2 Türen','80×42×120',80,42,120,'wardrobe',[IKC.weiss],{doors:2});
-  P(C('Aufbewahrung'),'KALLAX','Regal 1×2 Fächer','42×39×77',42,39,77,'kallax',kalC,{cols:1,rows:2});
+  P(C('Aufbewahrung'),'','Schrank','80×30×83',80,30,83,'sideboard',[IKC.kiefer]);
+  P(C('Aufbewahrung'),'','Regal','85×40×190',85,40,190,'shelf',[IKC.schwarz],{open:true,rows:4});
+  P(C('Aufbewahrung'),'','Regal','60×27×140',60,27,140,'shelf',[['verzinkt','#a3a8ad']],{open:true,rows:4});
+  P(C('Aufbewahrung'),'','Regal','92×36×181',92,36,181,'shelf',[['verzinkt','#a3a8ad']],{open:true,rows:5});
+  P(C('Aufbewahrung'),'','Schrank, 2 Türen','80×42×120',80,42,120,'wardrobe',[IKC.weiss],{doors:2});
+  P(C('Aufbewahrung'),'','Regal 1×2 Fächer','42×39×77',42,39,77,'cubes',kalC,{cols:1,rows:2});
   // Kinderzimmer
-  P(C('Kinderzimmer'),'KURA','Wendebett 90×200','99×209×116',99,209,116,'bed',[['weiß/Kiefer','#eeede8']]);
-  P(C('Kinderzimmer'),'SUNDVIK','Kinderbett 70×140','80×146×97',80,146,60,'bed',[IKC.weiss,['grau','#8f9295']]);
-  P(C('Kinderzimmer'),'SNIGLAR','Babybett 60×120','63×124×81',63,124,81,'bed',[IKC.birke]);
-  P(C('Kinderzimmer'),'TROFAST','Aufbewahrung','99×44×94',99,44,94,'kallax',[['weiß/Kiefer','#eeede8']],{cols:3,rows:2});
-  P(C('Kinderzimmer'),'FLISAT','Kindertisch','83×58×48',83,58,48,'table',[IKC.kiefer],{},false);
-  P(C('Kinderzimmer'),'MAMMUT','Kinderstuhl','39×37×67',39,37,67,'chair',[['blau','#4a6a8a'],['rosa','#d9a3a0'],IKC.weiss],{},false);
-  P(C('Kinderzimmer'),'BUSUNGE','Kleiderschrank','80×52×139',80,52,139,'wardrobe',[IKC.weiss,['hellrosa','#e5cfc6']],{doors:2});
-  L.forEach(p=>{ p.shop=p.shop||'IKEA'; });
+  P(C('Kinderzimmer'),'','Wendebett 90×200','99×209×116',99,209,116,'bed',[['weiß/Kiefer','#eeede8']]);
+  P(C('Kinderzimmer'),'','Kinderbett 70×140','80×146×97',80,146,60,'bed',[IKC.weiss,['grau','#8f9295']]);
+  P(C('Kinderzimmer'),'','Babybett 60×120','63×124×81',63,124,81,'bed',[IKC.birke]);
+  P(C('Kinderzimmer'),'','Aufbewahrung','99×44×94',99,44,94,'cubes',[['weiß/Kiefer','#eeede8']],{cols:3,rows:2});
+  P(C('Kinderzimmer'),'','Kindertisch','83×58×48',83,58,48,'table',[IKC.kiefer],{},false);
+  P(C('Kinderzimmer'),'','Kinderstuhl','39×37×67',39,37,67,'chair',[['blau','#4a6a8a'],['rosa','#d9a3a0'],IKC.weiss],{},false);
+  P(C('Kinderzimmer'),'','Kleiderschrank','80×52×139',80,52,139,'wardrobe',[IKC.weiss,['hellrosa','#e5cfc6']],{doors:2});
+  L.forEach(p=>{ p.shop=p.shop||'KATALOG'; });
+  { const sk=L.filter(p=>p.shop==='KATALOG'), seen={}; sk.forEach(p=>{ p.shop='Skandi'; });
+    const cnt={}; sk.forEach(p=>{ cnt[p.t]=(cnt[p.t]||0)+1; });
+    sk.forEach(p=>{ let n=p.t; if(cnt[p.t]>1) n+=', '+p.w+' cm breit'; if(seen[n]) n+=' (Variante '+(++seen[n])+')'; else seen[n]=1; p.n=n; p.t=''; }); }
   // ---- Designklassiker anderer Hersteller (Maße nach Herstellerangaben, vereinfachte Modelle) ----
   const D=(cat,maker,n,t,dims,w,d,h,kind,cols,ex,wall)=>{ P(cat,n,t,dims,w,d,h,kind,cols,ex,wall); const p=L[L.length-1]; p.id='dk'+(L.length); p.shop='Design'; p.maker=maker; };
   const DK=n=>C(n);
-  D(DK('Tische & Stühle'),'Vitra','Eames DSW','Schalenstuhl mit Holzbeinen','46,5×55×83',47,55,83,'shellchair',[['weiß','#efede6'],['schwarz','#2a2a2a'],['senfgelb','#d1a43b'],['meeresgrün','#5f8f8a']],{base:'wood'},false);
-  D(DK('Tische & Stühle'),'Vitra','Eames DSR','Schalenstuhl mit Drahtgestell','46,5×55×83',47,55,83,'shellchair',[['weiß','#efede6'],['schwarz','#2a2a2a']],{base:'chrome'},false);
-  D(DK('Tische & Stühle'),'Vitra','Panton Chair','Freischwinger aus einem Guss','50×61×86',50,61,86,'shellchair',[['weiß','#efede6'],['rot','#b5312a'],['schwarz','#2a2a2a']],{base:'panton'},false);
-  D(DK('Tische & Stühle'),'Fritz Hansen','Serie 7','Stuhl','50×52×78',50,52,78,'shellchair',[['Esche schwarz','#2d2a28'],['Esche natur','#d9c09a']],{base:'chrome'},false);
-  D(DK('Tische & Stühle'),'HAY','AAC 22','Armlehnstuhl','52×53×79',52,53,79,'shellchair',[['Eiche geseift','#d9c4a0'],['schwarz','#2a2a2a']],{base:'wood',arms:true},false);
-  D(DK('Tische & Stühle'),'Thonet','214','Bugholzstuhl','43×52×84',43,52,84,'chair',[['Buche nussbaum','#5e4030'],['schwarz','#2a2a2a']],{},false);
-  D(DK('Tische & Stühle'),'Tolix','Chaise A','Metallstuhl','44×52×85',44,52,85,'chair',[['Stahl roh','#8f9295'],['rot','#b5312a'],['schwarz','#2a2a2a']],{},false);
-  D(DK('Tische & Stühle'),'Knoll','Saarinen Tulip','Tisch rund','Ø120×72',120,120,72,'table',[['weiß/Marmor','#efede6']],{shape:'rund'},false);
-  D(DK('Tische & Stühle'),'Knoll','Saarinen Tulip','Stuhl','49×53×81',49,53,81,'shellchair',[['weiß','#efede6']],{base:'tulip',arms:true},false);
-  D(DK('Sofas & Sessel'),'Vitra','Eames Lounge Chair','Sessel','84×85×83',84,85,83,'lounge',[['Leder schwarz','#232323'],['Leder cognac','#8a4f2a']],{},false);
-  D(DK('Sofas & Sessel'),'Vitra','Eames Ottoman','Hocker','65×54×44',65,54,44,'ottoman',[['Leder schwarz','#232323'],['Leder cognac','#8a4f2a']],{},false);
-  D(DK('Sofas & Sessel'),'Ligne Roset','Togo','Sessel','87×102×70',87,102,70,'togo',[['Alcantara grau','#8f9295'],['Samt grün','#3e5a4b'],['Stoff beige','#cbbfa8']],{},false);
-  D(DK('Sofas & Sessel'),'Ligne Roset','Togo','Zweisitzer','131×102×70',131,102,70,'togo',[['Alcantara grau','#8f9295'],['Samt grün','#3e5a4b'],['Stoff beige','#cbbfa8']],{},false);
-  D(DK('Sofas & Sessel'),'Cassina','LC2','Sessel','76×70×67',76,70,67,'armchair',[['Leder schwarz','#232323'],['Leder weiß','#e8e6e0']],{},false);
-  D(DK('Sofas & Sessel'),'Knoll','Barcelona Chair','Sessel','75×75×77',75,75,77,'armchair',[['Leder schwarz','#232323'],['Leder cognac','#8a4f2a']],{},false);
-  D(DK('Sofas & Sessel'),'HAY','Mags','3er-Sofa','228×95×67',228,95,67,'sofa',[['Hallingdal grau','#8f9295'],['Linara beige','#cbbfa8']]);
-  D(DK('Sofas & Sessel'),'Muuto','Outline','3er-Sofa','220×84×71',220,84,71,'sofa',[['Fiord grau','#7b7e80'],['Vidar rosé','#c9a59a']]);
-  D(DK('Regale & TV'),'USM','Haller Sideboard','3×2 Fächer','152,5×37,5×74',153,38,74,'usm',[['reinweiß','#eeede8'],['graphitschwarz','#2a2b2d'],['enzianblau','#2f4f8a'],['rubinrot','#9a2a2a'],['goldgelb','#d4a52a']]);
-  D(DK('Regale & TV'),'USM','Haller Lowboard','4×1 Fächer','200×37,5×39',200,38,39,'usm',[['reinweiß','#eeede8'],['graphitschwarz','#2a2b2d'],['mittelgrau','#8f9295']]);
-  D(DK('Regale & TV'),'USM','Haller Regal','2×4 Fächer','102×37,5×144',102,38,144,'usm',[['reinweiß','#eeede8'],['graphitschwarz','#2a2b2d']]);
-  D(DK('Aufbewahrung'),'Kartell','Componibili','Rundcontainer 3 Elemente','Ø32×58,5',32,32,59,'roundcab',[IKC.weiss,IKC.schwarz,['rot','#b5312a']],{},false);
-  D(DK('Tische & Stühle'),'Vitra','Noguchi Coffee Table','Couchtisch Glas','128×93×40',128,93,40,'glasstable',[['Nussbaum','#5e4030'],['Esche schwarz','#2d2a28']],{},false);
-  D(DK('Lampen'),'Louis Poulsen','PH 5','Hängeleuchte','Ø50',50,50,70,'ceillamp',[IKC.weiss,['grau','#8f9295']],{style:'pendant',shade:'ph',elev:163},false);
-  D(DK('Lampen'),'Flos','Arco','Bogenleuchte','H 240',40,40,240,'lamp',[['Marmor / Stahl','#d4d7da']],{},false);
+  D(DK('Tische & Stühle'),'','Schalenstuhl mit Holzbeinen','','46,5×55×83',47,55,83,'shellchair',[['weiß','#efede6'],['schwarz','#2a2a2a'],['senfgelb','#d1a43b'],['meeresgrün','#5f8f8a']],{base:'wood'},false);
+  D(DK('Tische & Stühle'),'','Schalenstuhl mit Metallgestell','','46,5×55×83',47,55,83,'shellchair',[['weiß','#efede6'],['schwarz','#2a2a2a']],{base:'chrome'},false);
+  D(DK('Tische & Stühle'),'','Kunststoffstuhl modern','','50×61×86',50,61,86,'shellchair',[['weiß','#efede6'],['rot','#b5312a'],['schwarz','#2a2a2a']],{base:'chrome'},false);
+  D(DK('Tische & Stühle'),'','Schichtholzstuhl','','50×52×78',50,52,78,'shellchair',[['Esche schwarz','#2d2a28'],['Esche natur','#d9c09a']],{base:'chrome'},false);
+  D(DK('Tische & Stühle'),'','Armlehnstuhl Holz','','52×53×79',52,53,79,'shellchair',[['Eiche geseift','#d9c4a0'],['schwarz','#2a2a2a']],{base:'wood',arms:true},false);
+  D(DK('Tische & Stühle'),'','Bugholzstuhl','','43×52×84',43,52,84,'chair',[['Buche nussbaum','#5e4030'],['schwarz','#2a2a2a']],{},false);
+  D(DK('Tische & Stühle'),'','Metallstuhl im Bistrostil','','44×52×85',44,52,85,'chair',[['Stahl roh','#8f9295'],['rot','#b5312a'],['schwarz','#2a2a2a']],{},false);
+  D(DK('Tische & Stühle'),'','Esstisch rund mit Mittelfuß','','Ø120×72',120,120,72,'table',[['weiß/Marmor','#efede6']],{shape:'rund'},false);
+  D(DK('Tische & Stühle'),'','Schalenstuhl mit Armlehnen','','49×53×81',49,53,81,'shellchair',[['weiß','#efede6']],{base:'chrome',arms:true},false);
+  D(DK('Sofas & Sessel'),'','Ledersessel','','84×85×83',84,85,83,'armchair',[['Leder schwarz','#232323'],['Leder cognac','#8a4f2a']],{},false);
+  D(DK('Sofas & Sessel'),'','Lederhocker','','65×54×44',65,54,44,'ottoman',[['Leder schwarz','#232323'],['Leder cognac','#8a4f2a']],{},false);
+  D(DK('Sofas & Sessel'),'','Polstersessel niedrig','','87×102×70',87,102,70,'armchair',[['Mikrofaser grau','#8f9295'],['Samt grün','#3e5a4b'],['Stoff beige','#cbbfa8']],{},false);
+  D(DK('Sofas & Sessel'),'','Polstersofa niedrig, 2-Sitzer','','131×102×70',131,102,70,'sofa',[['Mikrofaser grau','#8f9295'],['Samt grün','#3e5a4b'],['Stoff beige','#cbbfa8']],{},false);
+  D(DK('Sofas & Sessel'),'','Würfelsessel Leder','','76×70×67',76,70,67,'armchair',[['Leder schwarz','#232323'],['Leder weiß','#e8e6e0']],{},false);
+  D(DK('Sofas & Sessel'),'','Ledersessel mit Stahlgestell','','75×75×77',75,75,77,'armchair',[['Leder schwarz','#232323'],['Leder cognac','#8a4f2a']],{},false);
+  D(DK('Sofas & Sessel'),'','Sofa 3-Sitzer niedrig','','228×95×67',228,95,67,'sofa',[['Wollstoff grau','#8f9295'],['Leinen beige','#cbbfa8']]);
+  D(DK('Sofas & Sessel'),'','Sofa 3-Sitzer, schmale Lehnen','','220×84×71',220,84,71,'sofa',[['Stoff grau','#7b7e80'],['Stoff rosé','#c9a59a']]);
+  D(DK('Regale & TV'),'','Metall-Sideboard 3×2 Fächer','','152,5×37,5×74',153,38,74,'sideboard',[['reinweiß','#eeede8'],['graphitschwarz','#2a2b2d'],['enzianblau','#2f4f8a'],['rubinrot','#9a2a2a'],['goldgelb','#d4a52a']]);
+  D(DK('Regale & TV'),'','Metall-Lowboard 4 Fächer','','200×37,5×39',200,38,39,'sideboard',[['reinweiß','#eeede8'],['graphitschwarz','#2a2b2d'],['mittelgrau','#8f9295']]);
+  D(DK('Regale & TV'),'','Metallregal 2×4 Fächer','','102×37,5×144',102,38,144,'shelf',[['reinweiß','#eeede8'],['graphitschwarz','#2a2b2d']]);
+  D(DK('Aufbewahrung'),'','Rundcontainer, 3 Fächer','','Ø32×58,5',32,32,59,'roundcab',[IKC.weiss,IKC.schwarz,['rot','#b5312a']],{},false);
+  D(DK('Tische & Stühle'),'','Couchtisch mit Glasplatte','','128×93×40',128,93,40,'coffeetable',[['Nussbaum','#5e4030'],['Esche schwarz','#2d2a28']],{},false);
+  D(DK('Lampen'),'','Pendelleuchte','','Ø50',50,50,70,'ceillamp',[IKC.weiss,['grau','#8f9295']],{style:'pendant',elev:163},false);
+  D(DK('Lampen'),'','Bogenleuchte','','H 240',40,40,240,'lamp',[['Marmor / Stahl','#d4d7da']],{},false);
   // ---- Fernseher und Technik (allgemeine Modelle, Maße nach Bildschirmdiagonale 16:9) ----
   const TX=(n,t,dims,w,d,h,kind,cols,ex,wall)=>{ P('TV & Technik',n,t,dims,w,d,h,kind,cols,ex,wall); const p=L[L.length-1]; p.id='tx'+L.length; p.shop='Technik'; };
   const tvC=[['schwarz','#17191b'],['silber','#9ea3a8'],['weiß','#e9e9e6']];
@@ -907,7 +966,7 @@ function tplState(k){
         I('Kleiderschrank 3-türig',700,281,150,58,201,'#e8e4dc',0)); }
     return base; }
   // ---- Fertig eingerichtete Beispiele ----
-  const KAT=id=>IKEA.find(p=>p.id===id);
+  const KAT=id=>KATALOG.find(p=>p.id===id);
   const mkI=spec=>typeof spec==='string' ? ikItem(KAT(spec),0,0) : Object.assign({id:uid('i'),name:spec[0],w:spec[1],d:spec[2],h:spec[3],color:spec[4]||'#9aa7b0',rot:0,elev:0,x:0,z:0}, JSON.parse(JSON.stringify(spec[5]||{})));
   const A=(r,side,along,spec,ex)=>{ const it=Object.assign(mkI(spec),ex||{}); const g=0.5;
     if(side==='N'){ it.rot=0; it.x=r.x+along; it.z=r.z+it.d/2+g; } if(side==='S'){ it.rot=180; it.x=r.x+along; it.z=r.z+r.d-it.d/2-g; }
@@ -936,7 +995,7 @@ function tplState(k){
       O(W,'N','fenster',80,160,{panes:2}),O(W,'N','fenster',380,160,{panes:2}),O(W,'W','tuer',150,180,{style:'hebeschiebe',height:220}),O(K,'N','fenster',90,120),O(K2,'O','fenster',90,110),
       O(E,'S','fenster',90,120),O(E,'W','fenster',150,100),O(B,'S','fenster',70,70,{sill:130,height:90,style:'kipp'}),O(K1,'S','fenster',140,140,{panes:2}),O(K1,'O','fenster',150,100)];
     // Wohnen
-    A(W,'N',310,'tx221'); F(W,270,315,'ik5',180); F(W,270,190,'ik14'); F(W,270,220,'ik73'); F(W,160,210,'ik10',270); F(W,130,120,'ik76'); F(W,270,220,'ik168');
+    A(W,'N',310,'tx221'); F(W,270,315,'ik5',180); F(W,270,190,'ik14'); F(W,270,220,'ik73'); F(W,185,95,'ik10',270); F(W,100,70,'ik76'); F(W,270,220,'ik168');
     F(W,515,330,'ik94'); F(W,515,251,'ik96'); F(W,515,409,'ik96',180); F(W,436,330,'ik96',270); F(W,594,330,'ik96',90); F(W,515,330,'ik164');
     A(W,'S',300,'ik103'); A(W,'S',300,'ik176'); F(W,590,30,'ik172'); F(W,30,60,'ik78'); A(W,'W',395,'ik29'); A(W,'N',160,RAD(100)); A(W,'N',460,RAD(100));
     // Küche
@@ -1034,7 +1093,7 @@ function plan(){ return tplState('leer'); }
 // Ältere Stände: nur die Räume ersetzen, die sich seitdem geändert haben, den Rest behalten
 function migrate(o){ o.planVer=PLAN_VER; return o; }
 function valid(o){ return o && Array.isArray(o.rooms) && Array.isArray(o.items); }
-function norm(o){ o.openings = o.openings||[]; o.wall = o.wall||12; if(o.source==='grundriss') o.source='projekt'; NORTH_DEG=-(+o.north||0); LAT=o.lat||51.2; LON=o.lon||10.4; o.items.forEach(i=>{i.rot=i.rot||0;i.elev=i.elev||0}); return o; }
+function norm(o){ try{ (o.items||[]).forEach(neutralItem); (o.floors||[]).forEach(f=>(f.items||[]).forEach(neutralItem)); }catch(e){} o.openings = o.openings||[]; o.wall = o.wall||12; if(o.source==='grundriss') o.source='projekt'; NORTH_DEG=-(+o.north||0); LAT=o.lat||51.2; LON=o.lon||10.4; o.items.forEach(i=>{i.rot=i.rot||0;i.elev=i.elev||0}); return o; }
 let state;
 try{ const s = localStorage.getItem(LS); if(s){ const o = JSON.parse(s); if(valid(o)){ if(o.source==='grundriss' && (o.planVer||1)<PLAN_VER){ oldState=s; state=migrate(norm(o)); } else state = norm(o); } } }catch(e){}
 if(!state){ state = plan(); firstRun = true; }
@@ -1135,7 +1194,7 @@ function conflicts(){
   for(let a=0;a<its.length;a++) for(let b=a+1;b<its.length;b++){
     const A=its[a], B=its[b];
     if(!(A.elev < B.elev+B.h-0.5 && B.elev < A.elev+A.h-0.5)) continue;
-    if(A.overlapOk||B.overlapOk) continue; // bewusst in die Grundfläche eines anderen Möbels (z. B. vor offenem PAX-Teil)
+    if(A.overlapOk||B.overlapOk) continue; // bewusst in die Grundfläche eines anderen Möbels (z. B. vor offenem Schrankteil)
     if(overlap2d(C.get(A.id),C.get(B.id))){ bad.add(A.id); bad.add(B.id); }
   }
   state.items.forEach(i=>{ if(kindOf(i)==='freewall') return; if(!C.get(i.id).every(([x,z])=>state.rooms.some(r=>inRoom(x,z,r,0.6)))) bad.add(i.id); });
@@ -1333,8 +1392,12 @@ function buildWorld0(){ setTimeout(()=>{ try{ applyEnvK(); wake(); }catch(e){} }
 }
 
 // ---------- Möbelmodelle (in cm, Rückseite bei -z, Vorderseite bei +z) ----------
-const KINDS = [['','Automatisch'],['box','Einfache Box'],['sofa','Sofa'],['couchmod','Sofa-Modul'],['recamiere','Recamiere'],['dock','Saugroboter-Station'],['ceillamp','Deckenleuchte'],['blind','Rollo'],['curtain','Vorhang'],['picture','Bild'],['speaker','Lautsprecher'],['roll','Rolle (gerollt)'],['post','Kratzsäule'],['armchair','Sessel'],['ottoman','Hocker'],['bed','Bett'],['wardrobe','Schrank'],['paxcorner','Eck-Kleiderschrank'],['canopybed','Himmelbett'],['dresser','Kommode'],['sideboard','Sideboard'],['shelf','Regal'],['coatrack','Garderobe'],['desk','Schreibtisch'],['table','Tisch'],['coffeetable','Couchtisch'],['chair','Stuhl'],['officechair','Bürostuhl'],['kitchen','Küchenzeile'],['tall','Hochschränke'],['fridge','Kühlschrank'],['washer','Waschmaschine'],['tub','Badewanne'],['shower','Dusche'],['wc','WC'],['sink','Waschbecken'],['tv','Fernseher'],['rug','Teppich'],['plant','Pflanze'],['lamp','Stehlampe'],['litter','Katzenklo'],['wallshelf','Wandbrett mit Büchern'],['kettle','Wasserkocher'],['slushi','Slush-Maschine'],['coffeemk','Kaffeemaschine'],['foodproc','Küchenmaschine'],['espresso','Kaffeevollautomat'],['actifry','Heißluftfritteuse'],['mirror','Spiegel'],['screen','Leinwand'],['vitrine','Vitrine'],['cattree','Kratzbaum'],['purifier','Luftreiniger'],['boiler','Gastherme'],['glasswall','Glaswand'],['towelrad','Handtuchheizkörper'],['projector','Beamer'],['tripod','Stativlampe'],['radiator','Heizkörper'],['shoeorg','Hängeorganizer'],['kallax','Würfelregal'],['poang','Schwingsessel'],['wingchair','Ohrensessel'],['cornersofa','Ecksofa mit Récamiere'],['vanity','Waschtisch'],['shellchair','Schalenstuhl'],['lounge','Loungesessel'],['usm','Rohr-Baukasten'],['roundcab','Rundcontainer'],['glasstable','Glastisch'],['togo','Bodensofa']];
+const KINDS = [['','Automatisch'],['box','Einfache Box'],['sofa','Sofa'],['couchmod','Sofa-Modul'],['recamiere','Recamiere'],['dock','Saugroboter-Station'],['ceillamp','Deckenleuchte'],['blind','Rollo'],['curtain','Vorhang'],['picture','Bild'],['speaker','Lautsprecher'],['roll','Rolle (gerollt)'],['post','Kratzsäule'],['armchair','Sessel'],['ottoman','Hocker'],['bed','Bett'],['wardrobe','Schrank'],['wardcorner','Eck-Kleiderschrank'],['canopybed','Himmelbett'],['dresser','Kommode'],['sideboard','Sideboard'],['shelf','Regal'],['coatrack','Garderobe'],['desk','Schreibtisch'],['table','Tisch'],['coffeetable','Couchtisch'],['chair','Stuhl'],['officechair','Bürostuhl'],['kitchen','Küchenzeile'],['tall','Hochschränke'],['fridge','Kühlschrank'],['washer','Waschmaschine'],['tub','Badewanne'],['shower','Dusche'],['wc','WC'],['sink','Waschbecken'],['tv','Fernseher'],['rug','Teppich'],['plant','Pflanze'],['lamp','Stehlampe'],['litter','Katzenklo'],['wallshelf','Wandbrett mit Büchern'],['kettle','Wasserkocher'],['slushi','Slush-Maschine'],['coffeemk','Kaffeemaschine'],['foodproc','Küchenmaschine'],['espresso','Kaffeevollautomat'],['actifry','Heißluftfritteuse'],['mirror','Spiegel'],['screen','Leinwand'],['vitrine','Vitrine'],['cattree','Kratzbaum'],['purifier','Luftreiniger'],['boiler','Gastherme'],['glasswall','Glaswand'],['towelrad','Handtuchheizkörper'],['projector','Beamer'],['tripod','Stativlampe'],['radiator','Heizkörper'],['shoeorg','Hängeorganizer'],['cubes','Würfelregal'],['swingchair','Schwingsessel'],['wingchair','Ohrensessel'],['cornersofa','Ecksofa mit Récamiere'],['vanity','Waschtisch'],['shellchair','Schalenstuhl'],['lounge','Loungesessel'],['metalcab','Rohr-Baukasten'],['roundcab','Rundcontainer'],['glasstable','Glastisch'],['lowseat','Bodensofa']];
 const KIND_RULES = [['deckenl','ceillamp'],['lichtleiste','ceillamp'],['rauchmeld','ceillamp'],['rollo','blind'],['vorhang','curtain'],['bild ','picture'],['lautspr','speaker'],['yogamatte','roll'],['gerollt','roll'],['saugrob','dock'],['fernseher','tv'],['station','dock'],['kratzbaum','cattree'],['liege','bed'],['läufer','rug'],['wäschest','towelrad'],['vitrine','vitrine'],['luftrein','purifier'],['therme','boiler'],['faltwand','glasswall'],['handtuch','towelrad'],['hochschr','tall'],['leinwand','screen'],['beamer','projector'],['stativ','tripod'],['heizk','radiator'],['couchtisch','coffeetable'],['nachttisch','dresser'],['schreibtisch','desk'],['bürostuhl','officechair'],['hocker','ottoman'],['sofa','sofa'],['couch','sofa'],['sessel','armchair'],['bett','bed'],['kommode','dresser'],['kühlschrank','fridge'],['waschmaschine','washer'],['schuhschrank','sideboard'],['schuh','shoeorg'],['kleiderschrank','wardrobe'],['schrank','wardrobe'],['garderobe','coatrack'],['regal','shelf'],['lowboard','sideboard'],['sideboard','sideboard'],['tv-board','sideboard'],['board','sideboard'],['fernseher','tv'],['tisch','table'],['stuhl','chair'],['küchenzeile','kitchen'],['badewanne','tub'],['dusche','shower'],['wc','wc'],['toilette','wc'],['waschbecken','sink'],['teppich','rug'],['pflanze','plant'],['lampe','lamp'],['katzenklo','litter'],['spiegel','mirror']];
+function neutralItem(it){ if(!it||!it.ikea||it.own) return; const p=(typeof catFind==='function'?catFind(it.ikea):null)||KATALOG.find(x=>x.id===it.ikea); if(!p||p.own) return;
+  const nm=`${p.n} ${p.t}`.trim(), up=/[A-ZÄÖÜÅ]{3,}/.test(it.name||'')||(p.shop==='Design'&&!!it.shop&&!it.url);
+  if(up) it.name=nm; if(it.shop && !it.url) delete it.shop; if(['lowseat','lounge','metalcab','glasstable'].includes(it.kind)) it.kind=p.kind; it.kind={kallax:'cubes',poang:'swingchair',paxcorner:'wardcorner'}[it.kind]||it.kind; if(it.base==='panton'||it.base==='tulip') it.base='chrome'; if(it.shade==='ph') delete it.shade;
+  if(it.colorName && !(p.cols||[]).some(c=>c[0]===it.colorName)){ const c=(p.cols||[]).find(c=>c[1]===it.color); it.colorName=c?c[0]:''; } }
 function kindOf(it){ if(it.kind) return it.kind; const n=(it.name||'').toLowerCase(); for(const [k,v] of KIND_RULES) if(n.includes(k)) return v; return 'box'; }
 // ---------- Fotorealistische Oberflächen: prozedurale PBR-Texturen (Relief, Glanz, Farbe), triplanar ----------
 const LOWQ = (navigator.maxTouchPoints>0 && Math.min(screen.width,screen.height)<820);
@@ -1571,7 +1634,7 @@ const MODELS = {
     pb(back,0,0,-3,w*0.66,h-36,4,wood,2); [0,1,2].forEach(k=>pb(back,0,k*(h-38)/3,0,w*0.62,(h-38)/3-1,10,leather,5));
     [-1,1].forEach(s=>{ pb(g,s*(w/2-6),44,-2,10,8,d*0.62,leather,3.5); pb(g,s*(w/2-6),41,-2,11,3,d*0.6,wood,1); });
   },
-  usm(g,w,d,h,c,it){ // Rohr-Baukasten: verchromte Rohre, Kugeln, farbige Bleche
+  metalcab(g,w,d,h,c,it){ // Rohr-Baukasten: verchromte Rohre, Kugeln, farbige Bleche
     const chrome=mk('#d6d9dc',0.12,0.95), panel=mk(c,0.35,0.35), cols=Math.max(1,Math.round(w/50)), rows=Math.max(1,Math.round((h-4)/35)), cw=w/cols, rh=(h-4)/rows, y0=4;
     for(let i=0;i<=cols;i++) [-1,1].forEach(sz=>{ const x=-w/2+i*cw; cyl(g,x,0,sz*(d/2-1),0.9,0.9,4,chrome,10); for(let j=0;j<=rows;j++){ const b=new THREE.Mesh(new THREE.SphereGeometry(1.4,12,8),chrome); b.position.set(x,y0+j*rh,sz*(d/2-1)); g.add(b); } cyl(g,x,y0,sz*(d/2-1),0.9,0.9,h-y0,chrome,10); });
     for(let j=0;j<=rows;j++){ const y=y0+j*rh; [-1,1].forEach(sz=>{ const t=cyl(g,0,0,0,0.9,0.9,w,chrome,10); t.rotation.z=Math.PI/2; t.position.set(0,y,sz*(d/2-1)); }); for(let i=0;i<=cols;i++){ const t=cyl(g,0,0,0,0.9,0.9,d-2,chrome,10); t.rotation.x=Math.PI/2; t.position.set(-w/2+i*cw,y,0); } }
@@ -1591,7 +1654,7 @@ const MODELS = {
     const b1=new THREE.Shape(); b1.moveTo(-w*0.3,0); b1.quadraticCurveTo(-w*0.34,h*0.7,-w*0.12,h-2); b1.lineTo(w*0.12,h-2); b1.quadraticCurveTo(w*0.02,h*0.4,w*0.1,0); b1.closePath();
     const bg=new THREE.ExtrudeGeometry(b1,{depth:5,bevelEnabled:true,bevelSize:0.8,bevelThickness:0.8,curveSegments:16}); bg.translate(0,0,-2.5);
     const p1=addM(g,bg,wood,-w*0.08,0,0); p1.rotation.y=0.35; const p2=addM(g,bg.clone(),wood,w*0.1,0,-d*0.04); p2.rotation.y=Math.PI/2+0.35; p2.scale.x=0.85; },
-  togo(g,w,d,h,c){ // Bodensofa aus gesteppten Polsterrollen
+  lowseat(g,w,d,h,c){ // Bodensofa aus gesteppten Polsterrollen
     const fab=mk(c,0.95), r=Math.min(14,h*0.2);
     pb(g,0,0,4,w,h*0.48,d-8,fab,10);
     for(let k=0;k<4;k++){ const y=h*0.46+k*(h*0.54/4), z=-d/2+10+k*3.2; const t=cyl(g,0,0,0,r*(1-k*0.08),r*(1-k*0.08),w-6-k*2,fab,24); t.rotation.z=Math.PI/2; t.position.set(0,y,z); }
@@ -1718,7 +1781,7 @@ const MODELS = {
     for(let i=0;i<pos.count;i++){ const u=pos.getX(i)/((w-P)/2), v=pos.getY(i)/((d-P)/2); pos.setZ(i,-(34*(1-u*u)+10*(1-v*v)*(1-0.5*u*u))); }
     geo.computeVertexNormals(); const cl=new THREE.Mesh(geo,mk('#efe9dd',0.95,0,{side:THREE.DoubleSide})); cl.rotation.x=-Math.PI/2; cl.position.y=H-3; cl.castShadow=true; cl.receiveShadow=true; g.add(cl);
   },
-  paxcorner(g,w,d,h,c,it){ // weißer Eck-Kleiderschrank (PAX-Art): links Eckelement mit Schenkel zur Wand (Tiefe d), Mitte zwei Spiegeltüren, rechts offenes Element; Front +z
+  wardcorner(g,w,d,h,c,it){ // weißer Eck-Kleiderschrank : links Eckelement mit Schenkel zur Wand (Tiefe d), Mitte zwei Spiegeltüren, rechts offenes Element; Front +z
     const body=mk(c,0.5), inner=mk(shade(c,-0.04),0.6), D=Math.min(it.leg||58,d), cw=it.cw||75, mw=it.mw||100, ow=Math.max(20,w-cw-mw), bz=-d/2, fz=bz+D, L=-w/2;
     const xa=L+cw, xb=xa+mw, xc=w/2;
     pb(g,L+D/2,0,0,D,h,d,body,0.8);                                        // Schenkel an der Wand (Seitenwand vorn sichtbar)
@@ -1997,7 +2060,7 @@ const MODELS = {
     pb(g,0,h*0.26,d*0.32,w*0.56,h*0.3,d*0.34,glass,1.5); // Kanne
     pb(g,0,h*0.56,d*0.32,w*0.6,h*0.42,d*0.4,dark,2); pb(g,0,h*0.58,d*0.34,w*0.4,h*0.32,1,mk('#1a1b1d',0.3),1); // Filterkorb+Front
     pb(g,w*0.32,h*0.1,d*0.2,2,h*0.2,3,mk('#b23a2a',0.3),0.6); },  // roter Schalter
-  foodproc(g,w,d,h,c){ // KitchenAid-Küchenmaschine (Kopf neigbar), Front +z: Fuß, Säule hinten, Motorkopf über der Schüssel
+  foodproc(g,w,d,h,c){ // Küchenmaschine (Kopf neigbar), Front +z: Fuß, Säule hinten, Motorkopf über der Schüssel
     const body=mk(c,0.28,0.1), steel=mk('#d9dcdf',0.22,0.4), chrome=mk('#e6e8ea',0.15,0.6), dark=mk('#2a2c2f',0.35);
     pb(g,0,0,d*0.04,w*0.78,h*0.09,d*0.92,body,Math.min(4,h*0.04));                // Fuß
     pb(g,0,h*0.08,-d*0.3,w*0.5,h*0.62,d*0.3,body,Math.min(7,w*0.2));             // Säule hinten
@@ -2008,7 +2071,7 @@ const MODELS = {
     cyl(g,0,h*0.49,bz,w*0.37,w*0.37,1.2,chrome,32); cyl(g,0,h*0.09,bz,w*0.26,w*0.26,1.5,steel,24);
     cyl(g,0,h*0.42,bz,0.9,0.9,h*0.2,chrome,10); pb(g,0,h*0.3,bz,w*0.26,h*0.16,1.4,chrome,0.6); // Rührer
     pb(g,w*0.31,h*0.66,-d*0.2,1.4,1.4,6,chrome,0.5); },                          // Geschwindigkeitshebel
-  espresso(g,w,d,h,c){ // Kaffeevollautomat (DeLonghi-Art), Front +z: Bedienleiste oben, Auslauf, Tropfschale, Milchdüse
+  espresso(g,w,d,h,c){ // Kaffeevollautomat , Front +z: Bedienleiste oben, Auslauf, Tropfschale, Milchdüse
     const body=mk(c,0.32,0.15), silver=mk('#c9ccd0',0.25,0.5), dark=mk('#1b1c1e',0.3), grate=mk('#b6babe',0.3,0.6);
     pb(g,0,0,0,w,h,d,body,2.5);                                                    // Gehäuse
     pb(g,0,h*0.74,d/2-0.4,w-2,h*0.24,1.2,silver,1.2);                              // Bedienfront oben
@@ -2044,7 +2107,7 @@ const MODELS = {
     pb(g,0,ht+4,d/2-0.2,dw,dh,1.2,dark,Math.min(dw,dh)/2.4);     // Klappe (oval gerundet)
     [-1,1].forEach(i=>pb(g,i*w*0.17,h-0.4,0,2.2,2.6,d*0.12,blue,0.8)); // Griffträger
     pb(g,0,h+1.4,0,w*0.34+4,2,d*0.12,blue,0.9); },               // Bügelgriff
-  kallax(g,w,d,h,c,it){ // Würfelregal: dicke Außenplatten, dünne Zwischenböden, ohne Rückwand
+  cubes(g,w,d,h,c,it){ // Würfelregal: dicke Außenplatten, dünne Zwischenböden, ohne Rückwand
     const b=mk(c,0.5), R=rngFrom(it.id||it.name), cols=it.cols||Math.max(1,Math.round(w/37)), rows=it.rows||Math.max(1,Math.round(h/37)), T=3.8, t=1.6;
     const iw=(w-2*T-(cols-1)*t)/cols, ih=(h-2*T-(rows-1)*t)/rows;
     pb(g,-w/2+T/2,0,0,T,h,d,b,0.3); pb(g,w/2-T/2,0,0,T,h,d,b,0.3); pb(g,0,0,0,w,T,d,b,0.3); pb(g,0,h-T,0,w,T,d,b,0.3);
@@ -2057,7 +2120,7 @@ const MODELS = {
           pb(g,x+bt/2,y0,-d/2+12,bt-0.2,bh,Math.min(d-8,20),mk(BOOK_COLS[(R()*BOOK_COLS.length)|0],0.85)); x+=bt; } }
       else if(p<0.74){ cyl(g,cx,y0,0,Math.min(iw,d)*0.2,Math.min(iw,d)*0.15,ih*0.45,mk(['#9fb0a6','#c8b49a','#5c6d7a'][(R()*3)|0],0.5),18); } }
   },
-  poang(g,w,d,h,c,it){ // Schwingsessel: gebogenes Schichtholz, dickes Polster
+  swingchair(g,w,d,h,c,it){ // Schwingsessel: gebogenes Schichtholz, dickes Polster
     const fr=mk(it.frame||'#d6b98a',0.45), cu=mk(c,0.97);
     const tb=(x,y,z,sx,sy,sz,rx,m,r)=>{ const geo=r?new RBG(sx,sy,sz,2,Math.min(r,sx/2-0.02,sy/2-0.02,sz/2-0.02)):new THREE.BoxGeometry(sx,sy,sz); const o=addM(g,geo,m,x,y,z); o.rotation.x=rx; return o; };
     [-1,1].forEach(sx=>{ const x=sx*(w/2-3);
@@ -2388,7 +2451,7 @@ function renderSel(){
   const it=item(sel), box=$('selBox');
   if(!it){ box.innerHTML='<h2>Ausgewählt</h2><p class="muted">Klicke ein Möbelstück in der Ansicht oder in der Liste an. Rot markierte Möbel überschneiden sich mit etwas oder stehen in einer Wand.</p>'; return; }
   box.innerHTML = `<h2>Ausgewählt</h2><div class="card sel">
-    <label class="f">Name<input id="s_name" value="${esc(it.name)}"></label>${it.dims?`<p class="muted" style="margin:-4px 0 0">${esc(it.shop||'IKEA')}-Maße ${esc(it.dims)} cm${it.url?` · <a href="${esc(it.url)}" target="_blank" rel="noopener">zum Shop</a>`:''}${it.colorName?' · '+esc(it.colorName):''}</p>`:''}
+    <label class="f">Name<input id="s_name" value="${esc(it.name)}"></label>${it.dims?`<p class="muted" style="margin:-4px 0 0">Maße ${esc(it.dims)} cm${it.url?` · <a href="${esc(it.url)}" target="_blank" rel="noopener">zum Shop</a>`:''}${it.colorName?' · '+esc(it.colorName):''}</p>`:''}
     <div class="grid">${F('s_w','Breite',it.w)}${F('s_d','Tiefe',it.d)}${F('s_h','Höhe',it.h)}</div>
     <div class="grid g4">${F('s_x','Pos. X',it.x)}${F('s_z','Pos. Y',it.z)}${F('s_rot','Drehung °',it.rot)}${F('s_elev','Über Boden',it.elev)}</div>
     <div class="grid g2"><label class="f">Farbe<input id="s_color" type="color" value="${esc(it.color||'#9aa7b0')}"></label>
@@ -2442,12 +2505,12 @@ $('addItem').onclick=()=>{
   mutate(()=>state.items.push(n)); select(n.id);
 };
 
-// ---------- IKEA-Katalog: Oberfläche ----------
+// ---------- Katalog: Oberfläche ----------
 let ikCat = '', ikQ = '', ikPick = {}, ikShopF = '';
 function ikItem(p, x, z){
   const col=(p.cols[ikPick[p.id]||0]||p.cols[0]);
-  const n=Object.assign({id:uid('i'),name:p.own?p.n:p.maker?`${p.maker} ${p.n} ${p.t}`:`${p.n} ${p.t}`,w:p.w,d:p.d,h:p.h,color:col[1],x,z,rot:0,elev:0,kind:p.kind,ikea:p.id,dims:p.dims,colorName:col[0]}, JSON.parse(JSON.stringify(p.ex)));
-  if(p.shop && p.shop!=='IKEA') n.shop=p.maker||p.shop; if(p.url) n.url=p.url;
+  const n=Object.assign({id:uid('i'),name:p.own?p.n:p.maker?`${p.maker} ${p.n} ${p.t}`.trim():`${p.n} ${p.t}`.trim(),w:p.w,d:p.d,h:p.h,color:col[1],x,z,rot:0,elev:0,kind:p.kind,ikea:p.id,dims:p.dims,colorName:col[0]}, JSON.parse(JSON.stringify(p.ex)));
+  if(p.own && (p.maker||p.shop)) n.shop=p.maker||p.shop; if(p.url) n.url=p.url;
   if(n.frame===null) delete n.frame; if(n.kind==='stairs'){ try{ n.h=flCur().h; }catch(e){} } if(n.kind==='freewall' && !n.half) n.h=state.roomH||250; return n; }
 function ikFootprint(it){ const q=((it.rot%180)+180)%180===90; return q?[it.d,it.w]:[it.w,it.d]; }
 function ikSnap(it, wall){ // in den Raum klemmen, nahe einer Wand mit der Rückseite andocken
@@ -2458,10 +2521,10 @@ function ikSnap(it, wall){ // in den Raum klemmen, nahe einer Wand mit der Rück
   const [fw,fd]=ikFootprint(it);
   it.x=Math.round(Math.max(r.x+fw/2+0.5, Math.min(r.x+r.w-fw/2-0.5, it.x))); it.z=Math.round(Math.max(r.z+fd/2+0.5, Math.min(r.z+r.d-fd/2-0.5, it.z)));
 }
-function renderIkea(){
+function renderKat(){
   const ALL=catAll(), shopOk=p=>!ikShopF || (ikShopF==='Eigene'?p.own:p.shop===ikShopF);
-  $('ikShops').innerHTML = [['','Alle Shops'],['IKEA','IKEA'],['Design','Designklassiker'],['Technik','TV & Technik'],['Eigene','Eigene Fundstücke'+(MYCAT.length?' ('+MYCAT.length+')':'')]].map(([k,l])=>`<button data-s="${k}" aria-pressed="${k===ikShopF}">${esc(l)}</button>`).join('');
-  const cats=IKEA_CATS.filter(c=>ALL.some(p=>p.cat===c && shopOk(p))); if(ikCat && !cats.includes(ikCat)) ikCat='';
+  $('ikShops').innerHTML = [['','Alle'],['Skandi','Skandinavischer Stil'],['Design','Moderner Stil'],['Technik','TV & Technik'],['Eigene','Eigene Fundstücke'+(MYCAT.length?' ('+MYCAT.length+')':'')]].map(([k,l])=>`<button data-s="${k}" aria-pressed="${k===ikShopF}">${esc(l)}</button>`).join('');
+  const cats=KAT_CATS.filter(c=>ALL.some(p=>p.cat===c && shopOk(p))); if(ikCat && !cats.includes(ikCat)) ikCat='';
   $('ikCats').innerHTML = ['',...cats].map(c=>`<button data-c="${esc(c)}" aria-pressed="${c===ikCat}">${esc(c||'Alle')}</button>`).join('');
   const q=ikQ.trim().toLowerCase();
   const list=ALL.filter(p=>shopOk(p) && (!ikCat||p.cat===ikCat) && (!q || (p.n+' '+p.t+' '+p.cat+' '+(p.maker||'')+' '+(p.shop||'')).toLowerCase().includes(q)));
@@ -2472,7 +2535,7 @@ function renderIkea(){
   $('ikIst').hidden = true;
 }
 function renderShop(){
-  const m=new Map(); state.items.forEach(i=>{ if(!i.ikea) return; const p=catFind(i.ikea), sh=p?(p.maker||p.shop||''):(i.shop||''), k=(sh&&sh!=='IKEA'?sh+' · ':'IKEA · ')+i.name+(i.colorName?', '+i.colorName:''), o=m.get(k)||{n:0,url:(p&&p.url)||i.url}; o.n++; m.set(k,o); });
+  const m=new Map(); state.items.forEach(i=>{ if(!i.ikea) return; const p=catFind(i.ikea), sh=p?(p.maker||p.shop||''):(i.shop||''), k=(i.shop?i.shop+' · ':'')+i.name+(i.colorName?', '+i.colorName:''), o=m.get(k)||{n:0,url:(p&&p.url)||i.url}; o.n++; m.set(k,o); });
   $('ikShop').innerHTML = m.size ? [...m].sort((a,b)=>a[0].localeCompare(b[0],'de')).map(([k,o])=>`<div><span>${o.url?`<a href="${esc(o.url)}" target="_blank" rel="noopener">${esc(k)}</a>`:esc(k)}</span><span>${o.n}×</span></div>`).join('') : '<span class="muted">Noch keine Möbel aus dem Katalog in dieser Variante.</span>';
 }
 // Vorschaubilder mit eigenem kleinen Renderer
@@ -2498,15 +2561,15 @@ function thStep(){
   setTimeout(thStep, 15);
 }
 window.__th=()=>({thR:!!thR, q:thQueue.length, busy:thBusy, n:Object.keys(THUMBS).length, last:Object.keys(THUMBS).slice(-3)});
-$('ikQ').addEventListener('input',e=>{ ikQ=e.target.value; renderIkea(); });
-$('ikShops').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; ikShopF=b.dataset.s; renderIkea(); });
-$('ikCats').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; ikCat=b.dataset.c; renderIkea(); });
+$('ikQ').addEventListener('input',e=>{ ikQ=e.target.value; renderKat(); });
+$('ikShops').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; ikShopF=b.dataset.s; renderKat(); });
+$('ikCats').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b) return; ikCat=b.dataset.c; renderKat(); });
 // Antippen = in die Raummitte, Ziehen = an die Stelle in der 3D-Ansicht
 let ikDrag=null;
 function ikAddCenter(p){ const t=walk?{x:camPos.x*S,z:camPos.z*S}:ctl().target, cx=t.x/S, cz=t.z/S, r=roomAt(cx,cz)||state.rooms[0];
   const n=ikItem(p, r?Math.round(r.x+r.w/2):Math.round(cx), r?Math.round(r.z+r.d/2):Math.round(cz)); ikSnap(n,!!(p.ex&&p.ex.mount)||p.kind==='screen'||p.kind==='dock'); onTopFix(n,true);
   mutate(()=>state.items.push(n)); select(n.id); }
-$('ikGrid').addEventListener('click',e=>{ const del=e.target.closest('[data-del]'); if(del){ e.stopPropagation(); const id=del.dataset.del, p=MYCAT.find(x=>x.id===id); MYCAT=MYCAT.filter(x=>x.id!==id); mySave(); renderIkea(); toast(`„${p?p.n:'Möbel'}“ aus dem Katalog entfernt. Bereits aufgestellte bleiben stehen.`); return; }
+$('ikGrid').addEventListener('click',e=>{ const del=e.target.closest('[data-del]'); if(del){ e.stopPropagation(); const id=del.dataset.del, p=MYCAT.find(x=>x.id===id); MYCAT=MYCAT.filter(x=>x.id!==id); mySave(); renderKat(); toast(`„${p?p.n:'Möbel'}“ aus dem Katalog entfernt. Bereits aufgestellte bleiben stehen.`); return; }
   const sw=e.target.closest('[data-sw]'), card=e.target.closest('.ik-card'); if(!card) return; const p=catFind(card.dataset.p);
   if(sw){ ikPick[p.id]=+sw.dataset.sw; card.querySelectorAll('[data-sw]').forEach(s=>s.classList.toggle('on',s===sw)); const k=p.id+':'+ikPick[p.id]; const im=card.querySelector('img');
     if(THUMBS[k]) im.src=THUMBS[k]; else queueThumbs([p]); return; }
@@ -2529,14 +2592,14 @@ addEventListener('pointerup',e=>{ if(!ikDrag) return; const d=ikDrag; document.b
 
 // ---------- Eigene Fundstücke: Möbel aus beliebigen Shops übernehmen ----------
 let MYCAT=[], myUpd=0; try{ const o=JSON.parse(localStorage.getItem(LS+'.mycat')||'{}'); MYCAT=Array.isArray(o.list)?o.list:[]; myUpd=o.updated||0; }catch(e){}
-function catAll(){ return IKEA.concat(MYCAT); }
-function catFind(id){ return IKEA.find(x=>x.id===id) || MYCAT.find(x=>x.id===id); }
+function catAll(){ return KATALOG.concat(MYCAT); }
+function catFind(id){ return KATALOG.find(x=>x.id===id) || MYCAT.find(x=>x.id===id); }
 function myLocal(){ try{ localStorage.setItem(LS+'.mycat',JSON.stringify({list:MYCAT,updated:myUpd})); }catch(e){} }
 function mySave(){ myUpd=Date.now(); myLocal(); if(vcol) vcol.doc('mycat').set({list:JSON.stringify(MYCAT),updated:myUpd}).catch(()=>{}); }
 function myCatSync(snap){ const d=snap.docs.find(x=>x.id==='mycat'), r=d&&d.data();
-  if(r && (r.updated||0)>myUpd){ try{ MYCAT=JSON.parse(r.list)||[]; myUpd=r.updated; myLocal(); renderIkea(); }catch(e){} }
+  if(r && (r.updated||0)>myUpd){ try{ MYCAT=JSON.parse(r.list)||[]; myUpd=r.updated; myLocal(); renderKat(); }catch(e){} }
   else if(myUpd && (!r || (r.updated||0)<myUpd)) vcol.doc('mycat').set({list:JSON.stringify(MYCAT),updated:myUpd}).catch(()=>{}); }
-const SHOPNAMES={ikea:'IKEA',otto:'OTTO',home24:'home24',wayfair:'Wayfair',xxxlutz:'XXXLutz',hoeffner:'Höffner',made:'MADE',westwing:'Westwing',poco:'POCO',moemax:'mömax',roller:'Roller',amazon:'Amazon',connox:'Connox',mycs:'MYCS',tchibo:'Tchibo',jysk:'JYSK',segmueller:'Segmüller',porta:'porta',bolia:'Bolia',hay:'HAY',muuto:'Muuto',vitra:'Vitra',kare:'KARE',depot:'DEPOT',butlers:'Butlers',sostrenegrene:'Søstrene Grene',hm:'H&M Home',zarahome:'Zara Home',lidl:'Lidl',aldi:'ALDI',kaufland:'Kaufland',ebay:'eBay',etsy:'Etsy',otto_de:'OTTO',maisonsdumonde:'Maisons du Monde',sofacompany:'Sofacompany',bettenrid:'Betten Rid',dielampe:'Die Lampe',lampenwelt:'Lampenwelt',manufactum:'Manufactum',fermliving:'ferm LIVING',normann:'Normann Copenhagen',andtradition:'&Tradition',usm:'USM',kartell:'Kartell',bauhaus:'BAUHAUS',obi:'OBI',hornbach:'Hornbach',toom:'toom',sconto:'SCONTO',moebelboss:'Möbel Boss',dänischesbettenlager:'JYSK'};
+const SHOPNAMES={ikea:'IKEA',otto:'OTTO',home24:'home24',wayfair:'Wayfair',xxxlutz:'XXXLutz',hoeffner:'Höffner',made:'MADE',westwing:'Westwing',poco:'POCO',moemax:'mömax',roller:'Roller',amazon:'Amazon',connox:'Connox',mycs:'MYCS',tchibo:'Tchibo',jysk:'JYSK',segmueller:'Segmüller',porta:'porta',bolia:'Bolia',hay:'HAY',muuto:'Muuto',vitra:'Vitra',kare:'KARE',depot:'DEPOT',butlers:'Butlers',sostrenegrene:'Søstrene Grene',hm:'H&M Home',zarahome:'Zara Home',lidl:'Lidl',aldi:'ALDI',kaufland:'Kaufland',ebay:'eBay',etsy:'Etsy',otto_de:'OTTO',maisonsdumonde:'Maisons du Monde',sofacompany:'Sofacompany',bettenrid:'Betten Rid',dielampe:'Die Lampe',lampenwelt:'Lampenwelt',manufactum:'Manufactum',fermliving:'ferm LIVING',normann:'Normann Copenhagen',andtradition:'&Tradition',metalcab:'USM',kartell:'Kartell',bauhaus:'BAUHAUS',obi:'OBI',hornbach:'Hornbach',toom:'toom',sconto:'SCONTO',moebelboss:'Möbel Boss',dänischesbettenlager:'JYSK'};
 function shopOf(url){ try{ const h=new URL(url).hostname.replace(/^www\d?\./,'').split('.'), k=(h.length>2&&h[h.length-2].length<=3?h[h.length-3]:h[h.length-2]||h[0]).toLowerCase().replace(/-/g,''); return SHOPNAMES[k]||k.charAt(0).toUpperCase()+k.slice(1); }catch(e){ return ''; } }
 function nameFromUrl(url){ try{ const segs=new URL(url).pathname.split('/').filter(Boolean).map(s=>decodeURIComponent(s)).filter(s=>/[a-zäöü]{3}/i.test(s) && !/^(de|en|p|produkt|product|products|artikel|item|dp|moebel|möbel|shop|kategorie)$/i.test(s));
     let s=(segs.sort((a,b)=>b.length-a.length)[0]||'').replace(/\.(html?|php|aspx?)$/i,'').replace(/[-_]?(s?\d{5,}|[a-z]?\d{6,}[a-z]?)$/i,'').replace(/[-_+]+/g,' ').replace(/\s+\d{5,}.*/,'').trim();
@@ -2556,8 +2619,8 @@ function parseDims(txt){ const t=(' '+txt+' ').replace(/(\d),(\d)/g,'$1.$2').rep
     vals.forEach((v,i)=>{ if(out[o[i]]==null) out[o[i]]=v; }); }
   ['w','d','h'].forEach(k=>{ if(out[k]!=null){ if(out[k]>600) out[k]/=10; out[k]=Math.round(out[k]*10)/10; } });
   return out; }
-const KIND_GUESS=[[/couchtisch|beistelltisch|sofatisch|coffee table/,'coffeetable'],[/kratzbaum/,'cattree'],[/schreibtischstuhl|bürostuhl|drehstuhl|gamingstuhl/,'officechair'],[/schreibtisch|desk/,'desk'],[/ecksofa|wohnlandschaft|eckcouch/,'cornersofa'],[/récamiere|recamiere/,'recamiere'],[/schlafsofa|sofa|couch/,'sofa'],[/ohrensessel/,'wingchair'],[/schaukelstuhl|freischwinger.*sessel/,'poang'],[/sessel|armchair/,'armchair'],[/barhocker/,'chair'],[/hocker|pouf|ottoman/,'ottoman'],[/bürostuhl|drehstuhl|schreibtischstuhl|gamingstuhl/,'officechair'],[/stuhl|chair/,'chair'],[/couchtisch|beistelltisch|sofatisch|coffee table/,'coffeetable'],[/schreibtisch|desk/,'desk'],[/tisch|table/,'table'],[/kratzbaum/,'cattree'],[/hochbett|etagenbett|bett\b|bettgestell|boxspring|bed/,'bed'],[/vitrine/,'vitrine'],[/kommode|nachttisch|nachtkonsole|rollcontainer/,'dresser'],[/sideboard|lowboard|tv-?bank|tv-?board|anrichte|schuhschrank|highboard/,'sideboard'],[/kleiderschrank|schrank|wardrobe/,'wardrobe'],[/regal|shelf|bücher/,'shelf'],[/teppich|läufer|rug/,'rug'],[/pendel|hängeleuchte|hängelampe|pendant/,'pendant'],[/deckenleuchte|deckenlampe|ceiling/,'ceillamp'],[/leuchte|lampe|lamp/,'lamp'],[/pflanze|plant|palme|monstera/,'plant'],[/spiegel|mirror/,'mirror'],[/bild|poster|rahmen|leinwand/,'picture'],[/vorhang|gardine|curtain/,'curtain'],[/waschtisch|waschbecken|waschbeckenunterschrank/,'vanity'],[/garderobe|kleiderständer|coat/,'coatrack']];
-const KIND_CAT={sofa:'Sofas & Sessel',cornersofa:'Sofas & Sessel',recamiere:'Sofas & Sessel',armchair:'Sofas & Sessel',wingchair:'Sofas & Sessel',poang:'Sofas & Sessel',ottoman:'Sofas & Sessel',lounge:'Sofas & Sessel',togo:'Sofas & Sessel',chair:'Tische & Stühle',shellchair:'Tische & Stühle',table:'Tische & Stühle',coffeetable:'Tische & Stühle',glasstable:'Tische & Stühle',officechair:'Arbeitszimmer',desk:'Arbeitszimmer',bed:'Schlafzimmer',dresser:'Schlafzimmer',wardrobe:'Kleiderschränke',coatrack:'Kleiderschränke',sideboard:'Regale & TV',shelf:'Regale & TV',vitrine:'Regale & TV',kallax:'Regale & TV',usm:'Regale & TV',rug:'Teppiche',lamp:'Lampen',ceillamp:'Lampen',pendant:'Lampen',plant:'Deko & Pflanzen',picture:'Deko & Pflanzen',mirror:'Bad & Flur',vanity:'Bad & Flur',curtain:'Deko & Pflanzen'};
+const KIND_GUESS=[[/couchtisch|beistelltisch|sofatisch|coffee table/,'coffeetable'],[/kratzbaum/,'cattree'],[/schreibtischstuhl|bürostuhl|drehstuhl|gamingstuhl/,'officechair'],[/schreibtisch|desk/,'desk'],[/ecksofa|wohnlandschaft|eckcouch/,'cornersofa'],[/récamiere|recamiere/,'recamiere'],[/schlafsofa|sofa|couch/,'sofa'],[/ohrensessel/,'wingchair'],[/schaukelstuhl|freischwinger.*sessel/,'swingchair'],[/sessel|armchair/,'armchair'],[/barhocker/,'chair'],[/hocker|pouf|ottoman/,'ottoman'],[/bürostuhl|drehstuhl|schreibtischstuhl|gamingstuhl/,'officechair'],[/stuhl|chair/,'chair'],[/couchtisch|beistelltisch|sofatisch|coffee table/,'coffeetable'],[/schreibtisch|desk/,'desk'],[/tisch|table/,'table'],[/kratzbaum/,'cattree'],[/hochbett|etagenbett|bett\b|bettgestell|boxspring|bed/,'bed'],[/vitrine/,'vitrine'],[/kommode|nachttisch|nachtkonsole|rollcontainer/,'dresser'],[/sideboard|lowboard|tv-?bank|tv-?board|anrichte|schuhschrank|highboard/,'sideboard'],[/kleiderschrank|schrank|wardrobe/,'wardrobe'],[/regal|shelf|bücher/,'shelf'],[/teppich|läufer|rug/,'rug'],[/pendel|hängeleuchte|hängelampe|pendant/,'pendant'],[/deckenleuchte|deckenlampe|ceiling/,'ceillamp'],[/leuchte|lampe|lamp/,'lamp'],[/pflanze|plant|palme|monstera/,'plant'],[/spiegel|mirror/,'mirror'],[/bild|poster|rahmen|leinwand/,'picture'],[/vorhang|gardine|curtain/,'curtain'],[/waschtisch|waschbecken|waschbeckenunterschrank/,'vanity'],[/garderobe|kleiderständer|coat/,'coatrack']];
+const KIND_CAT={sofa:'Sofas & Sessel',cornersofa:'Sofas & Sessel',recamiere:'Sofas & Sessel',armchair:'Sofas & Sessel',wingchair:'Sofas & Sessel',swingchair:'Sofas & Sessel',ottoman:'Sofas & Sessel',lounge:'Sofas & Sessel',lowseat:'Sofas & Sessel',chair:'Tische & Stühle',shellchair:'Tische & Stühle',table:'Tische & Stühle',coffeetable:'Tische & Stühle',glasstable:'Tische & Stühle',officechair:'Arbeitszimmer',desk:'Arbeitszimmer',bed:'Schlafzimmer',dresser:'Schlafzimmer',wardrobe:'Kleiderschränke',coatrack:'Kleiderschränke',sideboard:'Regale & TV',shelf:'Regale & TV',vitrine:'Regale & TV',cubes:'Regale & TV',metalcab:'Regale & TV',rug:'Teppiche',lamp:'Lampen',ceillamp:'Lampen',pendant:'Lampen',plant:'Deko & Pflanzen',picture:'Deko & Pflanzen',mirror:'Bad & Flur',vanity:'Bad & Flur',curtain:'Deko & Pflanzen'};
 const COL_GUESS=[['anthrazit','#3d4043'],['dunkelgrau','#55585b'],['hellgrau','#c4c4c0'],['grau','#8f9295'],['schwarz','#262626'],['weiß','#eeede8'],['weiss','#eeede8'],['creme','#ece6d8'],['beige','#d2c7b2'],['sand','#d8ccb6'],['taupe','#9a8c7e'],['cognac','#8a4f2a'],['braun','#6b4e3a'],['nussbaum','#5e4030'],['walnuss','#5e4030'],['eiche','#c7a477'],['buche','#d9b98a'],['kiefer','#d9b98a'],['esche','#d9c09a'],['akazie','#9a6a40'],['teak','#9a6a40'],['salbei','#9aaa8a'],['olive','#6b6a3a'],['dunkelgrün','#3e5a4b'],['grün','#5d6b55'],['petrol','#2f5f66'],['dunkelblau','#2f3d52'],['blau','#4a6a8a'],['bordeaux','#6a2030'],['rot','#9a2a2a'],['rosa','#d9a3a0'],['rosé','#d9b3a8'],['senf','#c9a440'],['gelb','#c9a440'],['orange','#c9682b'],['terrakotta','#b0654a'],['rost','#a0522d'],['messing','#c9a46f'],['gold','#c9a46f'],['chrom','#d4d7da'],['silber','#c0c4c8'],['natur','#d8c7a5'],['rattan','#c9a46f'],['jute','#c9b48a']];
 function guessKind(...ss){ for(let s of ss){ s=(s||'').toLowerCase(); for(const [re,k] of KIND_GUESS) if(re.test(s)) return k; } return 'box'; }
 function guessColor(s){ const lo=s.toLowerCase(), f=lo.match(/farbe\s*:?\s*([^\n;|]{2,40})/), src=f?f[1]:lo; let best=null;
@@ -2582,12 +2645,12 @@ function impSave(place){ const w=+$('imW').value, d=+$('imD').value, h=+$('imH')
   if(kind==='bed') mh=Math.min(h,55); if(kind==='rug'){ mw=Math.max(w,d); md=Math.min(w,d); mh=h>5?1:h; }
   if(kind==='picture'||kind==='mirror') ex.elev=kind==='picture'?120:100;
   const shop=$('imShop').value.trim()||'Eigene', url=$('imUrl').value.trim(), kl=(KINDS.find(k=>k[0]===kind)||[,''])[1];
-  const p={id:'my'+Date.now().toString(36)+Math.random().toString(36).slice(2,5), cat:$('imCat').value||'Eigene', n:name, t:shop+(kl?' · '+kl:''), dims:`${w}×${d}×${h}`, w:mw, d:md, h:mh, kind, cols:[[$('imColN').value.trim()||'Farbe',$('imCol').value]], ex, wall:!['chair','shellchair','table','coffeetable','glasstable','rug','lamp','ceillamp','plant','ottoman','armchair','wingchair','poang','lounge','togo','officechair'].includes(kind), shop, own:true};
+  const p={id:'my'+Date.now().toString(36)+Math.random().toString(36).slice(2,5), cat:$('imCat').value||'Eigene', n:name, t:shop+(kl?' · '+kl:''), dims:`${w}×${d}×${h}`, w:mw, d:md, h:mh, kind, cols:[[$('imColN').value.trim()||'Farbe',$('imCol').value]], ex, wall:!['chair','shellchair','table','coffeetable','glasstable','rug','lamp','ceillamp','plant','ottoman','armchair','wingchair','swingchair','lounge','lowseat','officechair'].includes(kind), shop, own:true};
   if(/^https?:\/\//.test(url)) p.url=url;
-  MYCAT.push(p); mySave(); ikShopF='Eigene'; ikCat=''; renderIkea(); if(place) ikAddCenter(p); toast(place?'Übernommen und in den Raum gestellt':'In „Eigene Fundstücke“ gespeichert');
+  MYCAT.push(p); mySave(); ikShopF='Eigene'; ikCat=''; renderKat(); if(place) ikAddCenter(p); toast(place?'Übernommen und in den Raum gestellt':'In „Eigene Fundstücke“ gespeichert');
   ['imUrl','imTxt','imName','imShop','imW','imD','imH','imColN'].forEach(i=>$(i).value=''); $('imMsg').textContent=''; }
 $('imKind').innerHTML=KINDS.filter(k=>k[0]).map(k=>`<option value="${k[0]}">${esc(k[1])}</option>`).join('').replace('<option value="ceillamp">','<option value="pendant">Hängeleuchte</option><option value="ceillamp">');
-$('imCat').innerHTML=IKEA_CATS.map(c=>`<option>${esc(c)}</option>`).join(''); $('imCat').value='Eigene';
+$('imCat').innerHTML=KAT_CATS.map(c=>`<option>${esc(c)}</option>`).join(''); $('imCat').value='Eigene';
 $('imUrl').addEventListener('change',()=>impFill(false)); $('imTxt').addEventListener('input',()=>{ clearTimeout(impFill.t); impFill.t=setTimeout(()=>impFill(false),350); });
 $('imParse').onclick=()=>impFill(true); $('imSave').onclick=()=>impSave(false); $('imPlace').onclick=()=>impSave(true);
 
@@ -2714,7 +2777,7 @@ function posOverlay(){
   const top=new THREE.Vector3(it.x*S,((it.elev||0)+it.h)*S,it.z*S), q=project(top);
   if(!q || q.x<0 || q.y<0 || q.x>viewEl.clientWidth || q.y>viewEl.clientHeight+40){ bar.hidden=true; return; }
   bar.hidden=false; const n=selIds().length; const lp=selIds().some(id=>isLamp(item(id))); $('sbLamp').hidden=!lp; { const tv=selIds().filter(id=>isTv(item(id))), on=tv.some(id=>item(id).tvOn); $('sbTv').hidden=!tv.length; $('sbTv').classList.toggle('on',on); $('sbTv').title=(on?'Fernseher ausschalten':'Fernseher einschalten')+' (L)'; $('sbTvCh').hidden=!on; } if(lp){ const on=selIds().some(id=>isLamp(item(id))&&lampOn(item(id))); $('sbLamp').classList.toggle('on',on); $('sbLamp').title=(on?'Licht ausschalten':'Licht einschalten')+' (L)'; }
-  const nm=n>1 ? `${n} Möbel<small>gemeinsam</small>` : `${esc(it.name)}<small>${Math.round(it.w)}×${Math.round(it.d)}×${Math.round(it.h)}${it.dims?' · '+esc(it.shop||'IKEA'):''}</small>`;
+  const nm=n>1 ? `${n} Möbel<small>gemeinsam</small>` : `${esc(it.name)}<small>${Math.round(it.w)}×${Math.round(it.d)}×${Math.round(it.h)}${it.dims&&it.shop?' · '+esc(it.shop):''}</small>`;
   if($('sbName').dataset.k!==nm){ $('sbName').innerHTML=nm; $('sbName').dataset.k=nm; $('sbColor').value=/^#[0-9a-f]{6}$/i.test(it.color||'')?it.color:'#9aa7b0'; }
   const w=bar.offsetWidth, x=Math.max(w/2+8,Math.min(viewEl.clientWidth-w/2-8,q.x)), y=Math.max(bar.offsetHeight+70,q.y);
   bar.style.left=x+'px'; bar.style.top=y+'px';
@@ -3009,7 +3072,7 @@ function buildCine(){ if(cine.g){ scene.remove(cine.g); cine.g.traverse(o=>{ if(
   const img=new THREE.Mesh(new THREE.PlaneGeometry(IW*S,IH*S), new THREE.MeshBasicMaterial({map:cine.tex,transparent:true,opacity:0,toneMapped:false})); img.position.z=0.012; G.add(img); cine.img=img;
   const bar=new THREE.Mesh(new THREE.BoxGeometry((W+4)*S,2.2*S,2.2*S), new THREE.MeshStandardMaterial({color:'#1b1b1b',roughness:0.5})); G.add(bar); cine.bar=bar;
   const L=new THREE.PointLight('#cfd9ff',0,7,2); L.position.set(0,top-(BT+IH/2)*S,0.8); G.add(L); cine.light=L;
-  // Ambilight über der Leinwandkassette (Lichtleiste): Farben des Films an Wand und Decke
+  // Farbiges Licht über der Leinwandkassette (Lichtleiste): Farben des Films an Wand und Decke
   const ab=state.items.find(i=>/lichtleiste/i.test(i.name||'') && Math.abs(i.z-scr.z)<40), ay=((ab?(ab.elev||0)+ab.h/2:(scr.elev||0)+16))*S;
   cine.amb={lights:[], cv:document.createElement('canvas'), sc:document.createElement('canvas')}; cine.amb.cv.width=128; cine.amb.cv.height=64; cine.amb.sc.width=5; cine.amb.sc.height=2;
   cine.amb.tex=new THREE.CanvasTexture(cine.amb.cv); cine.amb.tex.encoding=THREE.sRGBEncoding;
@@ -3155,7 +3218,7 @@ function catFree(x,z,ign){ const R=14;
     if(Math.abs(lx)<it.w/2+10 && Math.abs(lz)<it.d/2+10) return false; }
   return true; }
 // Liegeplätze: Sitzflächen, Betten, Kratzbaum, Tische, Kommoden, Kletterbretter, Heizkörperliegen
-const SEATK=new Set(['togo','lounge','sofa','couchmod','cornersofa','armchair','wingchair','recamiere','poang','ottoman']), TOPK=new Set(['bed','canopybed','cattree','dresser','sideboard','coffeetable','table','desk','kallax']);
+const SEATK=new Set(['lowseat','lounge','sofa','couchmod','cornersofa','armchair','wingchair','recamiere','swingchair','ottoman']), TOPK=new Set(['bed','canopybed','cattree','dresser','sideboard','coffeetable','table','desk','cubes']);
 function catPerches(){ const out=[]; state.items.forEach(it=>{ const k=kindOf(it), e=it.elev||0; let y=null;
     if(SEATK.has(k)) y=e+Math.min(it.h,44); else if(TOPK.has(k) && e+it.h<=125) y=e+it.h; else if(/kletterbrett|hängematte|liege \(katze\)|heizkörperliege/i.test(it.name)) y=e+it.h;
     if(y==null || y<20 || y>215 || it.w<24 || it.d<20) return; if(CURDOG && (y>55 || !SEATK.has(k) || it.w<CURK*45)) return; out.push({it,y}); }); return out; }
@@ -3164,7 +3227,7 @@ function perchSpot(p){ const it=p.it, k=kindOf(it), c=Math.cos(it.rot*Math.PI/18
   let x0=-it.w/2, x1=it.w/2, z0=-it.d/2, z1=it.d/2;
   if(k==='couchmod'){ if(it.back!==false) z0+=24; if(it.arm==='left') x0+=24; if(it.arm==='right') x1-=24; }
   else if(k==='recamiere'){ if(it.backSide==='left') x0+=18; else x1-=18; z0+=20; }
-  else if(k==='sofa'||k==='cornersofa'||k==='armchair'||k==='wingchair'||k==='poang'){ z0+=Math.min(30,it.d*0.35); x0+=12; x1-=12; }
+  else if(k==='sofa'||k==='cornersofa'||k==='armchair'||k==='wingchair'||k==='swingchair'){ z0+=Math.min(30,it.d*0.35); x0+=12; x1-=12; }
   for(let t=0;t<12;t++){ const lx=x0+14+Math.random()*Math.max(0,x1-x0-28), lz=z0+14+Math.random()*Math.max(0,z1-z0-28);
     const x=it.x+lx*c-lz*s_, z=it.z+lx*s_+lz*c;
     if(!state.items.some(o=>o!==it && catSolid(o,p.y) && inItem(o,x,z,12)) && [0,1,2,3,4,5,6,7].some(q=>catBodyIn(x,z,q*Math.PI/4,p.y,it))) return {x, z, y:p.y, it}; }
@@ -3352,7 +3415,7 @@ $('paintPop').addEventListener('click',e=>{ const p=$('paintPop'), b=e.target.cl
   p.querySelectorAll('.sw').forEach(sw=>{ if(sw.contains(b)) sw.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b)); }); wake(); });
 
 // ---------- Stile ----------
-const FABRIC=new Set(['sofa','couchmod','recamiere','armchair','wingchair','poang','cornersofa','ottoman','curtain']), WOOD=new Set(['canopybed','table','coffeetable','desk','dresser','sideboard','shelf','kallax','wardrobe','chair','vitrine','bed','coatrack','tall']);
+const FABRIC=new Set(['sofa','couchmod','recamiere','armchair','wingchair','swingchair','cornersofa','ottoman','curtain']), WOOD=new Set(['canopybed','table','coffeetable','desk','dresser','sideboard','shelf','cubes','wardrobe','chair','vitrine','bed','coatrack','tall']);
 const STYLES=[
  {n:'Skandinavisch',d:'Hell, Eiche, helles Grau',wall:'#f3f1ec',floor:['#d6bf99','dielen'],wood:['#d9c3a0','#eeede8'],fab:['#c9c4ba','#a9aeb2','#e4ddd0'],rug:'#e9e3d6'},
  {n:'Japandi',d:'Natur, Sand, ruhig',wall:'#ece6dc',floor:['#c9a77c','parkett'],wood:['#a07c5a','#c4a27c'],fab:['#b9ad98','#8c8574','#d8cfbf'],rug:'#cbbfa8'},
@@ -3513,7 +3576,7 @@ async function vConnect(){
 }
 
 // ---------- Tabs & Werkzeugleiste ----------
-function showTab(t){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t)); ['moebel','ikea','raeume','daten'].forEach(n=>$('p-'+n).hidden=n!==t); if(t==='ikea') renderIkea(); }
+function showTab(t){ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t)); ['moebel','ikea','raeume','daten'].forEach(n=>$('p-'+n).hidden=n!==t); if(t==='ikea') renderKat(); }
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 $('v3d').onclick=()=>{ if(walk) exitWalk(); setView('3d'); }; $('vplan').onclick=()=>setView('plan');
 document.querySelectorAll('[data-walls]').forEach(b=>b.onclick=()=>{ if(walk) return; walls=b.dataset.walls; saveUi(); syncWalls(); buildWorld(); buildItems(); setEnvVis(); });
@@ -3876,6 +3939,68 @@ function edgeGrab(x,z,tol){ const t=state.wall; let best=null;
     const inside=x>=r.x&&x<=r.x+r.w&&z>=r.z&&z<=r.z+r.d; if(!best||d-(inside?t/2:0)<best.d) best={r,side,d:d-(inside?t/2:0)}; });
   if(best && best.side.length===1){ const r=best.r, s=best.side, along=(s==='N'||s==='S')?x:z, lo=(s==='N'||s==='S')?r.x:r.z, hi=lo+((s==='N'||s==='S')?r.w:r.d); if(along<lo-1||along>hi+1) return null; }
   return best; }
+
+{ const ew=enterWalk; enterWalk=function(){ try{ scrollTo(0,0); }catch(e){} return ew.apply(this,arguments); }; }
+
+// ---------- Umzugs-Check: eigene Möbel einmal erfassen und in jede Wohnung mitnehmen ----------
+let MINE=[]; try{ const o=JSON.parse(localStorage.getItem(LS+'.mine')||'[]'); if(Array.isArray(o)) MINE=o; }catch(e){}
+function mineSave(){ try{ localStorage.setItem(LS+'.mine',JSON.stringify(MINE)); }catch(e){} try{ if(vcol) vcol.doc('mine').set({list:JSON.stringify(MINE),updated:Date.now()}).catch(()=>{}); }catch(e){} }
+const MINE_KINDS=[['sofa','Sofa'],['armchair','Sessel'],['bed','Bett'],['wardrobe','Schrank'],['shelf','Regal'],['dresser','Kommode'],['sideboard','Sideboard / TV-Bank'],['table','Tisch'],['desk','Schreibtisch'],['chair','Stuhl'],['box','Sonstiges']];
+function mineFromItem(it){ const src=JSON.parse(JSON.stringify(it)); ['id','x','z','rot','elev','mine'].forEach(k=>delete src[k]); if(!src.kind) src.kind=kindOf(it);
+  return {id:uid('m'), name:it.name, w:Math.round(it.w), d:Math.round(it.d), h:Math.round(it.h), item:src}; }
+function mineAdd(list){ let n=0; list.forEach(it=>{ const k=kindOf(it); if(['stairs','freewall','ceillamp','rug','picture','tv','dock','radiator','towelrad','kitchen','wc','tub','shower','sink','boiler'].includes(k)) return;
+    if(it.mine && MINE.some(m=>m.id===it.mine)) return; const m=mineFromItem(it); MINE.push(m); it.mine=m.id; n++; });
+  mineSave(); persist(); mineRender(); return n; }
+// Prüfung: passt das Möbel durch die Türen und in einen Raum?
+function mineCheck(m){ const out=[], s=[m.w,m.d,m.h].sort((a,b)=>a-b);
+  const doors=absOpenings().filter(o=>o.type==='tuer'); const ent=doors.find(o=>o.outer)||null;
+  const nar=doors.length?doors.reduce((a,o)=>o.width<a.width?o:a):null;
+  const fitDoor=o=>{ const cw=o.width-2, ch=(o.height||205)-2; return s[0]<=cw && s[1]<=ch || s[0]<=ch && s[1]<=cw; };
+  if(ent && !fitDoor(ent)) out.push({bad:1,t:`passt nicht durch die Wohnungstür (${Math.round(ent.width)} cm)`});
+  else if(nar && !fitDoor(nar)) out.push({warn:1,t:`knapp: schmalste Tür nur ${Math.round(nar.width)} cm, schräg tragen`});
+  const rooms=state.rooms.filter(r=>(m.w<=r.w&&m.d<=r.d)||(m.d<=r.w&&m.w<=r.d));
+  if(!rooms.length) out.push({bad:1,t:'zu groß für jeden Raum'}); else if(!rooms.some(r=>m.h<=(r.h||250))) out.push({bad:1,t:'zu hoch für die Räume'});
+  const it=state.items.find(i=>i.mine===m.id);
+  if(it){ const r=roomAt(it.x,it.z), cf=conflicts().has(it.id); if(!r) out.push({warn:1,t:'steht noch draußen'}); else if(cf) out.push({warn:1,t:'steht im '+r.name+', überschneidet sich'}); else out.push({ok:1,t:'steht im '+r.name}); }
+  else { const other=(state.floors||[]).some(f=>f.id!==state.floorId && (f.items||[]).some(i=>i.mine===m.id)); out.push(other?{ok:1,t:'steht in einem anderen Stockwerk'}:{t:'noch nicht aufgestellt'}); }
+  return out; }
+// Aufstellen: neben dem Grundriss abstellen, von dort in die Räume ziehen
+function minePlace(ms){ const b=bounds(); let x=b.x1+80, z=b.z0, row=0, n=0; snap();
+  ms.forEach(m=>{ if(state.items.some(i=>i.mine===m.id)) return; if(z+m.d>b.z1+200 && n){ x+=row+40; z=b.z0; row=0; }
+    const it=Object.assign(JSON.parse(JSON.stringify(m.item||{})),{id:uid('i'),name:m.name,w:m.w,d:m.d,h:m.h,x:x+m.w/2,z:z+m.d/2,rot:0,elev:0,mine:m.id});
+    if(!it.color) it.color='#9aa7b0'; state.items.push(it); z+=m.d+30; row=Math.max(row,m.w); n++; });
+  if(!n){ toast('Alle deine Möbel stehen schon in diesem Projekt'); return; }
+  persist(); rebuildAll(); renderAll(); try{ fit(); }catch(e){}
+  toast(n===1?'Steht rechts neben der Wohnung. Jetzt in einen Raum ziehen.':n+' Möbel stehen rechts neben der Wohnung. Jetzt in die Räume ziehen.'); }
+function mineRender(){ const el=$('mineBox'); if(!el) return; let ok=0, bad=0, warn=0, placed=0;
+  const rows=MINE.map(m=>{ const c=mineCheck(m); if(c.some(x=>x.bad)) bad++; else if(c.some(x=>x.warn)) warn++; else if(c.some(x=>x.ok)) ok++; if(state.items.some(i=>i.mine===m.id)) placed++;
+    const tags=c.map(x=>`<span class="mv-t ${x.bad?'bad':x.warn?'warn':x.ok?'ok':''}">${esc(x.t)}</span>`).join('');
+    return `<div class="mv-row"><div class="mv-n"><b>${esc(m.name)}</b><small>${m.w} × ${m.d} × ${m.h} cm</small>${tags}</div><div class="mv-b"><button class="btn sm" data-mv="place" data-id="${m.id}" title="In dieses Projekt stellen">Aufstellen</button><button class="btn sm" data-mv="del" data-id="${m.id}" aria-label="Aus meinen Möbeln entfernen">×</button></div></div>`; }).join('');
+  el.innerHTML=`<h2>Umzugs-Check: meine Möbel</h2>
+    <p class="muted">Erfasse deine eigenen Möbel einmal und nimm sie in jede Wohnung mit. Grundrizz prüft, ob sie durch die Türen passen und in welchem Raum sie Platz haben.</p>
+    <div class="row wrap"><button class="btn sm" data-mv="sel">Ausgewählte merken</button><button class="btn sm" data-mv="all">Alle aus diesem Projekt merken</button><button class="btn sm" data-mv="new">+ Von Hand</button></div>
+    <form id="mvForm" class="mv-form" hidden><label class="f w2">Name<input id="mvN" placeholder="z. B. Omas Kommode" autocomplete="off"></label>
+      <label class="f">Breite<input id="mvW" type="number" inputmode="decimal" min="5" placeholder="cm"></label><label class="f">Tiefe<input id="mvD" type="number" inputmode="decimal" min="5" placeholder="cm"></label><label class="f">Höhe<input id="mvH" type="number" inputmode="decimal" min="5" placeholder="cm"></label>
+      <label class="f">Art<select id="mvK">${MINE_KINDS.map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label><label class="f">Farbe<input id="mvC" type="color" value="#8a7a66"></label>
+      <div class="row"><button class="btn pri sm" type="submit">Merken</button><button class="btn sm" type="button" data-mv="cancel">Abbrechen</button></div></form>
+    ${MINE.length?`<div class="mv-sum">${MINE.length} Möbel · <span class="ok">${ok} stehen gut</span>${warn?` · <span class="warn">${warn} noch prüfen</span>`:''}${bad?` · <span class="bad">${bad} passen nicht</span>`:''}</div>
+    <div class="list mv-list">${rows}</div>${placed<MINE.length?`<div class="row"><button class="btn pri" data-mv="placeall">Alle in diese Wohnung stellen</button></div>`:''}`
+    :'<p class="muted">Noch keine eigenen Möbel gemerkt. Wähle Möbel in der Ansicht aus und tippe auf „Ausgewählte merken“, oder lege sie von Hand mit Maßen an.</p>'}`; }
+{ const box=document.createElement('div'); box.className='box'; box.id='mineBox'; const pm=$('p-moebel'); pm.insertBefore(box, pm.children[2]||null);
+  box.addEventListener('click',e=>{ const b=e.target.closest('[data-mv]'); if(!b) return; const a=b.dataset.mv;
+    if(a==='sel'){ const ids=new Set([...(typeof multi!=='undefined'?multi:[]), sel].filter(Boolean)); const list=state.items.filter(i=>ids.has(i.id)); if(!list.length){ toast('Erst ein Möbelstück in der Ansicht antippen'); return; } const n=mineAdd(list); toast(n?n+' Möbel gemerkt':'Schon gemerkt'); }
+    if(a==='all'){ const n=mineAdd(state.items.slice()); toast(n?n+' Möbel gemerkt. In einem anderen Projekt auf „Alle in diese Wohnung stellen“ tippen.':'Nichts Neues zum Merken'); }
+    if(a==='new'){ $('mvForm').hidden=false; $('mvN').focus(); }
+    if(a==='cancel') $('mvForm').hidden=true;
+    if(a==='del'){ MINE=MINE.filter(m=>m.id!==b.dataset.id); mineSave(); mineRender(); }
+    if(a==='place') minePlace(MINE.filter(m=>m.id===b.dataset.id));
+    if(a==='placeall') minePlace(MINE); });
+  box.addEventListener('submit',e=>{ e.preventDefault(); const w=+$('mvW').value, d=+$('mvD').value, h=+$('mvH').value, n=$('mvN').value.trim()||MINE_KINDS.find(k=>k[0]===$('mvK').value)[1];
+    if(!(w>=5&&d>=5&&h>=5)){ toast('Bitte Breite, Tiefe und Höhe in cm eintragen'); return; }
+    MINE.push({id:uid('m'),name:n,w:Math.round(w),d:Math.round(d),h:Math.round(h),item:{kind:$('mvK').value,color:$('mvC').value}}); mineSave(); mineRender(); toast(n+' gemerkt'); }); }
+{ const r0=renderAll; renderAll=function(){ r0.apply(this,arguments); try{ mineRender(); }catch(e){ console.warn(e); } }; }
+mineRender();
+window.__mine={get:()=>MINE,check:mineCheck,place:minePlace,add:mineAdd};
 
 
 // ---------- Fernseher: Bildschirm mit laufendem Programm, Licht in den Raum ----------
