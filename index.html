@@ -507,7 +507,8 @@ dialog.help h3.gzh svg.brandmk{width:30px;height:30px;flex:none}
 dialog.mcdlg{max-width:680px;max-height:calc(100dvh - 32px);overflow:auto}
 .mcdlg .mch{display:flex;align-items:center}.mcdlg .mch h3{flex:1;margin:0}
 .mcdlg .x{border:0;background:none;color:var(--muted);font-size:24px;cursor:pointer;line-height:1}
-.mcdlg .mci{font-size:12.5px;margin:6px 0 12px}
+.mcdlg .mci{font-size:12.5px;margin:6px 0 8px}
+.mcdlg .mcwarn{font-size:12.5px;line-height:1.45;margin:0 0 12px;padding:9px 12px;border-radius:10px;border:1px solid #e3b98f;background:#fbf1e6;color:#5b3a1c}.mcdlg .mcwarn b{color:#8a4d1d}.mcdlg .mcwarn a{color:#8a4d1d}
 .mcdlg .mcsec{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}
 .mcdlg .lnk{border:0;background:none;color:var(--accent);cursor:pointer;font:inherit;padding:0}
 .mcdlg .mcr{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
@@ -4479,7 +4480,7 @@ function hpInit(){ const d=$('helpDlg'); if(!HP_KEYS){ HP_KEYS=[...d.querySelect
     <div class="hpc" role="group" aria-label="Themen">${HP_CATS.map(([k,v])=>`<button type="button" data-hc="${k}" aria-pressed="${k===''}">${v}</button>`).join('')}</div>
     <div class="hpl" id="hpL"></div>
     <div class="row hpf"><button type="button" class="btn" id="hpIntro">Einführung ansehen</button><button type="button" class="btn pri" id="helpClose">Verstanden</button></div>
-    <p class="hplegal"><a href="https://carstenwinter77.github.io/grundrizz/rechtliches/impressum.html" target="_blank" rel="noopener">Impressum</a> · <a href="https://carstenwinter77.github.io/grundrizz/rechtliches/datenschutz.html" target="_blank" rel="noopener">Datenschutz</a></p>`;
+    <p class="hplegal"><a href="https://carstenwinter77.github.io/grundrizz/rechtliches/impressum.html" target="_blank" rel="noopener">Impressum</a> · <a href="https://carstenwinter77.github.io/grundrizz/rechtliches/datenschutz.html" target="_blank" rel="noopener">Datenschutz</a> · <a href="https://carstenwinter77.github.io/grundrizz/rechtliches/nutzung.html" target="_blank" rel="noopener">Nutzungshinweise</a></p>`;
   let cat=''; const draw=()=>{ const q=$('hpQ').value.trim().toLowerCase(), words=q.split(/\s+/).filter(Boolean);
     const hit=t=>{ const s=(t[2]+' '+t[3]+' '+t[4].replace(/<[^>]+>/g,'')).toLowerCase(); return words.every(w=>s.includes(w)); };
     let list=HP_TOPICS.filter(t=>(!cat||t[0]===cat)&&(!words.length||hit(t)));
@@ -4617,7 +4618,8 @@ function mcOpen(){ let d=$('mcDlg'); const all=mcRooms(); if(!all.length){ toast
   const N=(k,lab,step,unit,min)=>`<label class="mcf">${lab}<span><input type="number" inputmode="decimal" step="${step}" min="${min||0}" data-mc="${k}" value="${MC[k]}">${unit}</span></label>`;
   const C=(k,lab)=>`<label class="mcc"><input type="checkbox" data-mc="${k}"${MC[k]?' checked':''}>${lab}</label>`;
   d.innerHTML=`<div class="mch"><h3>Material berechnen</h3><button type="button" class="x" data-mca="close" aria-label="Schließen">×</button></div>
-    <p class="muted mci">Aus den Maßen deiner Räume, Türen und Fenster. Dachschrägen werden berücksichtigt. Alles sind Schätzungen, vor dem Kauf bitte kurz nachmessen.</p>
+    <p class="muted mci">Aus den Maßen deiner Räume, Türen und Fenster. Dachschrägen werden berücksichtigt.</p>
+    <div class="mcwarn" role="note"><b>Ohne Gewähr.</b> Alle Mengen sind unverbindliche Schätzungen aus deinen Eingaben. Echte Räume, Produkte und Untergründe weichen ab. Bitte vor dem Kauf selbst nachmessen und die Angaben des Herstellers beachten. <a href="https://carstenwinter77.github.io/grundrizz/rechtliches/nutzung.html" target="_blank" rel="noopener">Mehr dazu</a></div>
     <div class="mcsec"><b>Räume</b><span class="mcsel"><button type="button" class="lnk" data-mca="all">alle</button> · <button type="button" class="lnk" data-mca="none">keine</button></span></div>
     <div class="mcr">${all.map(x=>`<label><input type="checkbox" value="${x.r.id}" checked>${esc(x.r.name)}${x.floor&&(state.floors||[]).length>1?` <small>${esc(x.floor)}</small>`:''}</label>`).join('')}</div>
     <div class="mcopt">${C('floor','Boden')}${C('paint','Wandfarbe')}${C('paper','Tapete')}</div>
@@ -4639,7 +4641,7 @@ function mcDraw(){ const o=$('mcOut'); if(!o) return; const sel=mcSel(); if(!sel
   o.innerHTML=h; o.dataset.list=[`Einkaufsliste (Grundrizz) für: ${R.rows.map(x=>x.r.name).join(', ')}`,
     MC.floor?`• Boden: ${f1(R.floorNeed)} m², ${R.packs} Pakete à ${f1(MC.pack)} m²`:'', MC.floor?`• Sockelleisten: ${R.skirtPieces} × 2,5 m (${f1(R.T.skirt)} m)`:'',
     MC.paint?`• Wandfarbe: ${f1(R.liters)} l (${R.buckets}) für ${f0(R.T.paintArea)} m², ${MC.coats} Anstriche`:'', MC.paper?`• Tapete: ${R.rolls} Rollen ${f2(MC.rollL)} × ${f2(MC.rollW)} m, ${R.paste} Pakete Kleister`:'',
-    'Schätzung, vor dem Kauf bitte nachmessen.'].filter(Boolean).join('\n'); }
+    'Ohne Gewähr: unverbindliche Schätzung aus Grundrizz. Vor dem Kauf selbst nachmessen und Herstellerangaben beachten.'].filter(Boolean).join('\n'); }
 async function mcCopy(){ const t=$('mcOut').dataset.list||''; try{ await navigator.clipboard.writeText(t); $('mcMsg').textContent='Kopiert.'; }catch(e){ const ta=document.createElement('textarea'); ta.value=t; $('mcOut').appendChild(ta); ta.select(); $('mcMsg').textContent='Liste markiert, jetzt kopieren.'; } }
 { const row=$('p-raeume').querySelector('.row'); const b=document.createElement('button'); b.className='btn'; b.type='button'; b.id='mcBtn'; b.textContent='Material berechnen'; b.title='Boden, Wandfarbe und Tapete für deine Räume ausrechnen'; b.onclick=mcOpen; row.appendChild(b); }
 window.__mc={calc:mcCalc,open:mcOpen,geo:mcGeo,rooms:mcRooms,MC};
