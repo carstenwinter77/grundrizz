@@ -4,68 +4,315 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Grundrizz installieren</title>
-<meta name="description" content="Grundrizz auf iPhone, iPad, Android oder Computer installieren. Kostenlos, ohne App Store, ohne Konto.">
-<meta name="theme-color" content="#1d6c74">
-<meta property="og:title" content="Grundrizz – Raumplaner in 3D">
+<meta name="description" content="Grundrizz auf iPhone, iPad, Android oder Computer installieren. Raumplaner in 3D, kostenlos, ohne App Store, ohne Konto.">
+<meta name="theme-color" content="#0e3539">
+<meta property="og:title" content="Grundrizz: Wohnen, bevor du einziehst">
 <meta property="og:description" content="Grundriss zeichnen, einrichten und in 3D begehen. Kostenlos, ohne Konto. Hier installieren.">
 <meta property="og:url" content="https://carstenwinter77.github.io/grundrizz/installieren/">
 <meta property="og:image" content="https://carstenwinter77.github.io/grundrizz/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../icon.svg" type="image/svg+xml"><link rel="icon" href="../icon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <link rel="manifest" href="../manifest.webmanifest">
+<link rel="preload" as="image" href="img/3d.webp">
 <link rel="stylesheet" href="../fonts.css">
+<script>document.documentElement.classList.add('js')</script>
 <style>
-:root{--bg:#f4f2ec;--paper:#fffdf8;--ink:#1c2427;--muted:#5d686b;--line:#e2ddd1;--accent:#1d6c74;--accent-2:#164f55;--accent-soft:#e1eeec;--accent-ink:#fff;--warm:#c9773a;--grid:rgba(29,108,116,.07);color-scheme:light}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121718;--paper:#1a2123;--ink:#e9eeec;--muted:#9aa7a8;--line:#2c3638;--accent:#4fb0b8;--accent-2:#7cc9cf;--accent-soft:#1c3336;--accent-ink:#0d1a1c;--warm:#e3a36d;--grid:rgba(79,176,184,.07);color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#121718;--paper:#1a2123;--ink:#e9eeec;--muted:#9aa7a8;--line:#2c3638;--accent:#4fb0b8;--accent-2:#7cc9cf;--accent-soft:#1c3336;--accent-ink:#0d1a1c;--warm:#e3a36d;--grid:rgba(79,176,184,.07);color-scheme:dark}
+@property --n{syntax:'<integer>';inherits:false;initial-value:0}
+@property --h{syntax:'<integer>';inherits:false;initial-value:13}
+:root{
+ --bg:#f4f2ec;--paper:#fffdf8;--ink:#1a2325;--muted:#5a6669;--line:#e2ddd1;
+ --accent:#1d6c74;--accent-2:#164f55;--accent-soft:#e1eeec;--accent-ink:#fff;--warm:#c9773a;--warm-soft:#f6e6d8;
+ --grid:rgba(29,108,116,.07);--gridline:rgba(29,108,116,.10);
+ --wall:#24302f;--floor:#efe3cd;--floor2:#e6d5b8;--glass:#a9d3e0;--sofa:#8a9597;--ok:#2f8f5b;--bad:#c4473a;--shadow:20 40 40;
+ /* dunkle Bänder bleiben in beiden Themen dunkel */
+ --d1:#0b2b2f;--d2:#0f3a3f;--d3:#1d6c74;--dink:#eef5f3;--dmuted:#a9c2c0;--dline:rgba(255,255,255,.12);
+ color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --bg:#111617;--paper:#182022;--ink:#e8eeec;--muted:#9aa7a8;--line:#2a3436;
+ --accent:#4fb0b8;--accent-2:#7cc9cf;--accent-soft:#1b3235;--accent-ink:#0b1a1c;--warm:#e3a36d;--warm-soft:#3a2a1d;
+ --grid:rgba(79,176,184,.06);--gridline:rgba(79,176,184,.10);
+ --wall:#d6e1df;--floor:#2f2a22;--floor2:#3a3227;--glass:#4c8ea3;--sofa:#6d7a7c;--ok:#5cc08a;--bad:#f07a6c;--shadow:0 0 0;color-scheme:dark}}
+:root[data-theme="dark"]{
+ --bg:#111617;--paper:#182022;--ink:#e8eeec;--muted:#9aa7a8;--line:#2a3436;
+ --accent:#4fb0b8;--accent-2:#7cc9cf;--accent-soft:#1b3235;--accent-ink:#0b1a1c;--warm:#e3a36d;--warm-soft:#3a2a1d;
+ --grid:rgba(79,176,184,.06);--gridline:rgba(79,176,184,.10);
+ --wall:#d6e1df;--floor:#2f2a22;--floor2:#3a3227;--glass:#4c8ea3;--sofa:#6d7a7c;--ok:#5cc08a;--bad:#f07a6c;--shadow:0 0 0;color-scheme:dark}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
- background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
-.wrap{max-width:1080px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
-h1,h2,h3{font-family:Montserrat,Inter,system-ui,sans-serif;line-height:1.15;text-wrap:balance;margin:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:hidden}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:Montserrat,Inter,system-ui,sans-serif;line-height:1.1;text-wrap:balance;margin:0}
 a{color:var(--accent)}
-header{padding-block:calc(18px + env(safe-area-inset-top,0px)) 8px}
-.top{display:flex;align-items:center;gap:12px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font:800 22px Montserrat,Arial,sans-serif;letter-spacing:-.02em}
-.brand .mk{width:34px;height:34px;color:var(--accent)}
-.brand b{color:var(--warm);font-weight:800}
-.top .sp{flex:1}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;padding:12px 18px;font:600 15px Inter,sans-serif;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink);min-height:46px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:14px;padding:13px 20px;font:600 15px Inter,sans-serif;text-decoration:none;cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink);min-height:48px;transition:transform .2s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-1px)}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 .btn.pri:hover{background:var(--accent-2)}
-.btn.sm{padding:8px 14px;min-height:38px;font-size:14px}
-.btn svg{width:18px;height:18px}
-.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center;padding-block:36px 48px}
-.hero>*{min-width:0}
-.eyebrow{font:600 12px Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--warm);margin-bottom:12px}
-.hero h1{font-size:clamp(34px,5.4vw,56px);font-weight:700;letter-spacing:-.025em}
-.hero h1 em{font-style:normal;color:var(--accent)}
-.lead{font-size:18px;color:var(--muted);max-width:34em;margin:18px 0 26px}
-.cta{display:flex;flex-wrap:wrap;gap:10px}
-.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:22px;padding:0;list-style:none;color:var(--muted);font-size:14px}
+.btn.sm{padding:8px 14px;min-height:38px;font-size:14px;border-radius:11px}
+.btn svg{width:18px;height:18px;flex:none}
+
+/* ---------- Kopfbereich ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden;color:var(--dink);
+ background:radial-gradient(80% 70% at 85% 20%,rgba(201,119,58,.30),transparent 60%),radial-gradient(70% 80% at 10% 100%,rgba(29,108,116,.75),transparent 70%),linear-gradient(160deg,var(--d2),var(--d1) 70%);
+ padding-bottom:clamp(40px,7vw,90px)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:32px 32px;
+ -webkit-mask-image:radial-gradient(120% 90% at 60% 30%,#000 30%,transparent 80%);mask-image:radial-gradient(120% 90% at 60% 30%,#000 30%,transparent 80%)}
+.glow{position:absolute;z-index:-1;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(201,119,58,.45),transparent 65%);filter:blur(20px);top:-160px;right:-120px;animation:drift 16s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(-120px,140px) scale(1.15)}}
+.blueprint{position:absolute;z-index:-1;left:-40px;bottom:-30px;width:min(640px,80vw);opacity:.22;color:#7fd0d6}
+.blueprint path{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 3.2s .3s cubic-bezier(.6,0,.2,1) forwards}
+.blueprint path:nth-child(2){animation-delay:.9s}.blueprint path:nth-child(3){animation-delay:1.4s}.blueprint path:nth-child(4){animation-delay:1.9s}
+@keyframes draw{to{stroke-dashoffset:0}}
+header.top{display:flex;align-items:center;gap:12px;padding-block:calc(18px + env(safe-area-inset-top,0px)) 0}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;font:800 23px Montserrat,Arial,sans-serif;letter-spacing:-.02em}
+.brand .mk{width:36px;height:36px;color:#fff}
+.brand b{color:#e3a36d;font-weight:800}
+.top .sp{flex:1}
+.ghost{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);color:#fff;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.ghost:hover{background:rgba(255,255,255,.16)}
+.copper{background:linear-gradient(180deg,#d88a4c,#c9773a);border-color:#c9773a;color:#fff;box-shadow:0 10px 30px -8px rgba(201,119,58,.7)}
+.copper:hover{background:linear-gradient(180deg,#e0955a,#b86a31)}
+.hgrid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(28px,5vw,64px);align-items:center;padding-top:clamp(28px,6vw,72px)}
+.hgrid>*{min-width:0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font:600 12px Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#e3a36d;margin-bottom:18px;padding:6px 12px;border-radius:999px;background:rgba(227,163,109,.12);border:1px solid rgba(227,163,109,.3)}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:#e3a36d;box-shadow:0 0 0 0 rgba(227,163,109,.6);animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px rgba(227,163,109,0)}100%{box-shadow:0 0 0 0 rgba(227,163,109,0)}}
+.hero h1{font-size:clamp(40px,6.4vw,76px);font-weight:800;letter-spacing:-.035em;line-height:1.02}
+.hero h1 em{font-style:normal;background:linear-gradient(100deg,#f2b27c,#c9773a 60%,#e8a06a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lead{font-size:clamp(17px,1.6vw,19px);color:var(--dmuted);max-width:32em;margin:22px 0 30px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:10px 20px;margin:26px 0 0;padding:0;list-style:none;color:var(--dmuted);font-size:14px}
 .facts li{display:flex;align-items:center;gap:7px}
-.facts svg{width:16px;height:16px;color:var(--accent)}
-.card{background:var(--paper);border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 2px rgb(0 0 0 / .04),0 12px 32px rgb(20 40 40 / .07)}
-.qrcard{padding:26px;text-align:center}
-.qrcard h2{font-size:20px;margin-bottom:4px}
-.qrcard p{margin:0 0 18px;color:var(--muted);font-size:14px}
-.qr{display:block;width:min(240px,100%);aspect-ratio:1;margin:0 auto;padding:14px;background:#fff;border-radius:14px;border:1px solid var(--line)}
-.qr path{fill:#13201f}
-.link{display:flex;gap:6px;margin-top:18px;border:1px solid var(--line);border-radius:12px;padding:5px 5px 5px 12px;background:var(--bg);align-items:center}
-.link input{flex:1;min-width:0;border:0;background:none;color:var(--ink);font:500 14px ui-monospace,"SF Mono",Menlo,monospace}
+.facts svg{width:16px;height:16px;color:#7fd0d6}
+.ok{display:none;margin-top:18px;padding:12px 14px;border-radius:12px;background:rgba(127,208,214,.12);color:#9fe0e4;font-weight:600}
+.standalone .ok{display:block}
+
+/* Geräte */
+.devices{position:relative;aspect-ratio:16/12;max-width:100%}
+.laptop{position:absolute;left:0;top:2%;width:90%;transform:perspective(1800px) rotateY(-13deg) rotateX(5deg);transform-origin:left center;animation:rise 1.1s .15s cubic-bezier(.2,.8,.2,1) both}
+.laptop .scr{border-radius:14px 14px 4px 4px;background:#0a1416;padding:9px;box-shadow:0 0 0 1px rgba(255,255,255,.12) inset,0 40px 80px -20px rgba(0,0,0,.6)}
+.laptop img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:6px}
+.laptop .base{height:14px;margin:0 -5%;border-radius:0 0 16px 16px;background:linear-gradient(#c9d2d1,#8e9b9a);box-shadow:0 18px 30px -10px rgba(0,0,0,.6)}
+.hphone{position:absolute;right:0;bottom:0;width:29%;border-radius:clamp(18px,3vw,34px);padding:clamp(5px,.7vw,8px);background:#0a1416;box-shadow:0 0 0 1px rgba(255,255,255,.15) inset,0 40px 60px -16px rgba(0,0,0,.7);animation:riseP 1.1s .45s cubic-bezier(.2,.8,.2,1) both}
+.hphone img{display:block;width:100%;height:auto;aspect-ratio:640/1090;object-fit:cover;border-radius:clamp(13px,2.3vw,27px)}
+@keyframes rise{from{opacity:0;transform:translateY(40px) perspective(1800px) rotateY(-13deg) rotateX(5deg)}}
+.badge{position:absolute;display:flex;align-items:center;gap:8px;padding:9px 13px;border-radius:14px;font:600 13px Inter,sans-serif;color:#13201f;background:rgba(255,253,248,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 14px 30px -10px rgba(0,0,0,.45);white-space:nowrap;animation:pop .6s cubic-bezier(.2,1.4,.4,1) both,float 5s ease-in-out infinite alternate}
+.badge .d{display:grid;place-items:center;width:24px;height:24px;border-radius:8px;color:#fff;flex:none}
+.badge .d svg{width:15px;height:15px}
+.b1{left:-2%;bottom:12%;animation-delay:1.1s,1.7s}.b1 .d{background:#2f8f5b}
+.b2{right:24%;top:-3%;animation-delay:1.4s,2s}.b2 .d{background:#c9773a}
+.b3{left:38%;bottom:-2%;animation-delay:1.7s,2.3s}.b3 .d{background:#1d6c74}
+.b3 span{font-family:"IBM Plex Mono",monospace;font-weight:500}
+@keyframes riseP{from{opacity:0;transform:translateY(50px)}}
+@keyframes pop{from{opacity:0;transform:scale(.6) translateY(10px)}}
+@keyframes float{to{translate:0 -10px}}
+
+/* Laufband */
+.strip{background:var(--d1);color:var(--dmuted);border-top:1px solid var(--dline);overflow:hidden;padding-block:14px;font-size:14px}
+.strip .tr{display:flex;width:max-content;animation:marq 38s linear infinite}
+.strip ul{display:flex;gap:44px;margin:0;padding:0 22px;list-style:none}
+.strip li{display:flex;align-items:center;gap:9px;white-space:nowrap}
+.strip li::before{content:"";width:6px;height:6px;border-radius:2px;background:#c9773a;transform:rotate(45deg)}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ---------- Abläufe ---------- */
+section{padding-block:clamp(56px,9vw,110px)}
+.sh{max-width:720px;margin-bottom:clamp(30px,5vw,56px)}
+.kick{font:600 12px Inter,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--warm);margin-bottom:12px}
+.sh h2{font-size:clamp(30px,4.4vw,48px);letter-spacing:-.03em}
+.sh p{margin:14px 0 0;color:var(--muted);font-size:18px;max-width:36em}
+.flow{background-color:var(--bg);background-image:radial-gradient(var(--gridline) 1.2px,transparent 1.2px);background-size:22px 22px}
+.scenes{display:grid;gap:clamp(56px,9vw,120px);position:relative}
+.scene{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(28px,5vw,72px);align-items:center}
+.scene>*{min-width:0}
+.scene:nth-child(even) .txt{order:2}
+.num{font:800 clamp(56px,7vw,88px)/1 Montserrat,sans-serif;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1.5px var(--warm);opacity:.8;margin-bottom:10px}
+.scene h3{font-size:clamp(26px,3.2vw,36px);letter-spacing:-.025em;margin-bottom:14px}
+.scene p{margin:0;color:var(--muted);font-size:17px;max-width:30em}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;padding:0;list-style:none}
+.chips li{font:600 13px Inter,sans-serif;padding:6px 11px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.stage{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:26px;overflow:hidden;aspect-ratio:4/3;max-width:100%;
+ box-shadow:0 1px 2px rgb(var(--shadow) / .05),0 30px 60px -30px rgb(var(--shadow) / .35)}
+.stage>svg{display:block;width:100%;height:100%}
+.stage .tag{position:absolute;left:14px;top:14px;display:flex;align-items:center;gap:7px;font:600 12px Inter,sans-serif;padding:6px 10px;border-radius:999px;background:var(--bg);border:1px solid var(--line);color:var(--muted)}
+.stage .tag i{width:7px;height:7px;border-radius:50%;background:var(--bad);animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+.stage *{animation-play-state:paused}
+.scene.on .stage *{animation-play-state:running}
+.gl{stroke:var(--gridline);fill:none}
+.w{stroke:var(--wall);fill:none;stroke-linecap:square}
+.fl{fill:var(--floor)}
+.gls{fill:var(--glass)}
+.t{font:600 13px Montserrat,sans-serif;fill:var(--ink)}
+.tm{font:500 11px "IBM Plex Mono",monospace;fill:var(--muted)}
+.dl{stroke:var(--muted);stroke-width:1}
+.acc-s{stroke:var(--accent)}
+.acc-f{fill:var(--accent)}
+.warm-f{fill:var(--warm)}
+.pf{fill:var(--paper)}
+.bdg rect{rx:11px}
+.bdg text{font:600 12px Inter,sans-serif;fill:#fff}
+.ok-f{fill:var(--ok)}.bad-f{fill:var(--bad)}
+
+/* 1 Zeichnen (8 s) */
+.s1 .all{animation:a1all 8s infinite both}
+.s1 .band{transform-box:view-box;transform-origin:60px 60px;opacity:0;animation:a1band 8s ease-in-out infinite both}
+.s1 .walls{stroke-dasharray:100;animation:a1wall 8s ease-in-out infinite both}
+.s1 .floor{animation:a1fade 8s infinite both;--a:48%;--b:56%}
+.s1 .dim{animation:a1dim 8s ease-out infinite both}
+.s1 .door{animation:a1door 8s infinite both}
+.s1 .arc{stroke-dasharray:100;animation:a1arc 8s ease-out infinite both}
+.s1 .win{transform-box:fill-box;transform-origin:center;animation:a1win 8s ease-out infinite both}
+.s1 .lab{animation:a1lab 8s ease-out infinite both}
+.s1 .cur{opacity:0;animation:a1cur 8s cubic-bezier(.5,0,.3,1) infinite both}
+.s1 .ring{transform-box:fill-box;transform-origin:center;opacity:0;animation:a1ring 8s ease-out infinite both}
+@keyframes a1all{0%,90%{opacity:1}97%,100%{opacity:0}}
+@keyframes a1band{0%,8%{transform:scale(.02);opacity:0}9%{opacity:1}38%{transform:scale(1);opacity:1}46%,100%{transform:scale(1);opacity:0}}
+@keyframes a1wall{0%,38%{stroke-dashoffset:100}52%,100%{stroke-dashoffset:0}}
+@keyframes a1fade{0%,48%{opacity:0}56%,100%{opacity:1}}
+@keyframes a1dim{0%,44%{opacity:0;transform:translateY(5px)}52%,100%{opacity:1;transform:none}}
+@keyframes a1door{0%,56%{opacity:0}60%,100%{opacity:1}}
+@keyframes a1arc{0%,57%{stroke-dashoffset:100}65%,100%{stroke-dashoffset:0}}
+@keyframes a1win{0%,60%{opacity:0;transform:scaleY(0)}66%,100%{opacity:1;transform:none}}
+@keyframes a1lab{0%,66%{opacity:0;transform:translateY(8px)}74%,100%{opacity:1;transform:none}}
+@keyframes a1cur{0%{opacity:0;transform:translate(100px,96px)}6%,8%{opacity:1;transform:translate(60px,60px)}38%{opacity:1;transform:translate(340px,240px)}44%,100%{opacity:0;transform:translate(352px,252px)}}
+@keyframes a1ring{0%,7%{opacity:0;transform:scale(.3)}8%{opacity:.9}16%,100%{opacity:0;transform:scale(1.8)}}
+
+/* 2 Umzugs-Check (9 s) */
+.s2 .sofa{transform-box:fill-box;transform-origin:center;transform:translate(205px,0) rotate(90deg);animation:a2sofa 9s cubic-bezier(.5,0,.3,1) infinite both}
+.s2 .red{opacity:0;animation:a2red 9s infinite both}
+.s2 .grn{animation:a2grn 9s infinite both}
+.s2 .bb{opacity:0;animation:a2bb 9s ease-out infinite both}
+.s2 .bg{animation:a2bg 9s ease-out infinite both}
+.s2 .wid{opacity:0;animation:a2wid 9s infinite both}
+@keyframes a2sofa{0%{transform:translate(-70px,0) rotate(0);opacity:0}6%{opacity:1;transform:translate(-40px,0) rotate(0)}22%{transform:translate(84px,0) rotate(0)}24.5%{transform:translate(76px,0) rotate(0)}26.5%{transform:translate(84px,0) rotate(0)}29%{transform:translate(78px,0) rotate(0)}40%{transform:translate(48px,0) rotate(0)}52%{transform:translate(48px,0) rotate(90deg)}72%,93%{transform:translate(205px,0) rotate(90deg);opacity:1}100%{transform:translate(205px,0) rotate(90deg);opacity:0}}
+@keyframes a2red{0%,21%{opacity:0}23%,36%{opacity:.85}42%,100%{opacity:0}}
+@keyframes a2grn{0%,68%{opacity:0}73%,100%{opacity:.85}}
+@keyframes a2bb{0%,22%{opacity:0;transform:translateY(8px)}25%,37%{opacity:1;transform:none}42%,100%{opacity:0}}
+@keyframes a2bg{0%,70%{opacity:0;transform:translateY(8px)}75%,93%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes a2wid{0%,20%{opacity:0}24%,37%{opacity:1}42%,100%{opacity:0}}
+
+/* 3 Sonne (8 s) */
+.s3 .sun{transform-box:view-box;transform-origin:140px 205px;animation:a3sun 8s linear infinite both}
+.s3 .light{transform-box:view-box;transform-origin:140px 119px;opacity:.7;animation:a3light 8s linear infinite both}
+.s3 .bar{transform-box:fill-box;transform-origin:50% 100%;animation:a3bar .9s cubic-bezier(.2,.8,.2,1) both}
+.s3 .bar.hi{fill:var(--warm)}
+@keyframes a3sun{0%{transform:rotate(-58deg);opacity:0}7%{opacity:1}50%{transform:rotate(0)}93%{transform:rotate(58deg);opacity:1}100%{transform:rotate(58deg);opacity:0}}
+@keyframes a3light{0%{transform:skewX(42deg);opacity:0}8%{opacity:.3}50%{transform:skewX(0);opacity:.75}92%{transform:skewX(-42deg);opacity:.3}100%{transform:skewX(-42deg);opacity:0}}
+@keyframes a3bar{from{transform:scaleY(0)}}
+.clock{position:absolute;right:14px;top:14px;display:flex;align-items:center;gap:7px;padding:6px 11px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font:500 13px "IBM Plex Mono",monospace;color:var(--ink);--h:13;counter-reset:h var(--h);animation:a3h 8s linear infinite both}
+.clock::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--warm);box-shadow:0 0 0 3px var(--warm-soft)}
+.clock b{font-weight:500}.clock b::before{content:counter(h)}
+@keyframes a3h{0%{--h:7}92%,100%{--h:19}}
+
+/* 4 Begehen (10 s) */
+.s4 .stage{display:grid;place-items:center;background:radial-gradient(70% 70% at 50% 40%,var(--accent-soft),var(--paper))}
+.ph{position:relative;height:88%;aspect-ratio:640/1090;border-radius:28px;padding:6px;background:#0a1416;box-shadow:0 30px 50px -20px rgba(0,0,0,.55)}
+.ph .in{position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:#cfd8d6}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph .ia{transform-origin:28% 30%;opacity:0;animation:a4a 10s ease-in-out infinite both}
+.ph .ib{animation:a4b 10s ease-in-out infinite both}
+.ph .tap{position:absolute;left:21.8%;top:70.4%;width:16%;aspect-ratio:1;margin:-8% 0 0 -8%;border-radius:50%;background:rgba(255,255,255,.55);border:2px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;animation:a4t 10s ease-in-out infinite both}
+.ph .go{position:absolute;left:50%;top:9%;translate:-50% 0;font:600 11px Inter,sans-serif;color:#fff;background:#1d6c74;padding:5px 10px;border-radius:999px;white-space:nowrap;opacity:0;animation:a4g 10s ease-out infinite both}
+@keyframes a4a{0%,6%{opacity:1;transform:scale(1)}32%{opacity:1;transform:scale(2.1)}38%,88%{opacity:0;transform:scale(2.3)}89%{opacity:0;transform:scale(1)}96%,100%{opacity:1;transform:scale(1)}}
+@keyframes a4b{0%,32%{opacity:0;transform:scale(1.25)}40%{opacity:1;transform:scale(1.12)}84%{opacity:1;transform:scale(1)}94%,100%{opacity:0;transform:scale(1)}}
+@keyframes a4t{0%,44%{opacity:0;transform:none}48%{opacity:1;transform:none}62%{opacity:1;transform:translate(0,-35%)}70%{opacity:1;transform:translate(25%,-30%)}78%{opacity:1;transform:none}82%,100%{opacity:0}}
+@keyframes a4g{0%,10%{opacity:0;transform:translateY(-6px)}14%,30%{opacity:1;transform:none}34%,100%{opacity:0}}
+.s4 .side{position:absolute;display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;font:600 12px Inter,sans-serif;background:var(--paper);border:1px solid var(--line);box-shadow:0 10px 24px -12px rgb(var(--shadow) / .4);color:var(--ink);white-space:nowrap}
+.s4 .side svg{width:16px;height:16px;color:var(--accent)}
+.s4 .sa{left:6%;top:22%;animation:float 4s ease-in-out infinite alternate}
+.s4 .sb{right:6%;bottom:20%;animation:float 4.6s 1s ease-in-out infinite alternate}
+
+/* 5 Material */
+.s5 .stage{display:grid;place-items:center;padding:clamp(14px,3vw,28px);background:linear-gradient(160deg,var(--paper),var(--bg))}
+.mlist{width:100%;max-width:420px;display:grid;gap:10px}
+.mrow{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;padding:12px 14px;border-radius:16px;background:var(--paper);border:1px solid var(--line);box-shadow:0 8px 20px -14px rgb(var(--shadow) / .35);animation:a5in .6s cubic-bezier(.2,.8,.2,1) both}
+.mrow:nth-child(2){animation-delay:.15s}.mrow:nth-child(3){animation-delay:.3s}.mrow:nth-child(4){animation-delay:.45s}
+.mrow .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.mrow .ic svg{width:22px;height:22px}
+.mrow small{display:block;color:var(--muted);font-size:12px;line-height:1.3}
+.mrow b{font:600 15px Inter,sans-serif}
+.mrow .v{font:700 clamp(18px,2.4vw,24px) Montserrat,sans-serif;letter-spacing:-.02em;text-align:right;white-space:nowrap}
+.mrow .v small{text-align:right;font:500 11px Inter,sans-serif}
+.cnt{--n:var(--to);counter-reset:n var(--n);animation:cnt 1.8s .3s cubic-bezier(.2,.8,.2,1) both}
+.cnt::before{content:counter(n)}
+@keyframes cnt{from{--n:0}to{--n:var(--to)}}
+@keyframes a5in{from{opacity:0;transform:translateY(14px)}}
+.mcopy{justify-self:end;display:flex;align-items:center;gap:8px;margin-top:4px;padding:10px 14px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font:600 13px Inter,sans-serif;animation:a5btn 1.2s 2.4s ease-in-out both}
+.mcopy svg{width:16px;height:16px}
+@keyframes a5btn{0%{transform:scale(1)}40%{transform:scale(.94)}70%{transform:scale(1.04)}100%{transform:none}}
+.mdone{justify-self:end;font:600 12px Inter,sans-serif;color:var(--ok);animation:a5in .5s 3.1s both}
+
+/* 6 Teilen (7 s) */
+.s6 .pill{transform-box:fill-box;transform-origin:center;opacity:0;animation:a6pill 7s cubic-bezier(.5,0,.3,1) infinite both}
+.s6 .scr2{animation:a6on 7s infinite both}
+.s6 .halo{transform-box:fill-box;transform-origin:center;opacity:0;animation:a6halo 7s ease-out infinite both}
+.s6 .press{transform-box:fill-box;transform-origin:center;animation:a6press 7s infinite both}
+.s6 .ok6{animation:a6ok 7s ease-out infinite both}
+@keyframes a6pill{0%,12%{transform:translate(64px,128px) scale(.5);opacity:0}17%{opacity:1;transform:translate(64px,116px) scale(1)}31%{transform:translate(140px,34px) scale(1)}46%{transform:translate(262px,104px) scale(.8);opacity:1}53%,100%{transform:translate(266px,116px) scale(.3);opacity:0}}
+@keyframes a6on{0%,50%{opacity:0}58%,94%{opacity:1}100%{opacity:0}}
+@keyframes a6halo{0%,50%{opacity:0;transform:scale(.9)}53%{opacity:.8}66%,100%{opacity:0;transform:scale(1.35)}}
+@keyframes a6press{0%,6%{transform:none}9%{transform:scale(.9)}12%,100%{transform:none}}
+@keyframes a6ok{0%,58%{opacity:0;transform:translateY(8px)}64%,94%{opacity:1;transform:none}100%{opacity:0}}
+
+/* ---------- Galerie ---------- */
+.gal{background:var(--d1);color:var(--dink);position:relative;overflow:hidden;isolation:isolate}
+.gal::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(60% 60% at 50% 0%,rgba(29,108,116,.6),transparent 70%)}
+.gal .sh p{color:var(--dmuted)}
+.gal .kick{color:#e3a36d}
+.gtabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.gtabs button{font:600 14px Inter,sans-serif;padding:9px 15px;border-radius:999px;border:1px solid var(--dline);background:rgba(255,255,255,.05);color:var(--dmuted);cursor:pointer;position:relative;overflow:hidden}
+.gtabs button[aria-pressed="true"]{background:#fff;color:#0b2b2f;border-color:#fff}
+.gtabs button[aria-pressed="true"]::after{content:"";position:absolute;left:0;bottom:0;height:3px;width:100%;background:#c9773a;transform-origin:left;animation:prog 5s linear both}
+.gal.paused .gtabs button::after{animation:none;opacity:0}
+@keyframes prog{from{transform:scaleX(0)}}
+.big{position:relative;border-radius:18px;padding:10px;background:#061a1d;box-shadow:0 0 0 1px rgba(255,255,255,.1) inset,0 50px 100px -30px rgba(0,0,0,.8)}
+.big .bar{display:flex;gap:6px;padding:4px 6px 10px}
+.big .bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2)}
+.big .vw{position:relative;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:#cfd8d6}
+.big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.03);transition:opacity .8s,transform 6s ease-out}
+.big img.cur{opacity:1;transform:none}
+.gcap{margin-top:16px;color:var(--dmuted);min-height:1.6em}
+
+/* ---------- Installieren ---------- */
+.instb{position:relative;isolation:isolate;overflow:hidden;color:var(--dink);background:radial-gradient(60% 80% at 100% 0%,rgba(201,119,58,.28),transparent 60%),linear-gradient(160deg,var(--d3),var(--d1))}
+.instb::before{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:32px 32px}
+.igrid{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.igrid>*{min-width:0}
+.instb h2{font-size:clamp(32px,4.6vw,52px);letter-spacing:-.03em}
+.instb .kick{color:#e3a36d}
+.instb p.l{color:var(--dmuted);font-size:18px;margin:16px 0 26px;max-width:30em}
+.qrcard{padding:clamp(20px,3vw,30px);border-radius:28px;text-align:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 40px 80px -30px rgba(0,0,0,.6)}
+.qrcard h3{font-size:20px;margin-bottom:4px}
+.qrcard>p{margin:0 0 18px;color:var(--dmuted);font-size:14px}
+.qrw{position:relative;width:min(250px,100%);margin:0 auto}
+.qr{display:block;width:100%;aspect-ratio:1;padding:14px;background:#fff;border-radius:18px}
+.qr path{fill:#0e2427}
+.qrw::after{content:"";position:absolute;left:8%;right:8%;height:2px;top:10%;background:linear-gradient(90deg,transparent,#c9773a,transparent);box-shadow:0 0 12px #c9773a;animation:scan 2.8s ease-in-out infinite alternate}
+@keyframes scan{to{top:90%}}
+.qrw .lg{position:absolute;left:50%;top:50%;width:22%;aspect-ratio:1;translate:-50% -50%;border-radius:22%;background:url(../icon-192.png) center/cover;box-shadow:0 0 0 5px #fff}
+.link{display:flex;gap:6px;margin-top:18px;border:1px solid rgba(255,255,255,.2);border-radius:13px;padding:5px 5px 5px 12px;background:rgba(0,0,0,.2);align-items:center}
+.link input{flex:1;min-width:0;border:0;background:none;color:#fff;font:500 14px "IBM Plex Mono",ui-monospace,monospace}
 .link input:focus{outline:none}
 .share{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
-.msg{min-height:1.4em;font-size:13px;color:var(--accent);margin-top:8px}
-section{padding-block:40px}
-.sh{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:22px}
-.sh h2{font-size:clamp(26px,3.6vw,34px);letter-spacing:-.02em}
-.sh p{margin:6px 0 0;color:var(--muted);max-width:38em}
+.share .btn{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.2);color:#fff}
+.link .btn.pri{background:#c9773a;border-color:#c9773a;color:#fff}
+.msg{min-height:1.4em;font-size:13px;color:#9fe0e4;margin-top:8px}
+.steps3{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.steps3 li{display:flex;gap:14px;align-items:center;font-weight:500}
+.steps3 li span{display:grid;place-items:center;width:34px;height:34px;flex:none;border-radius:50%;border:1px solid rgba(227,163,109,.5);color:#e3a36d;font:700 15px Montserrat,sans-serif}
+
+/* Anleitung je Gerät */
+.howto{background:var(--bg)}
+.howto .top2{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:16px;margin-bottom:24px}
+.howto .top2 h2{font-size:clamp(26px,3.6vw,36px);letter-spacing:-.02em}
+.howto .top2 p{margin:8px 0 0;color:var(--muted);max-width:38em}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:0 1px 2px rgb(var(--shadow) / .04),0 20px 40px -24px rgb(var(--shadow) / .25)}
 .tabs{display:inline-flex;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:4px;gap:2px;max-width:100%;overflow-x:auto}
 .tabs button{border:0;background:none;color:var(--muted);font:600 14px Inter,sans-serif;padding:9px 14px;border-radius:10px;cursor:pointer;white-space:nowrap;display:flex;gap:7px;align-items:center}
 .tabs button svg{width:17px;height:17px}
 .tabs button[aria-selected="true"]{background:var(--accent);color:var(--accent-ink)}
-.panel{display:grid;grid-template-columns:1fr 300px;gap:28px;padding:28px;align-items:start}
+.panel{display:grid;grid-template-columns:1fr 300px;gap:28px;padding:30px;align-items:start}
 .panel>*{min-width:0}
 .panel h3{font-size:22px;margin-bottom:4px}
 .panel .sub{color:var(--muted);margin:0 0 18px;font-size:15px}
@@ -82,65 +329,252 @@ ol.steps span{color:var(--muted);font-size:15px}
 .phone .scr{position:absolute;inset:0;background:linear-gradient(160deg,#2b6c73,#173f44);border-radius:24px;padding:34px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px 10px;align-content:start}
 .phone .app{display:flex;flex-direction:column;align-items:center;gap:5px;font:500 9px Inter,sans-serif;color:#e7f1f0}
 .phone .app i{display:block;width:100%;aspect-ratio:1;border-radius:22%;background:rgb(255 255 255 / .16)}
-.phone .app.me i{background:url(../icon-192.png) center/cover;box-shadow:0 0 0 3px rgb(255 255 255 / .85);animation:pop 2.4s ease-in-out infinite}
-@keyframes pop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-@media (prefers-reduced-motion:reduce){.phone .app.me i{animation:none}}
+.phone .app.me i{background:url(../icon-192.png) center/cover;box-shadow:0 0 0 3px rgb(255 255 255 / .85);animation:hop 2.4s ease-in-out infinite}
+@keyframes hop{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
 .desk{border-radius:14px;border:1px solid var(--line);background:var(--bg);overflow:hidden}
 .desk .bar{display:flex;align-items:center;gap:8px;padding:9px 10px;background:var(--paper);border-bottom:1px solid var(--line)}
 .desk .url{flex:1;min-width:0;border-radius:8px;background:var(--bg);padding:5px 10px;font:12px ui-monospace,monospace;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .desk .inst{display:grid;place-items:center;width:26px;height:26px;border-radius:7px;background:var(--accent);color:var(--accent-ink)}
 .desk .inst svg{width:15px;height:15px}
 .desk .body{height:150px;display:grid;place-items:center;color:var(--muted);font-size:13px;padding:12px;text-align:center}
-.feat{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.feat .card{padding:22px}
-.feat svg{width:30px;height:30px;color:var(--accent);margin-bottom:10px}
-.feat h3{font-size:18px;margin-bottom:6px}
-.feat p{margin:0;color:var(--muted);font-size:15px}
-.faq{display:grid;gap:10px;max-width:780px}
-.faq details{background:var(--paper);border:1px solid var(--line);border-radius:14px}
-.faq summary{cursor:pointer;list-style:none;padding:16px 18px;font-weight:600;display:flex;justify-content:space-between;gap:12px}
+.faq{display:grid;gap:10px;max-width:820px}
+.faq details{background:var(--paper);border:1px solid var(--line);border-radius:16px;transition:box-shadow .2s}
+.faq details[open]{box-shadow:0 16px 30px -22px rgb(var(--shadow) / .4)}
+.faq summary{cursor:pointer;list-style:none;padding:18px 20px;font-weight:600;display:flex;justify-content:space-between;gap:12px}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";color:var(--accent);font:600 20px Inter,sans-serif;line-height:1}
-.faq details[open] summary::after{content:"–"}
-.faq details>div{padding:0 18px 16px;color:var(--muted)}
-.ok{display:none;margin-top:16px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);color:var(--accent);font-weight:600}
-.standalone .ok{display:block}
-footer{padding-block:30px calc(30px + env(safe-area-inset-bottom,0px));color:var(--muted);font-size:14px;border-top:1px solid var(--line);margin-top:20px}
-footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between}
+.faq summary::after{content:"+";color:var(--accent);font:600 22px Inter,sans-serif;line-height:1;transition:transform .25s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details>div{padding:0 20px 18px;color:var(--muted)}
+footer{padding-block:34px calc(34px + env(safe-area-inset-bottom,0px));color:var(--dmuted);font-size:14px;background:var(--d1)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 24px;justify-content:space-between;align-items:center}
+footer a{color:#cfe3e1}
+footer .brand{font-size:18px}footer .brand .mk{width:26px;height:26px}
 [hidden]{display:none!important}
-@media (max-width:860px){.hero{grid-template-columns:1fr;gap:28px;padding-top:20px}.panel{grid-template-columns:1fr;padding:22px}.panel .vis{order:-1;max-width:260px;width:100%;margin:0 auto}.feat{grid-template-columns:1fr}}
-@media (max-width:520px){.top .btn span{display:none}.lead{font-size:17px}.qrcard{padding:20px}.hide-sm{display:none}}
+
+/* Einblenden beim Scrollen */
+.js .rv{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+.js .scene .stage.rv{transform:translateY(40px) scale(.97)}
+.js .scene .stage.rv.in{transform:none}
+
+@media (max-width:900px){
+ .hgrid,.igrid{grid-template-columns:1fr}
+ .devices{margin-top:8px;max-width:640px}
+ .scene{grid-template-columns:1fr;gap:26px}
+ .scene:nth-child(even) .txt{order:0}
+ .panel{grid-template-columns:1fr;padding:22px}.panel .vis{order:-1;max-width:260px;width:100%;margin:0 auto}
+}
+@media (max-width:560px){
+ .top .btn span{display:none}
+ .badge{font-size:11px;padding:7px 10px;gap:6px}.badge .d{width:20px;height:20px}
+ .b2{right:18%}.b3{left:30%}
+ .num{font-size:52px}
+ .s4 .side{font-size:11px;padding:6px 9px}
+}
+@media (prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation:none!important;transition:none!important}
+ .js .rv{opacity:1;transform:none}
+ .strip .tr{width:auto}.strip ul+ul{display:none}.strip ul{flex-wrap:wrap;gap:10px 30px;justify-content:center}
+ html{scroll-behavior:auto}
+ .blueprint path{stroke-dashoffset:0}
+}
 </style>
 </head>
 <body>
-<header><div class="wrap top">
-  <a class="brand" href="../" aria-label="Grundrizz"><svg class="mk" viewBox="125 123 246 248" aria-hidden="true"><g transform="translate(80 80)" fill="none" stroke-linecap="round"><path d="M82 92 H270 V270 H82 V92 M176 92 V159 M82 177 H151 M151 177 V215 M210 177 H270 M210 177 V217" stroke="currentColor" stroke-width="18" stroke-linejoin="round"/><path d="M143 270 V239 A53 53 0 0 1 196 186" stroke="currentColor" stroke-width="15"/><path d="M57 94 Q62 55 100 55 H273" stroke="#C9773A" stroke-width="21"/></g></svg><span>Grundri<b>zz</b></span></a><span class="sp"></span>
-  <a class="btn sm pri" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Grundrizz öffnen</span></a>
-</div></header>
+
+<div class="hero">
+  <div class="glow" aria-hidden="true"></div>
+  <svg class="blueprint" viewBox="0 0 640 420" aria-hidden="true"><path pathLength="1" d="M40 40H600V380H40Z"/><path pathLength="1" d="M300 40V200H40M300 200H420V380"/><path pathLength="1" d="M420 200H600M480 40V200"/><path pathLength="1" d="M300 300A60 60 0 0 1 360 240M120 200A50 50 0 0 0 170 250"/></svg>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="../" aria-label="Grundrizz"><svg class="mk" viewBox="125 123 246 248" aria-hidden="true"><g transform="translate(80 80)" fill="none" stroke-linecap="round"><path d="M82 92 H270 V270 H82 V92 M176 92 V159 M82 177 H151 M151 177 V215 M210 177 H270 M210 177 V217" stroke="currentColor" stroke-width="18" stroke-linejoin="round"/><path d="M143 270 V239 A53 53 0 0 1 196 186" stroke="currentColor" stroke-width="15"/><path d="M57 94 Q62 55 100 55 H273" stroke="#C9773A" stroke-width="21"/></g></svg><span>Grundri<b>zz</b></span></a><span class="sp"></span>
+      <a class="btn sm ghost" href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg><span>Grundrizz öffnen</span></a>
+    </header>
+    <div class="hgrid">
+      <div>
+        <div class="eyebrow"><i></i>Raumplaner in 3D · kostenlos</div>
+        <h1>Wohnen, <em>bevor du einziehst.</em></h1>
+        <p class="lead">Grundriss zeichnen, Möbel stellen, in 3D durch die Räume gehen. Grundrizz zeigt dir, ob das Sofa durch die Tür passt, wann die Sonne ins Zimmer scheint und wie viel Farbe du brauchst.</p>
+        <div class="cta">
+          <button class="btn copper" id="instBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Jetzt installieren</button>
+          <a class="btn copper" id="howBtn" href="#installieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Kostenlos installieren</a>
+          <a class="btn ghost" href="#ablauf">So funktioniert’s</a>
+        </div>
+        <ul class="facts">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Kein Konto</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Keine Werbung</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Daten bleiben auf deinem Gerät</li>
+        </ul>
+        <div class="ok">Grundrizz ist auf diesem Gerät schon installiert. Viel Spaß beim Planen!</div>
+      </div>
+      <div class="devices" aria-label="Grundrizz auf Laptop und Handy" role="img">
+        <div class="laptop"><div class="scr"><img src="img/3d.webp" alt="" width="1600" height="1000"></div><div class="base"></div></div>
+        <div class="hphone"><img src="img/walk.webp" alt="" width="640" height="1090"></div>
+        <div class="badge b1"><span class="d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>Sofa passt durch die Tür</div>
+        <div class="badge b2"><span class="d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg></span>Juni: 7 h Sonne</div>
+        <div class="badge b3"><span class="d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8v8M21 8v8M3 12h18M7 10l-4 2 4 2M17 10l4 2-4 2"/></svg></span><span>620 cm</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="strip" aria-label="Auf einen Blick"><div class="tr">
+  <ul><li>Kostenlos</li><li>Ohne Konto</li><li>Ohne App Store</li><li>Funktioniert offline</li><li>iPhone, iPad, Android, Computer</li><li>Pläne bleiben auf deinem Gerät</li><li>Hunderte Möbel mit echten Maßen</li></ul>
+  <ul aria-hidden="true"><li>Kostenlos</li><li>Ohne Konto</li><li>Ohne App Store</li><li>Funktioniert offline</li><li>iPhone, iPad, Android, Computer</li><li>Pläne bleiben auf deinem Gerät</li><li>Hunderte Möbel mit echten Maßen</li></ul>
+</div></div>
 
 <main>
-<div class="wrap hero">
-  <div>
-    <div class="eyebrow">Installieren · kostenlos · ohne App Store</div>
-    <h1>Deine Wohnung in 3D, <em>direkt auf dem Startbildschirm.</em></h1>
-    <p class="lead">Grundrizz ist ein Raumplaner für alle: Grundriss zeichnen, Möbel stellen und in 3D durch die Räume gehen. Installiert startet er wie eine App, im Vollbild und auch ohne Internet.</p>
-    <div class="cta">
-      <button class="btn pri" id="instBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Jetzt installieren</button>
-      <a class="btn pri" id="howBtn" href="#anleitung"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>So installierst du es</a>
-      <a class="btn" href="../">Erst im Browser ausprobieren</a>
+<section class="flow" id="ablauf"><div class="wrap">
+  <div class="sh rv"><div class="kick">So plant es sich</div><h2>Vom leeren Blatt bis zur Einkaufsliste.</h2><p>Sechs Dinge, die Grundrizz für dich erledigt. Alles im Browser, alles auf deinem Gerät.</p></div>
+  <div class="scenes">
+
+  <article class="scene s1">
+    <div class="txt rv"><div class="num">01</div><h3>Grundriss in Minuten</h3><p>Raum mit dem Finger aufziehen, Maße eintippen, Türen und Fenster einsetzen. Oder eine Vorlage wählen, ein Foto vom Exposé nachzeichnen oder einen Raumscan vom Handy laden.</p>
+      <ul class="chips"><li>Vorlagen</li><li>Foto nachzeichnen</li><li>Raumscan laden</li><li>Mehrere Stockwerke</li></ul></div>
+    <div class="stage rv" role="img" aria-label="Ein Raum wird aufgezogen, Wände, Tür und Fenster erscheinen, dazu 24,8 Quadratmeter.">
+      <svg viewBox="0 0 400 300">
+        <defs><pattern id="g1" width="20" height="20" patternUnits="userSpaceOnUse"><path class="gl" d="M20 0H0V20"/></pattern></defs>
+        <rect width="400" height="300" fill="url(#g1)"/>
+        <g class="all">
+          <rect class="floor fl" x="60" y="60" width="280" height="180"/>
+          <rect class="band" x="60" y="60" width="280" height="180" fill="none" stroke="#1d6c74" stroke-width="2" stroke-dasharray="6 5" vector-effect="non-scaling-stroke" style="fill:rgba(29,108,116,.08)"/>
+          <path class="walls w" pathLength="100" d="M60 60H340V240H60Z" stroke-width="9"/>
+          <g class="dim"><path class="dl" d="M60 36V46M340 36V46M60 41H340"/><rect class="pf" x="172" y="32" width="56" height="18" rx="4"/><text class="tm" x="200" y="45" text-anchor="middle">620 cm</text>
+            <path class="dl" d="M36 60H46M36 240H46M41 60V240"/><g transform="translate(41 150) rotate(-90)"><rect class="pf" x="-28" y="-9" width="56" height="18" rx="4"/><text class="tm" x="0" y="4" text-anchor="middle">400 cm</text></g></g>
+          <g class="door"><rect class="fl" x="112" y="234" width="56" height="12"/><path class="arc w" pathLength="100" d="M112 240V184A56 56 0 0 1 168 240" stroke-width="2" style="stroke:var(--muted)"/></g>
+          <rect class="win gls" x="335" y="100" width="10" height="80" rx="1"/>
+          <g class="lab"><text class="t" x="230" y="146" text-anchor="middle" style="font-size:17px">Wohnzimmer</text><text class="tm" x="230" y="166" text-anchor="middle" style="font-size:13px">24,8 m²</text></g>
+          <g class="cur"><circle class="ring" r="18" fill="none" stroke="#1d6c74" stroke-width="2"/><circle r="11" fill="#fff" stroke="#1d6c74" stroke-width="3" style="filter:drop-shadow(0 3px 5px rgba(0,0,0,.25))"/></g>
+        </g>
+      </svg>
     </div>
-    <ul class="facts">
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Kostenlos</li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Kein Konto nötig</li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>Daten bleiben auf deinem Gerät</li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>iPhone, iPad, Android, Computer</li>
-    </ul>
-    <div class="ok">Grundrizz ist auf diesem Gerät schon installiert. Viel Spaß beim Planen!</div>
+  </article>
+
+  <article class="scene s2">
+    <div class="txt rv"><div class="num">02</div><h3>Passt das Sofa durch die Tür?</h3><p>Erfasse deine eigenen Möbel einmal. Der Umzugs-Check prüft, ob sie durch die Türen der neuen Wohnung passen und wo sie Platz haben. Bevor der Umzugswagen kommt.</p>
+      <ul class="chips"><li>Umzugs-Check</li><li>Eigene Möbel merken</li><li>Hunderte Möbel im Katalog</li></ul></div>
+    <div class="stage rv" role="img" aria-label="Ein Sofa bleibt quer an der Tür hängen, wird gedreht und passt längs hindurch.">
+      <svg viewBox="0 0 400 300">
+        <defs><pattern id="g2" width="20" height="20" patternUnits="userSpaceOnUse"><path class="gl" d="M20 0H0V20"/></pattern></defs>
+        <rect width="400" height="300" fill="url(#g2)"/>
+        <rect class="fl" x="234" y="20" width="166" height="260" style="opacity:.6"/>
+        <path class="w" d="M230 20V116M230 184V280" stroke-width="8"/>
+        <path d="M234 116A68 68 0 0 1 302 184" fill="none" style="stroke:var(--muted)" stroke-width="1.5" stroke-dasharray="3 3"/>
+        <text class="tm" x="22" y="278">Flur</text><text class="tm" x="388" y="278" text-anchor="end">Wohnzimmer</text>
+        <g><rect class="pf" x="240" y="90" width="72" height="20" rx="5" style="stroke:var(--line)"/><text class="tm" x="276" y="104" text-anchor="middle">Tür 90 cm</text></g>
+        <g class="sofa">
+          <rect x="80" y="75" width="60" height="150" rx="8" style="fill:var(--sofa)"/>
+          <rect x="80" y="75" width="16" height="150" rx="6" style="fill:rgba(0,0,0,.18)"/>
+          <path d="M100 125H140M100 175H140" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+          <rect class="red bad-f" x="80" y="75" width="60" height="150" rx="8"/>
+          <rect class="grn ok-f" x="80" y="75" width="60" height="150" rx="8"/>
+          <text x="118" y="150" text-anchor="middle" transform="rotate(-90 118 150)" style="font:600 11px Inter,sans-serif;fill:#fff">Sofa 200 × 80</text>
+        </g>
+        <g class="wid"><path d="M150 75V225M144 75H156M144 225H156" style="stroke:var(--bad)" stroke-width="2"/></g>
+        <g class="bdg bb"><rect class="bad-f" x="16" y="16" width="188" height="28"/><text x="110" y="35" text-anchor="middle">Quer: 200 cm, zu breit</text></g>
+        <g class="bdg bg"><rect class="ok-f" x="16" y="16" width="200" height="28"/><text x="116" y="35" text-anchor="middle">✓ Längs: 80 cm, passt!</text></g>
+      </svg>
+    </div>
+  </article>
+
+  <article class="scene s3">
+    <div class="txt rv"><div class="num">03</div><h3>Wo scheint die Sonne hin?</h3><p>Grundrizz berechnet den Sonnenstand über den Tag und übers Jahr. Du siehst, wann Licht durch welches Fenster fällt und wie viele Sonnenstunden ein Raum im Monat bekommt.</p>
+      <ul class="chips"><li>Sonnenstand live</li><li>Sonne übers Jahr</li><li>Himmelsrichtung</li></ul></div>
+    <div class="stage rv" role="img" aria-label="Die Sonne wandert über den Raum, der Lichtfleck vom Fenster wandert mit. Daneben Sonnenstunden je Monat.">
+      <svg viewBox="0 0 400 300">
+        <defs><pattern id="g3" width="20" height="20" patternUnits="userSpaceOnUse"><path class="gl" d="M20 0H0V20"/></pattern><clipPath id="c3"><rect x="44" y="119" width="192" height="152"/></clipPath>
+          <radialGradient id="sg"><stop offset="0" stop-color="#ffd27a"/><stop offset=".55" stop-color="#f2a44a"/><stop offset="1" stop-color="#f2a44a" stop-opacity="0"/></radialGradient>
+          <linearGradient id="lg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".95"/><stop offset="1" stop-color="#ffcf7a" stop-opacity=".25"/></linearGradient></defs>
+        <rect width="400" height="300" fill="url(#g3)"/>
+        <path d="M4.8 110.4A165 165 0 0 1 275.2 110.4" fill="none" style="stroke:var(--warm)" stroke-width="1.5" stroke-dasharray="2 5" opacity=".7"/>
+                <rect class="fl" x="44" y="119" width="192" height="152"/>
+        <g clip-path="url(#c3)"><path class="light" d="M110 119H170L192 262H88Z" fill="url(#lg3)"/></g>
+        <path class="w" d="M40 115H240V275H40Z" stroke-width="8"/>
+        <rect class="gls" x="110" y="111" width="60" height="8"/>
+        <text class="t" x="140" y="205" text-anchor="middle">Wohnzimmer</text>
+        <g class="sun"><circle cx="140" cy="40" r="26" fill="url(#sg)"/><circle cx="140" cy="40" r="11" fill="#ffc861"/></g>
+        <text class="tm" x="262" y="112" style="fill:var(--ink)">Sonnenstunden</text>
+        <rect class="bar acc-f" x="262" y="236.5" width="7" height="25.5" rx="2" style="animation-delay:0ms"/><text class="tm" x="265.5" y="276" text-anchor="middle" style="font-size:8px">J</text><rect class="bar acc-f" x="273" y="217.8" width="7" height="44.2" rx="2" style="animation-delay:70ms"/><text class="tm" x="276.5" y="276" text-anchor="middle" style="font-size:8px">F</text><rect class="bar acc-f" x="284" y="190.6" width="7" height="71.4" rx="2" style="animation-delay:140ms"/><text class="tm" x="287.5" y="276" text-anchor="middle" style="font-size:8px">M</text><rect class="bar acc-f" x="295" y="166.8" width="7" height="95.2" rx="2" style="animation-delay:210ms"/><text class="tm" x="298.5" y="276" text-anchor="middle" style="font-size:8px">A</text><rect class="bar acc-f" x="306" y="149.8" width="7" height="112.2" rx="2" style="animation-delay:280ms"/><text class="tm" x="309.5" y="276" text-anchor="middle" style="font-size:8px">M</text><rect class="bar hi acc-f" x="317" y="143.0" width="7" height="119.0" rx="2" style="animation-delay:350ms"/><text class="tm" x="320.5" y="276" text-anchor="middle" style="font-size:8px">J</text><rect class="bar acc-f" x="328" y="143.0" width="7" height="119.0" rx="2" style="animation-delay:420ms"/><text class="tm" x="331.5" y="276" text-anchor="middle" style="font-size:8px">J</text><rect class="bar acc-f" x="339" y="156.6" width="7" height="105.4" rx="2" style="animation-delay:490ms"/><text class="tm" x="342.5" y="276" text-anchor="middle" style="font-size:8px">A</text><rect class="bar acc-f" x="350" y="180.4" width="7" height="81.6" rx="2" style="animation-delay:560ms"/><text class="tm" x="353.5" y="276" text-anchor="middle" style="font-size:8px">S</text><rect class="bar acc-f" x="361" y="207.6" width="7" height="54.4" rx="2" style="animation-delay:630ms"/><text class="tm" x="364.5" y="276" text-anchor="middle" style="font-size:8px">O</text><rect class="bar acc-f" x="372" y="231.4" width="7" height="30.6" rx="2" style="animation-delay:700ms"/><text class="tm" x="375.5" y="276" text-anchor="middle" style="font-size:8px">N</text><rect class="bar acc-f" x="383" y="241.6" width="7" height="20.4" rx="2" style="animation-delay:770ms"/><text class="tm" x="386.5" y="276" text-anchor="middle" style="font-size:8px">D</text><text class="tm" x="317" y="134" text-anchor="middle" style="fill:var(--warm);font-size:10px">7 h</text>
+        <path class="dl" d="M258 262H394"/>
+      </svg>
+      <div class="clock" aria-hidden="true"><span><b></b>:00 Uhr</span></div>
+    </div>
+  </article>
+
+  <article class="scene s4">
+    <div class="txt rv"><div class="num">04</div><h3>Durchgehen, als wärst du schon da.</h3><p>Ein Tipp auf „Begehen“ und du stehst mitten im Raum. Mit dem Finger laufen, mit dem Handy umschauen. So merkst du, ob der Esstisch den Weg versperrt.</p>
+      <ul class="chips"><li>3D in Echtzeit</li><li>Handy bewegen</li><li>Licht an und aus</li></ul></div>
+    <div class="stage rv">
+      <div class="ph" role="img" aria-label="Vom Blick von oben geht es hinein ins Wohnzimmer."><div class="in"><img class="ia" src="img/phone3d.webp" alt="" loading="lazy"><img class="ib" src="img/walk.webp" alt="" loading="lazy"><span class="go">Begehen</span><span class="tap"></span></div></div>
+      <div class="side sa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5 2 7.5L12 16.5 5.5 21l2-7.5L2 9h7z"/></svg>Echte Möbelmodelle</div>
+      <div class="side sb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>Mit dem Finger laufen</div>
+    </div>
+  </article>
+
+  <article class="scene s5">
+    <div class="txt rv"><div class="num">05</div><h3>Material auf Knopfdruck.</h3><p>Boden, Sockelleisten, Wandfarbe und Tapete rechnet Grundrizz aus deinen Räumen aus. Türen, Fenster und Dachschrägen sind schon abgezogen. Die Einkaufsliste kopierst du mit einem Tipp.</p>
+      <ul class="chips"><li>Verschnitt einstellbar</li><li>Eimergrößen</li><li>Tapetenrapport</li></ul></div>
+    <div class="stage rv" role="img" aria-label="Materialliste: 20 Quadratmeter Boden in 10 Paketen, 8 Sockelleisten, 17 Liter Wandfarbe, 10 Rollen Tapete.">
+      <div class="mlist">
+        <div class="mrow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18M9 7v5M15 12v5M6 17v4M18 7V3"/></svg></span><span><b>Boden</b><small>Fläche + 10 % Verschnitt</small></span><span class="v"><span class="cnt" style="--to:20"></span> m²<small><span class="cnt" style="--to:10"></span> Pakete</small></span></div>
+        <div class="mrow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18h18M5 14h14v4H5z"/></svg></span><span><b>Sockelleisten</b><small>ohne Türöffnungen</small></span><span class="v"><span class="cnt" style="--to:8"></span><small>à 2,5 m</small></span></div>
+        <div class="mrow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="15" height="7" rx="2"/><path d="M18 6h3v5h-9v3"/><rect x="10" y="14" width="4" height="7" rx="1"/></svg></span><span><b>Wandfarbe</b><small>2 Anstriche</small></span><span class="v"><span class="cnt" style="--to:17"></span> l<small>2 × 10 l</small></span></div>
+        <div class="mrow"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h11a3 3 0 0 1 0 6H5zM5 3v18M16 9v12"/></svg></span><span><b>Tapete</b><small>10,05 × 0,53 m</small></span><span class="v"><span class="cnt" style="--to:10"></span><small>Rollen</small></span></div>
+        <span class="mcopy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Einkaufsliste kopieren</span>
+        <span class="mdone">✓ Kopiert, ab in den Baumarkt</span>
+      </div>
+    </div>
+  </article>
+
+  <article class="scene s6">
+    <div class="txt rv"><div class="num">06</div><h3>Teilen, ohne Konto.</h3><p>Ein Link enthält den ganzen Plan. Schick ihn per WhatsApp oder Mail, auf dem anderen Gerät ist sofort alles da. Hochgeladen wird dabei nichts.</p>
+      <ul class="chips"><li>Plan per Link</li><li>Datei sichern</li><li>Kein Server</li></ul></div>
+    <div class="stage rv" role="img" aria-label="Ein Link fliegt vom Laptop zum Handy, dort erscheint derselbe Grundriss.">
+      <svg viewBox="0 0 400 300">
+        <defs><pattern id="g6" width="20" height="20" patternUnits="userSpaceOnUse"><path class="gl" d="M20 0H0V20"/></pattern>
+          <g id="mini"><path d="M0 0H100V64H0Z M48 0V30H0 M48 30H70V64 M70 30H100" fill="none" stroke-width="3"/></g></defs>
+        <rect width="400" height="300" fill="url(#g6)"/>
+        <rect x="24" y="84" width="176" height="112" rx="8" style="fill:#0a1416"/>
+        <rect x="31" y="91" width="162" height="98" rx="3" class="pf"/>
+        <use href="#mini" x="44" y="104" class="w"/>
+        <g class="press"><rect x="128" y="168" width="58" height="15" rx="5" class="acc-f"/><text x="157" y="179" text-anchor="middle" style="font:600 8px Inter,sans-serif;fill:#fff">Link teilen</text></g>
+        <path d="M12 196H212L204 206H20Z" style="fill:#9aa6a5"/>
+        <rect class="halo" x="276" y="56" width="92" height="172" rx="20" fill="none" style="stroke:var(--accent)" stroke-width="3"/>
+        <rect x="282" y="62" width="80" height="160" rx="16" style="fill:#0a1416"/>
+        <rect x="287" y="67" width="70" height="150" rx="12" style="fill:#1b2a2c"/>
+        <g class="scr2"><rect x="287" y="67" width="70" height="150" rx="12" class="pf"/><use href="#mini" transform="translate(294 112) scale(.56)" class="w"/><rect x="296" y="182" width="52" height="12" rx="4" class="acc-f"/><text x="322" y="191" text-anchor="middle" style="font:600 7px Inter,sans-serif;fill:#fff">Öffnen</text></g>
+        <g class="pill"><rect width="118" height="26" rx="13" class="warm-f"/><text x="59" y="17" text-anchor="middle" style="font:500 10px 'IBM Plex Mono',monospace;fill:#fff">#plan=eJyVk…</text></g>
+        <g class="ok6"><rect x="258" y="238" width="128" height="26" rx="13" class="ok-f"/><text x="322" y="255" text-anchor="middle" style="font:600 11px Inter,sans-serif;fill:#fff">✓ Plan ist da</text></g>
+      </svg>
+    </div>
+  </article>
   </div>
-  <div class="card qrcard">
-    <h2>Mit dem Handy scannen</h2>
+</div></section>
+
+<section class="gal"><div class="wrap">
+  <div class="sh rv"><div class="kick">Echte Ansichten</div><h2>So sieht Grundrizz aus.</h2><p>Keine Attrappen: Das sind Bildschirmfotos aus der App, mit einer der mitgelieferten Vorlagen.</p></div>
+  <div class="gtabs" role="group" aria-label="Ansicht wählen">
+    <button type="button" data-i="0" aria-pressed="true">3D-Ansicht</button><button type="button" data-i="1" aria-pressed="false">Zeichnen</button><button type="button" data-i="2" aria-pressed="false">Sonne übers Jahr</button><button type="button" data-i="3" aria-pressed="false">Material</button>
+  </div>
+  <div class="big rv"><div class="bar"><i></i><i></i><i></i></div><div class="vw">
+    <img class="cur" src="img/3d.webp" alt="3D-Ansicht einer Familienwohnung mit Möbeln" loading="lazy" width="1600" height="1000">
+    <img src="img/draw.webp" alt="Grundriss im Zeichnen-Modus mit Maßen und Raumflächen" loading="lazy" width="1600" height="1000">
+    <img src="img/sun.webp" alt="Sonnenstunden je Monat für einen Raum" loading="lazy" width="1600" height="1000">
+    <img src="img/mc.webp" alt="Materialrechner mit Boden, Farbe und Tapete" loading="lazy" width="1600" height="1000">
+  </div></div>
+  <p class="gcap" id="gcap" aria-live="polite">Die ganze Wohnung in 3D, mit Licht, Schatten und echten Möbelmodellen.</p>
+</div></section>
+
+<section class="instb" id="installieren"><div class="wrap igrid">
+  <div class="rv">
+    <div class="kick">Installieren</div>
+    <h2>In 30 Sekunden auf deinem Startbildschirm.</h2>
+    <p class="l">Grundrizz ist eine Web-App. Du lädst nichts aus einem Store, sondern legst sie direkt aus dem Browser ab. Danach startet sie wie jede App, im Vollbild und auch ohne Internet.</p>
+    <ol class="steps3"><li><span>1</span>QR-Code mit der Handykamera scannen</li><li><span>2</span>Im Browser auf Teilen oder Menü tippen</li><li><span>3</span>„Zum Home-Bildschirm“ oder „Installieren“ wählen</li></ol>
+    <p style="margin-top:22px"><a class="btn ghost" href="#anleitung">Genaue Anleitung für dein Gerät</a></p>
+  </div>
+  <div class="qrcard rv">
+    <h3>Mit dem Handy scannen</h3>
     <p>Kamera auf den Code richten, die Seite öffnet sich auf dem Handy.</p>
-    <svg class="qr" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR-Code zu https://carstenwinter77.github.io/grundrizz/installieren/"><path d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM9 0h1v1h-1zM10 0h1v1h-1zM11 0h1v1h-1zM12 0h1v1h-1zM16 0h1v1h-1zM19 0h1v1h-1zM23 0h1v1h-1zM26 0h1v1h-1zM27 0h1v1h-1zM28 0h1v1h-1zM29 0h1v1h-1zM30 0h1v1h-1zM31 0h1v1h-1zM32 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM11 1h1v1h-1zM15 1h1v1h-1zM16 1h1v1h-1zM21 1h1v1h-1zM24 1h1v1h-1zM26 1h1v1h-1zM32 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM8 2h1v1h-1zM9 2h1v1h-1zM10 2h1v1h-1zM11 2h1v1h-1zM12 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM19 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM29 2h1v1h-1zM30 2h1v1h-1zM32 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM8 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM15 3h1v1h-1zM17 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM29 3h1v1h-1zM30 3h1v1h-1zM32 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM12 4h1v1h-1zM14 4h1v1h-1zM15 4h1v1h-1zM16 4h1v1h-1zM19 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM23 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM29 4h1v1h-1zM30 4h1v1h-1zM32 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM9 5h1v1h-1zM10 5h1v1h-1zM11 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM21 5h1v1h-1zM22 5h1v1h-1zM26 5h1v1h-1zM32 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM27 6h1v1h-1zM28 6h1v1h-1zM29 6h1v1h-1zM30 6h1v1h-1zM31 6h1v1h-1zM32 6h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM16 7h1v1h-1zM21 7h1v1h-1zM22 7h1v1h-1zM23 7h1v1h-1zM0 8h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM9 8h1v1h-1zM12 8h1v1h-1zM13 8h1v1h-1zM16 8h1v1h-1zM17 8h1v1h-1zM18 8h1v1h-1zM19 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM23 8h1v1h-1zM26 8h1v1h-1zM27 8h1v1h-1zM28 8h1v1h-1zM29 8h1v1h-1zM30 8h1v1h-1zM0 9h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM9 9h1v1h-1zM11 9h1v1h-1zM12 9h1v1h-1zM13 9h1v1h-1zM16 9h1v1h-1zM19 9h1v1h-1zM20 9h1v1h-1zM23 9h1v1h-1zM26 9h1v1h-1zM27 9h1v1h-1zM29 9h1v1h-1zM30 9h1v1h-1zM32 9h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1zM11 10h1v1h-1zM12 10h1v1h-1zM13 10h1v1h-1zM14 10h1v1h-1zM15 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM25 10h1v1h-1zM28 10h1v1h-1zM30 10h1v1h-1zM0 11h1v1h-1zM1 11h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM7 11h1v1h-1zM8 11h1v1h-1zM9 11h1v1h-1zM10 11h1v1h-1zM11 11h1v1h-1zM12 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM18 11h1v1h-1zM20 11h1v1h-1zM21 11h1v1h-1zM23 11h1v1h-1zM24 11h1v1h-1zM28 11h1v1h-1zM29 11h1v1h-1zM30 11h1v1h-1zM31 11h1v1h-1zM32 11h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM5 12h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM8 12h1v1h-1zM9 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM22 12h1v1h-1zM24 12h1v1h-1zM25 12h1v1h-1zM27 12h1v1h-1zM28 12h1v1h-1zM29 12h1v1h-1zM31 12h1v1h-1zM32 12h1v1h-1zM0 13h1v1h-1zM3 13h1v1h-1zM5 13h1v1h-1zM8 13h1v1h-1zM9 13h1v1h-1zM10 13h1v1h-1zM11 13h1v1h-1zM15 13h1v1h-1zM18 13h1v1h-1zM19 13h1v1h-1zM20 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM24 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM29 13h1v1h-1zM31 13h1v1h-1zM32 13h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM13 14h1v1h-1zM15 14h1v1h-1zM16 14h1v1h-1zM17 14h1v1h-1zM22 14h1v1h-1zM24 14h1v1h-1zM25 14h1v1h-1zM26 14h1v1h-1zM27 14h1v1h-1zM28 14h1v1h-1zM29 14h1v1h-1zM31 14h1v1h-1zM1 15h1v1h-1zM2 15h1v1h-1zM4 15h1v1h-1zM5 15h1v1h-1zM11 15h1v1h-1zM15 15h1v1h-1zM20 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1zM24 15h1v1h-1zM25 15h1v1h-1zM26 15h1v1h-1zM28 15h1v1h-1zM29 15h1v1h-1zM30 15h1v1h-1zM0 16h1v1h-1zM1 16h1v1h-1zM4 16h1v1h-1zM5 16h1v1h-1zM6 16h1v1h-1zM11 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM15 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM19 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM25 16h1v1h-1zM27 16h1v1h-1zM28 16h1v1h-1zM32 16h1v1h-1zM1 17h1v1h-1zM7 17h1v1h-1zM8 17h1v1h-1zM11 17h1v1h-1zM16 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM22 17h1v1h-1zM23 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM29 17h1v1h-1zM30 17h1v1h-1zM32 17h1v1h-1zM2 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM10 18h1v1h-1zM12 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM24 18h1v1h-1zM27 18h1v1h-1zM28 18h1v1h-1zM30 18h1v1h-1zM31 18h1v1h-1zM0 19h1v1h-1zM3 19h1v1h-1zM7 19h1v1h-1zM9 19h1v1h-1zM11 19h1v1h-1zM13 19h1v1h-1zM14 19h1v1h-1zM15 19h1v1h-1zM16 19h1v1h-1zM20 19h1v1h-1zM21 19h1v1h-1zM22 19h1v1h-1zM23 19h1v1h-1zM24 19h1v1h-1zM26 19h1v1h-1zM27 19h1v1h-1zM28 19h1v1h-1zM29 19h1v1h-1zM30 19h1v1h-1zM31 19h1v1h-1zM0 20h1v1h-1zM3 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM8 20h1v1h-1zM9 20h1v1h-1zM10 20h1v1h-1zM15 20h1v1h-1zM17 20h1v1h-1zM22 20h1v1h-1zM25 20h1v1h-1zM27 20h1v1h-1zM28 20h1v1h-1zM29 20h1v1h-1zM32 20h1v1h-1zM0 21h1v1h-1zM1 21h1v1h-1zM2 21h1v1h-1zM8 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM15 21h1v1h-1zM16 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM26 21h1v1h-1zM29 21h1v1h-1zM30 21h1v1h-1zM32 21h1v1h-1zM0 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM10 22h1v1h-1zM17 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM29 22h1v1h-1zM31 22h1v1h-1zM0 23h1v1h-1zM2 23h1v1h-1zM3 23h1v1h-1zM4 23h1v1h-1zM5 23h1v1h-1zM7 23h1v1h-1zM9 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM16 23h1v1h-1zM18 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM22 23h1v1h-1zM23 23h1v1h-1zM24 23h1v1h-1zM25 23h1v1h-1zM26 23h1v1h-1zM29 23h1v1h-1zM30 23h1v1h-1zM31 23h1v1h-1zM0 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM7 24h1v1h-1zM8 24h1v1h-1zM9 24h1v1h-1zM13 24h1v1h-1zM16 24h1v1h-1zM17 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM25 24h1v1h-1zM26 24h1v1h-1zM27 24h1v1h-1zM28 24h1v1h-1zM29 24h1v1h-1zM32 24h1v1h-1zM8 25h1v1h-1zM9 25h1v1h-1zM11 25h1v1h-1zM12 25h1v1h-1zM16 25h1v1h-1zM17 25h1v1h-1zM18 25h1v1h-1zM19 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM23 25h1v1h-1zM24 25h1v1h-1zM28 25h1v1h-1zM30 25h1v1h-1zM32 25h1v1h-1zM0 26h1v1h-1zM1 26h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM6 26h1v1h-1zM12 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM15 26h1v1h-1zM16 26h1v1h-1zM17 26h1v1h-1zM21 26h1v1h-1zM22 26h1v1h-1zM23 26h1v1h-1zM24 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM30 26h1v1h-1zM31 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM8 27h1v1h-1zM10 27h1v1h-1zM11 27h1v1h-1zM12 27h1v1h-1zM14 27h1v1h-1zM15 27h1v1h-1zM18 27h1v1h-1zM19 27h1v1h-1zM20 27h1v1h-1zM21 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM28 27h1v1h-1zM29 27h1v1h-1zM30 27h1v1h-1zM32 27h1v1h-1zM0 28h1v1h-1zM2 28h1v1h-1zM3 28h1v1h-1zM4 28h1v1h-1zM6 28h1v1h-1zM8 28h1v1h-1zM9 28h1v1h-1zM11 28h1v1h-1zM12 28h1v1h-1zM14 28h1v1h-1zM17 28h1v1h-1zM18 28h1v1h-1zM19 28h1v1h-1zM22 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1zM26 28h1v1h-1zM27 28h1v1h-1zM28 28h1v1h-1zM29 28h1v1h-1zM31 28h1v1h-1zM32 28h1v1h-1zM0 29h1v1h-1zM2 29h1v1h-1zM3 29h1v1h-1zM4 29h1v1h-1zM6 29h1v1h-1zM8 29h1v1h-1zM14 29h1v1h-1zM15 29h1v1h-1zM18 29h1v1h-1zM19 29h1v1h-1zM20 29h1v1h-1zM23 29h1v1h-1zM24 29h1v1h-1zM25 29h1v1h-1zM28 29h1v1h-1zM30 29h1v1h-1zM31 29h1v1h-1zM32 29h1v1h-1zM0 30h1v1h-1zM2 30h1v1h-1zM3 30h1v1h-1zM4 30h1v1h-1zM6 30h1v1h-1zM8 30h1v1h-1zM9 30h1v1h-1zM11 30h1v1h-1zM14 30h1v1h-1zM15 30h1v1h-1zM16 30h1v1h-1zM17 30h1v1h-1zM20 30h1v1h-1zM21 30h1v1h-1zM24 30h1v1h-1zM26 30h1v1h-1zM27 30h1v1h-1zM0 31h1v1h-1zM6 31h1v1h-1zM14 31h1v1h-1zM16 31h1v1h-1zM21 31h1v1h-1zM22 31h1v1h-1zM23 31h1v1h-1zM26 31h1v1h-1zM28 31h1v1h-1zM29 31h1v1h-1zM30 31h1v1h-1zM0 32h1v1h-1zM1 32h1v1h-1zM2 32h1v1h-1zM3 32h1v1h-1zM4 32h1v1h-1zM5 32h1v1h-1zM6 32h1v1h-1zM8 32h1v1h-1zM10 32h1v1h-1zM13 32h1v1h-1zM14 32h1v1h-1zM17 32h1v1h-1zM22 32h1v1h-1zM23 32h1v1h-1zM24 32h1v1h-1zM25 32h1v1h-1zM27 32h1v1h-1zM29 32h1v1h-1zM31 32h1v1h-1z"/></svg>
+    <div class="qrw"><svg class="qr" viewBox="0 0 33 33" shape-rendering="crispEdges" role="img" aria-label="QR-Code zu https://carstenwinter77.github.io/grundrizz/installieren/"><path d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM9 0h1v1h-1zM10 0h1v1h-1zM11 0h1v1h-1zM12 0h1v1h-1zM16 0h1v1h-1zM19 0h1v1h-1zM23 0h1v1h-1zM26 0h1v1h-1zM27 0h1v1h-1zM28 0h1v1h-1zM29 0h1v1h-1zM30 0h1v1h-1zM31 0h1v1h-1zM32 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM9 1h1v1h-1zM11 1h1v1h-1zM15 1h1v1h-1zM16 1h1v1h-1zM21 1h1v1h-1zM24 1h1v1h-1zM26 1h1v1h-1zM32 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM8 2h1v1h-1zM9 2h1v1h-1zM10 2h1v1h-1zM11 2h1v1h-1zM12 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM19 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM29 2h1v1h-1zM30 2h1v1h-1zM32 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM8 3h1v1h-1zM9 3h1v1h-1zM10 3h1v1h-1zM15 3h1v1h-1zM17 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM29 3h1v1h-1zM30 3h1v1h-1zM32 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM9 4h1v1h-1zM11 4h1v1h-1zM12 4h1v1h-1zM14 4h1v1h-1zM15 4h1v1h-1zM16 4h1v1h-1zM19 4h1v1h-1zM20 4h1v1h-1zM21 4h1v1h-1zM23 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM29 4h1v1h-1zM30 4h1v1h-1zM32 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM9 5h1v1h-1zM10 5h1v1h-1zM11 5h1v1h-1zM12 5h1v1h-1zM13 5h1v1h-1zM17 5h1v1h-1zM20 5h1v1h-1zM21 5h1v1h-1zM22 5h1v1h-1zM26 5h1v1h-1zM32 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM27 6h1v1h-1zM28 6h1v1h-1zM29 6h1v1h-1zM30 6h1v1h-1zM31 6h1v1h-1zM32 6h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM16 7h1v1h-1zM21 7h1v1h-1zM22 7h1v1h-1zM23 7h1v1h-1zM0 8h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM9 8h1v1h-1zM12 8h1v1h-1zM13 8h1v1h-1zM16 8h1v1h-1zM17 8h1v1h-1zM18 8h1v1h-1zM19 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM23 8h1v1h-1zM26 8h1v1h-1zM27 8h1v1h-1zM28 8h1v1h-1zM29 8h1v1h-1zM30 8h1v1h-1zM0 9h1v1h-1zM3 9h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM7 9h1v1h-1zM8 9h1v1h-1zM9 9h1v1h-1zM11 9h1v1h-1zM12 9h1v1h-1zM13 9h1v1h-1zM16 9h1v1h-1zM19 9h1v1h-1zM20 9h1v1h-1zM23 9h1v1h-1zM26 9h1v1h-1zM27 9h1v1h-1zM29 9h1v1h-1zM30 9h1v1h-1zM32 9h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM4 10h1v1h-1zM5 10h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1zM11 10h1v1h-1zM12 10h1v1h-1zM13 10h1v1h-1zM14 10h1v1h-1zM15 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM20 10h1v1h-1zM22 10h1v1h-1zM25 10h1v1h-1zM28 10h1v1h-1zM30 10h1v1h-1zM0 11h1v1h-1zM1 11h1v1h-1zM2 11h1v1h-1zM4 11h1v1h-1zM7 11h1v1h-1zM8 11h1v1h-1zM9 11h1v1h-1zM10 11h1v1h-1zM11 11h1v1h-1zM12 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM18 11h1v1h-1zM20 11h1v1h-1zM21 11h1v1h-1zM23 11h1v1h-1zM24 11h1v1h-1zM28 11h1v1h-1zM29 11h1v1h-1zM30 11h1v1h-1zM31 11h1v1h-1zM32 11h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM5 12h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM8 12h1v1h-1zM9 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM16 12h1v1h-1zM17 12h1v1h-1zM22 12h1v1h-1zM24 12h1v1h-1zM25 12h1v1h-1zM27 12h1v1h-1zM28 12h1v1h-1zM29 12h1v1h-1zM31 12h1v1h-1zM32 12h1v1h-1zM0 13h1v1h-1zM3 13h1v1h-1zM5 13h1v1h-1zM8 13h1v1h-1zM9 13h1v1h-1zM10 13h1v1h-1zM11 13h1v1h-1zM15 13h1v1h-1zM18 13h1v1h-1zM19 13h1v1h-1zM20 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM24 13h1v1h-1zM25 13h1v1h-1zM26 13h1v1h-1zM29 13h1v1h-1zM31 13h1v1h-1zM32 13h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM6 14h1v1h-1zM7 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM13 14h1v1h-1zM15 14h1v1h-1zM16 14h1v1h-1zM17 14h1v1h-1zM22 14h1v1h-1zM24 14h1v1h-1zM25 14h1v1h-1zM26 14h1v1h-1zM27 14h1v1h-1zM28 14h1v1h-1zM29 14h1v1h-1zM31 14h1v1h-1zM1 15h1v1h-1zM2 15h1v1h-1zM4 15h1v1h-1zM5 15h1v1h-1zM11 15h1v1h-1zM15 15h1v1h-1zM20 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1zM24 15h1v1h-1zM25 15h1v1h-1zM26 15h1v1h-1zM28 15h1v1h-1zM29 15h1v1h-1zM30 15h1v1h-1zM0 16h1v1h-1zM1 16h1v1h-1zM4 16h1v1h-1zM5 16h1v1h-1zM6 16h1v1h-1zM11 16h1v1h-1zM12 16h1v1h-1zM14 16h1v1h-1zM15 16h1v1h-1zM17 16h1v1h-1zM18 16h1v1h-1zM19 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM25 16h1v1h-1zM27 16h1v1h-1zM28 16h1v1h-1zM32 16h1v1h-1zM1 17h1v1h-1zM7 17h1v1h-1zM8 17h1v1h-1zM11 17h1v1h-1zM16 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM22 17h1v1h-1zM23 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM29 17h1v1h-1zM30 17h1v1h-1zM32 17h1v1h-1zM2 18h1v1h-1zM6 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM10 18h1v1h-1zM12 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM24 18h1v1h-1zM27 18h1v1h-1zM28 18h1v1h-1zM30 18h1v1h-1zM31 18h1v1h-1zM0 19h1v1h-1zM3 19h1v1h-1zM7 19h1v1h-1zM9 19h1v1h-1zM11 19h1v1h-1zM13 19h1v1h-1zM14 19h1v1h-1zM15 19h1v1h-1zM16 19h1v1h-1zM20 19h1v1h-1zM21 19h1v1h-1zM22 19h1v1h-1zM23 19h1v1h-1zM24 19h1v1h-1zM26 19h1v1h-1zM27 19h1v1h-1zM28 19h1v1h-1zM29 19h1v1h-1zM30 19h1v1h-1zM31 19h1v1h-1zM0 20h1v1h-1zM3 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM8 20h1v1h-1zM9 20h1v1h-1zM10 20h1v1h-1zM15 20h1v1h-1zM17 20h1v1h-1zM22 20h1v1h-1zM25 20h1v1h-1zM27 20h1v1h-1zM28 20h1v1h-1zM29 20h1v1h-1zM32 20h1v1h-1zM0 21h1v1h-1zM1 21h1v1h-1zM2 21h1v1h-1zM8 21h1v1h-1zM9 21h1v1h-1zM12 21h1v1h-1zM15 21h1v1h-1zM16 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM19 21h1v1h-1zM20 21h1v1h-1zM21 21h1v1h-1zM22 21h1v1h-1zM23 21h1v1h-1zM26 21h1v1h-1zM29 21h1v1h-1zM30 21h1v1h-1zM32 21h1v1h-1zM0 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM10 22h1v1h-1zM17 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM29 22h1v1h-1zM31 22h1v1h-1zM0 23h1v1h-1zM2 23h1v1h-1zM3 23h1v1h-1zM4 23h1v1h-1zM5 23h1v1h-1zM7 23h1v1h-1zM9 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM16 23h1v1h-1zM18 23h1v1h-1zM20 23h1v1h-1zM21 23h1v1h-1zM22 23h1v1h-1zM23 23h1v1h-1zM24 23h1v1h-1zM25 23h1v1h-1zM26 23h1v1h-1zM29 23h1v1h-1zM30 23h1v1h-1zM31 23h1v1h-1zM0 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM7 24h1v1h-1zM8 24h1v1h-1zM9 24h1v1h-1zM13 24h1v1h-1zM16 24h1v1h-1zM17 24h1v1h-1zM19 24h1v1h-1zM20 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM25 24h1v1h-1zM26 24h1v1h-1zM27 24h1v1h-1zM28 24h1v1h-1zM29 24h1v1h-1zM32 24h1v1h-1zM8 25h1v1h-1zM9 25h1v1h-1zM11 25h1v1h-1zM12 25h1v1h-1zM16 25h1v1h-1zM17 25h1v1h-1zM18 25h1v1h-1zM19 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM23 25h1v1h-1zM24 25h1v1h-1zM28 25h1v1h-1zM30 25h1v1h-1zM32 25h1v1h-1zM0 26h1v1h-1zM1 26h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM6 26h1v1h-1zM12 26h1v1h-1zM13 26h1v1h-1zM14 26h1v1h-1zM15 26h1v1h-1zM16 26h1v1h-1zM17 26h1v1h-1zM21 26h1v1h-1zM22 26h1v1h-1zM23 26h1v1h-1zM24 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM30 26h1v1h-1zM31 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM8 27h1v1h-1zM10 27h1v1h-1zM11 27h1v1h-1zM12 27h1v1h-1zM14 27h1v1h-1zM15 27h1v1h-1zM18 27h1v1h-1zM19 27h1v1h-1zM20 27h1v1h-1zM21 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM28 27h1v1h-1zM29 27h1v1h-1zM30 27h1v1h-1zM32 27h1v1h-1zM0 28h1v1h-1zM2 28h1v1h-1zM3 28h1v1h-1zM4 28h1v1h-1zM6 28h1v1h-1zM8 28h1v1h-1zM9 28h1v1h-1zM11 28h1v1h-1zM12 28h1v1h-1zM14 28h1v1h-1zM17 28h1v1h-1zM18 28h1v1h-1zM19 28h1v1h-1zM22 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1zM26 28h1v1h-1zM27 28h1v1h-1zM28 28h1v1h-1zM29 28h1v1h-1zM31 28h1v1h-1zM32 28h1v1h-1zM0 29h1v1h-1zM2 29h1v1h-1zM3 29h1v1h-1zM4 29h1v1h-1zM6 29h1v1h-1zM8 29h1v1h-1zM14 29h1v1h-1zM15 29h1v1h-1zM18 29h1v1h-1zM19 29h1v1h-1zM20 29h1v1h-1zM23 29h1v1h-1zM24 29h1v1h-1zM25 29h1v1h-1zM28 29h1v1h-1zM30 29h1v1h-1zM31 29h1v1h-1zM32 29h1v1h-1zM0 30h1v1h-1zM2 30h1v1h-1zM3 30h1v1h-1zM4 30h1v1h-1zM6 30h1v1h-1zM8 30h1v1h-1zM9 30h1v1h-1zM11 30h1v1h-1zM14 30h1v1h-1zM15 30h1v1h-1zM16 30h1v1h-1zM17 30h1v1h-1zM20 30h1v1h-1zM21 30h1v1h-1zM24 30h1v1h-1zM26 30h1v1h-1zM27 30h1v1h-1zM0 31h1v1h-1zM6 31h1v1h-1zM14 31h1v1h-1zM16 31h1v1h-1zM21 31h1v1h-1zM22 31h1v1h-1zM23 31h1v1h-1zM26 31h1v1h-1zM28 31h1v1h-1zM29 31h1v1h-1zM30 31h1v1h-1zM0 32h1v1h-1zM1 32h1v1h-1zM2 32h1v1h-1zM3 32h1v1h-1zM4 32h1v1h-1zM5 32h1v1h-1zM6 32h1v1h-1zM8 32h1v1h-1zM10 32h1v1h-1zM13 32h1v1h-1zM14 32h1v1h-1zM17 32h1v1h-1zM22 32h1v1h-1zM23 32h1v1h-1zM24 32h1v1h-1zM25 32h1v1h-1zM27 32h1v1h-1zM29 32h1v1h-1zM31 32h1v1h-1z"/></svg></div>
     <div class="link"><input id="lnk" value="https://carstenwinter77.github.io/grundrizz/installieren/" readonly aria-label="Link zum Weitergeben"><button class="btn sm pri" id="cpBtn" type="button">Kopieren</button></div>
     <div class="share">
       <button class="btn sm" id="shBtn" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13M7 8l5-5 5 5M5 13v7h14v-7"/></svg>Teilen</button>
@@ -149,16 +583,15 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
     </div>
     <div class="msg" id="msg" aria-live="polite"></div>
   </div>
-</div>
+</div></section>
 
-<section id="anleitung"><div class="wrap">
-  <div class="sh"><div><h2>Installieren in drei Schritten</h2><p>Grundrizz ist eine Web-App. Du lädst nichts aus einem Store, sondern legst sie direkt aus dem Browser auf den Startbildschirm. Wir haben dein Gerät schon vorausgewählt.</p></div>
+<section class="howto" id="anleitung"><div class="wrap">
+  <div class="top2"><div><h2>Schritt für Schritt</h2><p>Wir haben dein Gerät schon vorausgewählt.</p></div>
     <div class="tabs" role="tablist" aria-label="Gerät wählen">
       <button role="tab" id="t-ios" aria-controls="p-ios" data-d="ios"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg>iPhone &amp; iPad</button>
       <button role="tab" id="t-and" aria-controls="p-and" data-d="and"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M6 5h12M6 18h12"/></svg>Android</button>
       <button role="tab" id="t-pc" aria-controls="p-pc" data-d="pc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg>Computer</button>
     </div></div>
-
   <div class="card panel" role="tabpanel" id="p-ios" aria-labelledby="t-ios">
     <div><h3>iPhone und iPad</h3><p class="sub">Am besten mit Safari. Auf neueren iPhones geht es auch in Chrome und Edge über das Teilen-Menü.</p>
       <ol class="steps">
@@ -192,17 +625,8 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
   </div>
 </div></section>
 
-<section><div class="wrap">
-  <div class="sh"><div><h2>Was dich erwartet</h2></div></div>
-  <div class="feat">
-    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 12h9v9M12 3v5"/></svg><h3>Grundriss in Minuten</h3><p>Vorlage wählen, Räume mit dem Finger ziehen, Maße eintippen oder ein Foto vom Exposé nachzeichnen. Raumscans vom Handy lassen sich laden.</p></div>
-    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17v-5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v5z"/><path d="M6 17v3M18 17v3M7 10V7h10v3"/></svg><h3>Einrichten mit echten Maßen</h3><p>Hunderte Möbel im Katalog. Der Umzugs-Check prüft, ob dein Sofa durch die Tür der neuen Wohnung passt.</p></div>
-    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg><h3>Wohnen, bevor du einziehst</h3><p>In 3D durch die Räume gehen, Sonne über Tag und Jahr ansehen, Licht ausmachen. Plan per Link teilen.</p></div>
-  </div>
-</div></section>
-
-<section><div class="wrap">
-  <div class="sh"><div><h2>Häufige Fragen</h2></div></div>
+<section class="howto" style="padding-top:0"><div class="wrap">
+  <div class="top2"><div><h2>Häufige Fragen</h2></div></div>
   <div class="faq">
     <details><summary>Kostet Grundrizz etwas?</summary><div>Nein. Grundrizz ist kostenlos, ohne Werbung und ohne Anmeldung.</div></details>
     <details><summary>Wo werden meine Pläne gespeichert?</summary><div>Nur auf deinem Gerät, im Speicher des Browsers bzw. der installierten App. Niemand sonst sieht sie. Zur Sicherheit kannst du unter „Projekte“ jederzeit eine Datei speichern.</div></details>
@@ -214,7 +638,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
 </div></section>
 </main>
 
-<footer><div class="wrap"><span>Grundrizz · Raumplaner in 3D für alle.</span><span style="display:flex;gap:18px;flex-wrap:wrap"><a href="../">Zur App</a><a href="../rechtliches/datenschutz.html">Datenschutz</a><a href="../rechtliches/impressum.html">Impressum</a></span></div></footer>
+<footer><div class="wrap"><a class="brand" href="../" aria-label="Grundrizz"><svg class="mk" viewBox="125 123 246 248" aria-hidden="true"><g transform="translate(80 80)" fill="none" stroke-linecap="round"><path d="M82 92 H270 V270 H82 V92 M176 92 V159 M82 177 H151 M151 177 V215 M210 177 H270 M210 177 V217" stroke="currentColor" stroke-width="18" stroke-linejoin="round"/><path d="M143 270 V239 A53 53 0 0 1 196 186" stroke="currentColor" stroke-width="15"/><path d="M57 94 Q62 55 100 55 H273" stroke="#C9773A" stroke-width="21"/></g></svg><span>Grundri<b>zz</b></span></a><span>Raumplaner in 3D für alle.</span><span style="display:flex;gap:18px;flex-wrap:wrap"><a href="../">Zur App</a><a href="../rechtliches/datenschutz.html">Datenschutz</a><a href="../rechtliches/impressum.html">Impressum</a></span></div></footer>
 
 <script>
 (function(){
@@ -237,6 +661,26 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-bet
   ib.onclick=function(){ if(!deferred) return; deferred.prompt(); deferred.userChoice.then(function(c){ if(c.outcome==='accepted'){ ib.hidden=true; msg.textContent='Installiert. Grundrizz findest du jetzt bei deinen Apps.'; } deferred=null; }); };
   window.addEventListener('appinstalled',function(){ ib.hidden=true; document.body.classList.add('standalone'); });
   if('serviceWorker' in navigator) navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(function(){});
+})();
+</script>
+<script>
+(function(){
+  var rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if('IntersectionObserver' in window){
+    var ro=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); } }); },{rootMargin:'0px 0px -8% 0px',threshold:.12});
+    document.querySelectorAll('.rv').forEach(function(el){ ro.observe(el); });
+    var so=new IntersectionObserver(function(es){ es.forEach(function(e){ e.target.classList.toggle('on',e.isIntersecting); }); },{threshold:.35});
+    document.querySelectorAll('.scene').forEach(function(el){ so.observe(el); });
+  } else { document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); }); document.querySelectorAll('.scene').forEach(function(el){ el.classList.add('on'); }); }
+  // Galerie
+  var gal=document.querySelector('.gal'), bs=[].slice.call(gal.querySelectorAll('.gtabs button')), im=[].slice.call(gal.querySelectorAll('.vw img')), cap=document.getElementById('gcap'), cur=0, tm=null, vis=false;
+  var caps=['Die ganze Wohnung in 3D, mit Licht, Schatten und echten Möbelmodellen.','Zeichnen mit Maßen in Zentimetern. Flächen rechnet Grundrizz selbst aus.','Sonnenstunden je Monat für jeden Raum, aus Fenstern und Himmelsrichtung.','Material für die ausgewählten Räume, mit Einkaufsliste zum Kopieren.'];
+  function show(i){ cur=i; im.forEach(function(x,k){ x.classList.toggle('cur',k===i); }); bs.forEach(function(b,k){ b.setAttribute('aria-pressed',k===i); }); cap.textContent=caps[i];
+    var b=bs[i]; b.style.animation='none'; void b.offsetWidth; b.style.animation=''; plan(); }
+  function plan(){ clearTimeout(tm); if(!rm && vis && !gal.classList.contains('paused')) tm=setTimeout(function(){ show((cur+1)%im.length); },5000); }
+  bs.forEach(function(b,k){ b.addEventListener('click',function(){ gal.classList.add('paused'); show(k); }); });
+  if('IntersectionObserver' in window) new IntersectionObserver(function(es){ vis=es[0].isIntersecting; plan(); },{threshold:.3}).observe(gal.querySelector('.big'));
+  if(rm) gal.classList.add('paused');
 })();
 </script>
 </body>

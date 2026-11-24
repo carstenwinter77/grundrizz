@@ -496,6 +496,42 @@ svg.brandmk{color:var(--accent);fill:none}
 dialog.help h3.gzh{display:flex;align-items:center;gap:10px}
 dialog.help h3.gzh svg.brandmk{width:30px;height:30px;flex:none}
 
+/* Sicherungs-Erinnerung */
+.bkbar{position:fixed;z-index:60;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;max-width:min(620px,calc(100% - 24px));background:var(--panel);border:1px solid var(--line);border-left:4px solid #C9773A;border-radius:14px;padding:10px 12px;box-shadow:0 8px 28px rgb(0 0 0 / .18);font-size:13.5px}
+.bkbar svg{width:20px;height:20px;color:#C9773A;flex:none}
+.bkbar span{flex:1;min-width:180px}
+
+.hpdlg .hplegal{margin:0;font-size:12px;text-align:center;color:var(--muted)}.hpdlg .hplegal a{color:var(--muted)}
+
+/* Material-Rechner */
+dialog.mcdlg{max-width:680px;max-height:calc(100dvh - 32px);overflow:auto}
+.mcdlg .mch{display:flex;align-items:center}.mcdlg .mch h3{flex:1;margin:0}
+.mcdlg .x{border:0;background:none;color:var(--muted);font-size:24px;cursor:pointer;line-height:1}
+.mcdlg .mci{font-size:12.5px;margin:6px 0 12px}
+.mcdlg .mcsec{display:flex;justify-content:space-between;align-items:baseline;font-size:13px}
+.mcdlg .lnk{border:0;background:none;color:var(--accent);cursor:pointer;font:inherit;padding:0}
+.mcdlg .mcr{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.mcdlg .mcr label,.mcdlg .mcc{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px;background:var(--field);cursor:pointer}
+.mcdlg .mcr small{color:var(--muted)}
+.mcdlg .mcopt{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.mcdlg .mcset summary{cursor:pointer;font-size:13px;color:var(--accent);margin-bottom:8px}
+.mcdlg .mcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:10px}
+.mcdlg .mcf{display:flex;flex-direction:column;gap:3px;font-size:11.5px;color:var(--muted)}
+.mcdlg .mcf span{display:flex;align-items:center;gap:5px;color:var(--fg)}
+.mcdlg .mcf input{width:80px;font-size:15px;padding:5px 7px;border:1px solid var(--line);border-radius:7px;background:var(--field);color:var(--fg)}
+.mcdlg .mccards{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin:6px 0 12px}
+.mcdlg .mccard{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:3px;background:var(--panel)}
+.mcdlg .mccard small{font:600 10.5px var(--font-ui);text-transform:uppercase;letter-spacing:.06em;color:#C9773A}
+.mcdlg .mccard b{font:600 22px var(--font-num)}
+.mcdlg .mccard span{font-size:12px;color:var(--muted)}
+.mcdlg .mcw{overflow-x:auto}
+.mcdlg .mct{width:100%;border-collapse:collapse;font-size:12.5px}
+.mcdlg .mct th,.mcdlg .mct td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.mcdlg .mct th:first-child,.mcdlg .mct td:first-child{text-align:left}
+.mcdlg .mct tfoot td{font-weight:600;border-bottom:0}
+.mcdlg .mcb{margin-top:12px;gap:8px;align-items:center}
+@media (max-width:560px){ .mcdlg .mcf input{font-size:16px} }
+
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 </style>
 </head><body>
@@ -4442,7 +4478,8 @@ function hpInit(){ const d=$('helpDlg'); if(!HP_KEYS){ HP_KEYS=[...d.querySelect
     <input id="hpQ" type="search" placeholder="Wonach suchst du? z. B. Foto, Treppe, teilen" autocomplete="off" aria-label="Hilfe durchsuchen">
     <div class="hpc" role="group" aria-label="Themen">${HP_CATS.map(([k,v])=>`<button type="button" data-hc="${k}" aria-pressed="${k===''}">${v}</button>`).join('')}</div>
     <div class="hpl" id="hpL"></div>
-    <div class="row hpf"><button type="button" class="btn" id="hpIntro">Einführung ansehen</button><button type="button" class="btn pri" id="helpClose">Verstanden</button></div>`;
+    <div class="row hpf"><button type="button" class="btn" id="hpIntro">Einführung ansehen</button><button type="button" class="btn pri" id="helpClose">Verstanden</button></div>
+    <p class="hplegal"><a href="https://carstenwinter77.github.io/grundrizz/rechtliches/impressum.html" target="_blank" rel="noopener">Impressum</a> · <a href="https://carstenwinter77.github.io/grundrizz/rechtliches/datenschutz.html" target="_blank" rel="noopener">Datenschutz</a></p>`;
   let cat=''; const draw=()=>{ const q=$('hpQ').value.trim().toLowerCase(), words=q.split(/\s+/).filter(Boolean);
     const hit=t=>{ const s=(t[2]+' '+t[3]+' '+t[4].replace(/<[^>]+>/g,'')).toLowerCase(); return words.every(w=>s.includes(w)); };
     let list=HP_TOPICS.filter(t=>(!cat||t[0]===cat)&&(!words.length||hit(t)));
@@ -4507,6 +4544,105 @@ setInterval(()=>{ const T=window.ENV_TREES; if(!T||!T.length||typeof camera==='u
 // Grundriss-Umriss geändert (Projekt gewechselt, Datei, Link, Räume gezeichnet): Umgebung neu aufbauen
 let envSig=''; { const r0=rebuildAll; rebuildAll=function(){ const r=r0.apply(this,arguments); try{ const b=bounds(), sig=[b.x0,b.z0,b.x1,b.z1,state.level||0,(state.floors||[]).length,state.floorId||''].map(v=>typeof v==='number'?Math.round(v/50):v).join(',');
   if(sig!==envSig){ const first=!envSig; envSig=sig; if(!first){ buildEnv(); try{ if(typeof setEnvVis==='function') setEnvVis(); }catch(e){} placeSun(); } } }catch(e){} return r; }; }
+
+// ---------- Sicherung: alle Projekte in eine Datei, Erinnerung wenn lange nicht gesichert ----------
+const BK_KEY=LS+'.backup', BK_DAYS=14;
+function bkGet(){ try{ return JSON.parse(localStorage.getItem(BK_KEY)||'{}')||{}; }catch(e){ return {}; } }
+function bkSet(o){ try{ localStorage.setItem(BK_KEY,JSON.stringify(Object.assign(bkGet(),o))); }catch(e){} }
+if(!bkGet().since) bkSet({since:Date.now(),edits:0});
+function bkDone(){ bkSet({last:Date.now(),edits:0,snooze:0}); const b=$('bkBar'); if(b) b.hidden=true; bkInfo(); }
+async function bkAll(){ try{ vTouch(); }catch(e){}
+  const data={grundrizzBackup:1, saved:new Date().toISOString(), projects:V.list.map(v=>({name:v.name,state:v.state})), mine:(typeof MINE!=='undefined'?MINE:[])};
+  const d=new Date(), n=`Grundrizz-Sicherung-${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.json`;
+  if(await saveFile(n, JSON.stringify(data), 'Sicherung')) bkDone(); }
+// Gesicherte Datei laden: ganze Sicherung oder einzelnes Projekt
+{ const o0=$('fileLoad'), n0=o0.cloneNode(true); o0.replaceWith(n0); } // alten Lade-Handler ersetzen
+$('fileLoad').addEventListener('change',e=>{ const f=e.target.files[0]; if(!f) return; f.text().then(t=>{ let o; try{ o=JSON.parse(t); }catch(_){ $('fileMsg').textContent='Die Datei ist kein gültiger Stand.'; return; }
+  if(o && o.grundrizzBackup && Array.isArray(o.projects)){ let n=0; o.projects.forEach(p=>{ try{ const s=JSON.parse(p.state); if(valid(s)){ vNew(p.name||'Projekt',false,s); n++; } }catch(_){} });
+    if(Array.isArray(o.mine) && typeof MINE!=='undefined'){ o.mine.forEach(m=>{ if(m && m.id && !MINE.some(x=>x.id===m.id)) MINE.push(m); }); try{ mineSave(); mineRender(); }catch(_){} }
+    try{ fillCamSel(); }catch(_){} $('fileMsg').textContent=n+(n===1?' Projekt':' Projekte')+' aus der Sicherung geladen.'; toast(n+' Projekte wiederhergestellt'); e.target.value=''; return; }
+  if(!valid(o)){ $('fileMsg').textContent='Die Datei ist kein gültiger Stand.'; return; } vNew(f.name.replace(/\.json$/i,''), false, o); try{ fillCamSel(); }catch(_){} $('fileMsg').textContent='Als neues Projekt geladen.'; e.target.value=''; }); });
+// Einzelnes Projekt gespeichert oder Link erzeugt zählt auch als Sicherung des offenen Projekts
+$('fileSave').addEventListener('click',()=>{ if(V.list.length<2) setTimeout(bkDone,1500); });
+// Änderungen zählen
+{ const p0=persist; persist=function(){ const r=p0.apply(this,arguments); try{ if(state.rooms.length){ const b=bkGet(); b.edits=(b.edits||0)+1; try{ localStorage.setItem(BK_KEY,JSON.stringify(b)); }catch(e){} } }catch(e){} return r; }; }
+function bkDue(){ const b=bkGet(), now=Date.now(), day=864e5; const hasPlan=V.list.some(v=>{ try{ return JSON.parse(v.state).rooms.length>0; }catch(e){ return false; } });
+  if(!hasPlan || (b.edits||0)<20) return false; if(b.snooze && now<b.snooze) return false;
+  const ref=b.last||b.since||now; return now-ref > (b.last?BK_DAYS:3)*day; }
+function bkAgo(){ const b=bkGet(); if(!b.last) return 'noch nie'; const d=Math.floor((Date.now()-b.last)/864e5); return d<1?'heute':d===1?'gestern':'vor '+d+' Tagen'; }
+function bkInfo(){ const el=$('bkInfo'); if(el) el.textContent='Zuletzt gesichert: '+bkAgo()+'.'; }
+// Kasten im Tab Projekte
+{ const pane=$('p-daten'), first=pane.querySelector('.box'); const box=document.createElement('div'); box.className='box'; box.id='bkBox';
+  box.innerHTML=`<h2>Alles sichern</h2><p class="muted">Deine Pläne liegen nur in diesem Browser. Löschst du die Browserdaten oder wechselst das Gerät, sind sie weg. Sichere ab und zu alle Projekte in eine Datei, zum Beispiel in iCloud, Google Drive oder per Mail an dich selbst. Mit „Datei laden“ holst du alles zurück.</p>
+    <div class="row"><button class="btn pri" id="bkAllBtn" type="button" title="Alle Projekte und deine gemerkten Möbel in eine Datei speichern">Alle Projekte sichern</button><span class="muted" id="bkInfo"></span></div>`;
+  pane.insertBefore(box, first?first.nextSibling:null); $('bkAllBtn').onclick=bkAll; bkInfo(); }
+// Erinnerungsleiste
+{ const bar=document.createElement('div'); bar.id='bkBar'; bar.className='bkbar'; bar.hidden=true; bar.setAttribute('role','status');
+  bar.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg><span id="bkTxt"></span><button class="btn pri sm" type="button" id="bkNow">Jetzt sichern</button><button class="btn sm" type="button" id="bkLater">Später</button>`;
+  document.body.appendChild(bar); $('bkNow').onclick=bkAll; $('bkLater').onclick=()=>{ bkSet({snooze:Date.now()+3*864e5}); bar.hidden=true; };
+  const check=()=>{ if(document.querySelector('dialog[open]') || (typeof walk!=='undefined'&&walk)) return; if(bkDue()){ $('bkTxt').textContent=`Deine Pläne sind nur in diesem Browser gespeichert. Letzte Sicherung: ${bkAgo()}.`; bar.hidden=false; } };
+  setTimeout(check,20000); setInterval(check,10*60*1000); }
+window.__bk={all:bkAll,due:bkDue,get:bkGet,set:bkSet};
+
+// ---------- Material-Rechner: Boden, Sockelleisten, Wandfarbe, Tapete aus den Räumen ----------
+const MC_DEF={floor:true,paint:true,paper:false,ceil:true,waste:10,pack:2.0,coats:2,yieldL:7,rollL:10.05,rollW:0.53,rapport:0};
+let MC=Object.assign({},MC_DEF); try{ Object.assign(MC,JSON.parse(localStorage.getItem(LS+'.mc')||'{}')); }catch(e){}
+function mcRooms(){ const out=[]; const fl=state.floors&&state.floors.length?state.floors:[null];
+  fl.forEach(f=>{ const cur=!f||f.id===state.floorId, rs=cur?state.rooms:(f.rooms||[]), os=cur?state.openings:(f.openings||[]);
+    rs.forEach(r=>out.push({r,ops:os.filter(o=>o.roomId===r.id),floor:f?f.name:''})); }); return out; }
+function mcGeo(r,ops){ const W=r.w/100, D=r.d/100, H=(r.h||state.roomH||250)/100, len={N:W,S:W,O:D,W:D};
+  let walls=0, ceil=W*D; const sl={}; (r.slopes||[]).forEach(s=>{ sl[s.side]=s; });
+  ['N','S','O','W'].forEach(sd=>{ const s=sl[sd]; walls+= s? len[sd]*Math.min(H,(s.knee||100)/100) : len[sd]*H; });
+  Object.values(sl).forEach(s=>{ const k=Math.min(H,(s.knee||100)/100), dp=(s.depth||0)/100, rise=H-k, L=len[s.side];
+    ceil+= L*(Math.hypot(dp,rise)-dp); // schräge Fläche statt flacher
+    // Giebelseiten verlieren das Dreieck unter der Schräge
+    walls-= 2*dp*rise/2; });
+  let holes=0, doorW=0, holeW=0; ops.forEach(o=>{ const w=o.width/100, h=(o.height||(o.type==='fenster'?130:205))/100; holes+=w*h; if(o.type!=='fenster') doorW+=w; if(w*h>0.5) holeW+=w; });
+  const per=2*(W+D); return {area:W*D, per, walls:Math.max(0,walls-holes), ceil, H, doorW, holeW}; }
+function mcCalc(sel){ const rows=mcRooms().filter(x=>sel.has(x.r.id)).map(x=>({...x,g:mcGeo(x.r,x.ops)}));
+  const T={area:0,skirt:0,paintArea:0,bahnen:0,ceil:0,walls:0};
+  rows.forEach(x=>{ const g=x.g; T.area+=g.area; T.skirt+=Math.max(0,g.per-g.doorW); T.walls+=g.walls; T.ceil+=g.ceil; T.paintArea+=g.walls+(MC.ceil?g.ceil:0);
+    const bahnLen=g.H+(+MC.rapport||0)/100+0.1; x.bpr=Math.max(1,Math.floor(MC.rollL/bahnLen)); x.bahnen=Math.max(0,Math.ceil(g.per/MC.rollW)-Math.floor(g.holeW/MC.rollW)); x.rolls=Math.ceil(x.bahnen/x.bpr); });
+  const floorNeed=T.area*(1+(+MC.waste||0)/100), packs=Math.ceil(floorNeed/(+MC.pack||1));
+  const liters=T.paintArea*(+MC.coats||1)/(+MC.yieldL||7);
+  const buckets=(()=>{ let l=Math.ceil(liters*2)/2, r=[]; let n10=Math.floor(l/10); l-=n10*10; if(l>5){ n10++; l=0; } if(n10) r.push(n10+' × 10 l'); if(l>2.5) r.push('1 × 5 l'); else if(l>0) r.push('1 × 2,5 l'); return r.join(' + ')||'–'; })();
+  const rolls=rows.reduce((a,x)=>a+x.rolls,0);
+  return {rows,T,floorNeed,packs,liters,buckets,rolls,skirtPieces:Math.ceil(T.skirt*1.05/2.5),paste:Math.max(1,Math.ceil(rolls/5))}; }
+const f2=v=>(+v).toLocaleString('de-DE',{maximumFractionDigits:2}), f1=v=>fmt1(v), f0=v=>Math.round(v).toLocaleString('de-DE');
+function mcOpen(){ let d=$('mcDlg'); const all=mcRooms(); if(!all.length){ toast('Erst Räume anlegen, dann rechnet Grundrizz das Material aus'); return; }
+  if(!d){ d=document.createElement('dialog'); d.className='help mcdlg'; d.id='mcDlg'; document.body.appendChild(d);
+    d.addEventListener('input',e=>{ const k=e.target.dataset.mc; if(k){ MC[k]=e.target.type==='checkbox'?e.target.checked:+e.target.value; try{ localStorage.setItem(LS+'.mc',JSON.stringify(MC)); }catch(_){} } mcDraw(); });
+    d.addEventListener('click',e=>{ const b=e.target.closest('[data-mca]'); if(!b) return; const a=b.dataset.mca;
+      if(a==='close') d.close(); if(a==='copy') mcCopy(); if(a==='all'||a==='none') d.querySelectorAll('.mcr input').forEach(i=>{ i.checked=a==='all'; }), mcDraw(); }); }
+  const N=(k,lab,step,unit,min)=>`<label class="mcf">${lab}<span><input type="number" inputmode="decimal" step="${step}" min="${min||0}" data-mc="${k}" value="${MC[k]}">${unit}</span></label>`;
+  const C=(k,lab)=>`<label class="mcc"><input type="checkbox" data-mc="${k}"${MC[k]?' checked':''}>${lab}</label>`;
+  d.innerHTML=`<div class="mch"><h3>Material berechnen</h3><button type="button" class="x" data-mca="close" aria-label="Schließen">×</button></div>
+    <p class="muted mci">Aus den Maßen deiner Räume, Türen und Fenster. Dachschrägen werden berücksichtigt. Alles sind Schätzungen, vor dem Kauf bitte kurz nachmessen.</p>
+    <div class="mcsec"><b>Räume</b><span class="mcsel"><button type="button" class="lnk" data-mca="all">alle</button> · <button type="button" class="lnk" data-mca="none">keine</button></span></div>
+    <div class="mcr">${all.map(x=>`<label><input type="checkbox" value="${x.r.id}" checked>${esc(x.r.name)}${x.floor&&(state.floors||[]).length>1?` <small>${esc(x.floor)}</small>`:''}</label>`).join('')}</div>
+    <div class="mcopt">${C('floor','Boden')}${C('paint','Wandfarbe')}${C('paper','Tapete')}</div>
+    <details class="mcset"><summary>Annahmen anpassen</summary><div class="mcgrid">
+      ${N('waste','Verschnitt Boden',1,'%')}${N('pack','Boden je Paket',0.01,'m²',0.1)}${N('coats','Anstriche',1,'×',1)}${N('yieldL','Ergiebigkeit Farbe',0.5,'m²/l',1)}
+      ${N('rollL','Tapetenrolle Länge',0.01,'m',1)}${N('rollW','Tapetenrolle Breite',0.01,'m',0.1)}${N('rapport','Rapport (Musterversatz)',1,'cm')}${C('ceil','Decke mitstreichen')}</div></details>
+    <div id="mcOut"></div>
+    <div class="row mcb"><button type="button" class="btn pri" data-mca="copy">Einkaufsliste kopieren</button><button type="button" class="btn" data-mca="close">Schließen</button><span class="muted" id="mcMsg"></span></div>`;
+  try{ d.showModal(); }catch(e){ d.setAttribute('open',''); } mcDraw(); }
+function mcSel(){ return new Set([...document.querySelectorAll('#mcDlg .mcr input:checked')].map(i=>i.value)); }
+function mcDraw(){ const o=$('mcOut'); if(!o) return; const sel=mcSel(); if(!sel.size){ o.innerHTML='<p class="muted">Wähle mindestens einen Raum.</p>'; return; } const R=mcCalc(sel);
+  let h='<div class="mccards">';
+  if(MC.floor) h+=`<div class="mccard"><small>Boden</small><b>${f1(R.floorNeed)} m²</b><span>${R.packs} ${R.packs===1?'Paket':'Pakete'} à ${f1(MC.pack)} m² (Fläche ${f1(R.T.area)} m² + ${MC.waste} % Verschnitt)</span><span>Sockelleisten: ${f1(R.T.skirt)} m, also ${R.skirtPieces} Stück à 2,5 m</span></div>`;
+  if(MC.paint) h+=`<div class="mccard"><small>Wandfarbe</small><b>${f1(R.liters)} Liter</b><span>${R.buckets} · ${f0(R.T.paintArea)} m² ${MC.ceil?'Wände und Decken':'Wände'}, ${MC.coats} Anstriche, ${f1(MC.yieldL)} m² je Liter</span></div>`;
+  if(MC.paper) h+=`<div class="mccard"><small>Tapete</small><b>${R.rolls} ${R.rolls===1?'Rolle':'Rollen'}</b><span>${f2(MC.rollL)} × ${f2(MC.rollW)} m${MC.rapport?`, Rapport ${MC.rapport} cm`:''} · ${R.paste} ${R.paste===1?'Paket':'Pakete'} Kleister</span></div>`;
+  h+='</div><div class="mcw"><table class="mct"><thead><tr><th>Raum</th><th>Boden</th><th>Wände</th><th>Decke</th>'+(MC.paper?'<th>Rollen</th>':'')+'</tr></thead><tbody>'+
+    R.rows.map(x=>`<tr><td>${esc(x.r.name)}</td><td>${f1(x.g.area)} m²</td><td>${f1(x.g.walls)} m²</td><td>${f1(x.g.ceil)} m²</td>${MC.paper?`<td>${x.rolls}</td>`:''}</tr>`).join('')+
+    `</tbody><tfoot><tr><td>Summe</td><td>${f1(R.T.area)} m²</td><td>${f1(R.T.walls)} m²</td><td>${f1(R.T.ceil)} m²</td>${MC.paper?`<td>${R.rolls}</td>`:''}</tr></tfoot></table></div>`;
+  o.innerHTML=h; o.dataset.list=[`Einkaufsliste (Grundrizz) für: ${R.rows.map(x=>x.r.name).join(', ')}`,
+    MC.floor?`• Boden: ${f1(R.floorNeed)} m², ${R.packs} Pakete à ${f1(MC.pack)} m²`:'', MC.floor?`• Sockelleisten: ${R.skirtPieces} × 2,5 m (${f1(R.T.skirt)} m)`:'',
+    MC.paint?`• Wandfarbe: ${f1(R.liters)} l (${R.buckets}) für ${f0(R.T.paintArea)} m², ${MC.coats} Anstriche`:'', MC.paper?`• Tapete: ${R.rolls} Rollen ${f2(MC.rollL)} × ${f2(MC.rollW)} m, ${R.paste} Pakete Kleister`:'',
+    'Schätzung, vor dem Kauf bitte nachmessen.'].filter(Boolean).join('\n'); }
+async function mcCopy(){ const t=$('mcOut').dataset.list||''; try{ await navigator.clipboard.writeText(t); $('mcMsg').textContent='Kopiert.'; }catch(e){ const ta=document.createElement('textarea'); ta.value=t; $('mcOut').appendChild(ta); ta.select(); $('mcMsg').textContent='Liste markiert, jetzt kopieren.'; } }
+{ const row=$('p-raeume').querySelector('.row'); const b=document.createElement('button'); b.className='btn'; b.type='button'; b.id='mcBtn'; b.textContent='Material berechnen'; b.title='Boden, Wandfarbe und Tapete für deine Räume ausrechnen'; b.onclick=mcOpen; row.appendChild(b); }
+window.__mc={calc:mcCalc,open:mcOpen,geo:mcGeo,rooms:mcRooms,MC};
 
 
 // ---------- Fernseher: Bildschirm mit laufendem Programm, Licht in den Raum ----------
