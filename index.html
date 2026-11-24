@@ -1137,7 +1137,7 @@ const TEMPLATES = [
   {k:'studio', n:'Studio-Apartment', d:'Fertig eingerichtet, mit Katze · ca. 36 m²'},
   {k:'familie', n:'Familienwohnung', d:'4 Zimmer mit Balkon, komplett eingerichtet · ca. 90 m²'},
   {k:'loft', n:'Loft', d:'Offen, 3,20 m hoch, Designermöbel, Spielautomat, Hund · ca. 80 m²'},
-  {k:'villa', n:'Traumvilla', d:'Bungalow mit Pool, Garten, Wellness, Heimkino, Spielzimmer und Fitness · ca. 400 m² Wohnfläche'}
+  {k:'villa', n:'Traumvilla', d:'Keller mit Heimkino, Erdgeschoss, Obergeschoss mit Dachterrasse, Pool, Garten, Wellness und Spielzimmer · ca. 430 m² Wohnfläche'}
 ];
 const TFLOORS = {wood:['#b8956a','dielen'], oak:['#c4a578','parkett'], tileW:['#e9e8e3','fliesen'], tileG:['#b9b6ae','fliesen-gross'], plain:['#d6d2c8','glatt']};
 function floorFor(name){ const n=(name||'').toLowerCase();
@@ -1228,19 +1228,19 @@ function tplState(k){
     base.pets=[{id:uid('p'),art:'hund',rasse:'labrador',farbe:0}]; return base; }
   if(k==='villa'){ base.roomH=280; const OR=(n,o,x,z,w,d)=>{ const r=R(n,x,z,w,d); r.out=o; const f=OUT_DEF[o]; r.floor=f[0]; r.pattern=f[1]; return r; };
     const RH=(n,x,z,w,d)=>Object.assign(R(n,x,z,w,d),{h:280}), TUR=(r,side,pos,w,ex)=>O(r,side,'tuer',pos,w,ex), FEN=(r,side,pos,w,ex)=>O(r,side,'fenster',pos,w,ex);
-    const wz=RH('Wohnzimmer',0,0,800,600), ku=RH('Küche',812,0,500,600), sz=RH('Schlafzimmer',1324,0,450,360), bd=RH('Bad',1324,372,450,228), fl=RH('Flur',0,612,1774,200),
+    const wz=RH('Wohnzimmer',0,0,800,600), ku=RH('Küche',812,0,500,600), sz=RH('Gästezimmer',1324,0,450,360), bd=RH('Gästebad',1324,372,450,228), fl=RH('Flur',0,612,1774,200),
       sp=RH('Spielzimmer',0,824,600,500), fi=RH('Fitnessraum',612,824,400,500), we=RH('Wellness',1024,824,500,500), ki=RH('Kinderzimmer',1536,824,400,500);
     we.floor='#d9d4ca'; we.pattern='fliesen-gross'; fi.floor='#5a5d60'; fi.pattern='glatt'; sp.floor='#6e4c33'; sp.pattern='dielen';
     const te=OR('Terrasse','terrasse',0,-412,1312,400), ga=OR('Garten','garten',0,-1624,1936,1200);
-    base.rooms=[wz,ku,sz,bd,fl,sp,fi,we,ki,te,ga];
+    const th1=RH('Treppenhaus',1786,0,250,812); base.rooms=[wz,ku,sz,bd,fl,th1,sp,fi,we,ki,te,ga];
     base.openings=[TUR(fl,'W',50,110,{leaf:'kassette',color:'anthrazit'}),O(fl,'N','offen',300,200),TUR(fl,'N',900,90),TUR(fl,'N',1450,85),TUR(bd,'N',50,80),
       TUR(fl,'S',250,90),TUR(fl,'S',750,90),TUR(fl,'S',1100,90,{style:'schiebe'}),TUR(fl,'S',1600,85),O(wz,'O','offen',200,180),
       TUR(wz,'N',300,250,{style:'hebeschiebe',height:240}),TUR(ku,'N',300,100,{style:'balkon',height:230}),FEN(wz,'N',80,150,{sill:30,height:210}),FEN(wz,'N',620,140,{sill:30,height:210}),
       FEN(sz,'N',150,150),FEN(sp,'S',150,150),FEN(sp,'S',400,120),FEN(fi,'S',200,200,{sill:30,height:210}),FEN(we,'S',100,300,{sill:30,height:210,panes:3}),
-      FEN(ki,'S',150,140),FEN(ki,'O',350,100),FEN(bd,'O',150,80,{sill:130,height:90,style:'kipp'}),FEN(fl,'O',60,80)];
+      FEN(ki,'S',150,140),FEN(ki,'O',350,100),TUR(fl,'O',60,90),FEN(th1,'O',300,120,{sill:30,height:220}),FEN(th1,'N',125,100)];
     base.items=[];
     // Wohnzimmer mit Heimkino und Flügel
-    A(wz,'W',300,'tx227'); A(wz,'W',300,'ik104'); A(wz,'W',300,'tx231'); F(wz,420,300,'tx229',0,{elev:240}); F(wz,340,320,'ik0',90); F(wz,200,320,'ik15',90); F(wz,220,320,'ik73',90);
+    A(wz,'W',300,'tx227'); A(wz,'W',300,'ik104'); F(wz,340,320,'ik0',90); F(wz,200,320,'ik15',90); F(wz,220,320,'ik73',90);
     F(wz,200,130,'ik10'); F(wz,200,470,'ik10',180); F(wz,700,105,'grandpiano',180); A(wz,'S',650,'bigaqua'); F(wz,40,140,'ik76'); F(wz,40,560,'ik172'); F(wz,400,300,'ik164');
     // Küche mit Essplatz, Insel, Hausbar
     A(ku,'O',300,KITCHEN(400,'#2f3336')); A(ku,'O',540,FRIDGE); F(ku,300,300,'ik145',90); F(ku,215,270,'ik146',90); F(ku,215,330,'ik146',90);
@@ -1268,6 +1268,49 @@ function tplState(k){
     F(ga,1500,100,'raisedbed'); F(ga,1500,220,'raisedbed'); F(ga,1750,170,'flowerbed',90); F(ga,1350,600,'pond'); F(ga,1750,600,'gtree'); F(ga,250,900,'gtree');
     F(ga,150,450,'gpath',0,{d:400}); F(ga,1350,900,'gpath',0,{w:60,d:300,style:'tritt'}); F(ga,1850,1100,'mowerdock',90);
     for(let i=0;i<7;i++) A(ga,'N',125+250*i,'fence',{w:250,h:120,style:'doppelstab',color:'#3a3d40'}); A(ga,'N',1843,'hedge',{w:186});
+
+    // ---- Treppenhaus, Keller, Obergeschoss ----
+    const STAIR=(x,z,h,rot)=>({id:uid('i'),name:'Treppe gerade',x,z,w:100,d:420,h,color:'#8a6a48',rot,elev:0,kind:'stairs',stype:'gerade',rail:'beide'});
+    const onFloor=(fn)=>{ const sv=base.items; base.items=[]; fn(); const out=base.items; base.items=sv; return out; };
+    base.items.push(STAIR(1846,300,305,0)); F(th1,190,700,'ik168'); A(th1,'O',700,'ik172');
+    const KR=(n,x,z,w,d,fin)=>{ const r=R(n,x,z,w,d); r.h=230; if(!fin){ r.floor='#b9b6ae'; r.pattern='glatt'; } return r; };
+    const KF=(r,side,pos,w)=>FEN(r,side,pos,w,{sill:170,height:45,style:'kipp'});
+    const TROCKNER=['Wäschetrockner',60,60,85,'#f0f0ee',{kind:'washer'}], TRUHE=['Gefriertruhe',110,65,85,'#f2f2f2',{kind:'box'}], WERKBANK=['Werkbank',200,70,90,'#a0805a',{kind:'table'}];
+    const hk=KR('Heimkino',0,0,700,600,true), wk=KR('Weinkeller',712,0,400,600,true), tr=KR('Technikraum',1124,0,650,600), kf=KR('Kellerflur',0,612,1774,200,true), th0=KR('Treppenhaus',1786,0,250,812,true),
+      hob=KR('Hobbyraum',0,824,600,500,true), wa=KR('Waschkeller',612,824,400,500), vo=KR('Vorratskeller',1024,824,500,500), ws=KR('Werkstatt',1536,824,400,500);
+    hk.floor='#4a3d3a'; hk.pattern='glatt'; wk.floor='#8a6f55'; wk.pattern='fliesen-gross';
+    const kO=[TUR(kf,'O',60,90),TUR(kf,'N',300,100),TUR(kf,'N',800,90),TUR(kf,'N',1300,90),TUR(kf,'S',250,90),TUR(kf,'S',750,90),TUR(kf,'S',1100,90),TUR(kf,'S',1600,85),
+      KF(hob,'S',300,100),KF(wa,'S',200,80),KF(ws,'S',200,100),KF(ws,'O',300,80),KF(tr,'N',500,80),KF(th0,'O',600,80)];
+    const kI=onFloor(()=>{
+      A(hk,'W',300,'tx231'); F(hk,560,300,'tx229',0,{elev:195}); F(hk,330,300,'ik5',90); F(hk,520,300,'ik5',90); F(hk,420,300,'ik73',90); A(hk,'O',90,'ik177');
+      A(wk,'N',80,'winefridge'); A(wk,'N',160,'winefridge'); A(wk,'N',240,'winefridge'); A(wk,'W',300,'ik32'); A(wk,'O',300,'ik32'); F(wk,200,330,'ik20'); F(wk,200,238,'ik21'); F(wk,200,422,'ik21',180); F(wk,200,330,'ik165');
+      A(tr,'N',100,['Wärmepumpe Innenteil',60,70,180,'#eef0f0',{kind:'box'}]); A(tr,'N',200,['Warmwasserspeicher 400 l',75,75,190,'#e8e8e8',{kind:'box'}]); A(tr,'N',320,['Batteriespeicher',60,25,120,'#f2f2f2',{kind:'box'}]);
+      A(tr,'O',300,'ik180'); A(tr,'S',450,'ik178'); F(tr,325,300,'ik168');
+      [300,900,1500].forEach(x=>F(kf,x,100,'ik168'));
+      F(hob,300,280,'pingpong'); A(hob,'W',250,'ik180'); A(hob,'S',100,WERKBANK); A(hob,'O',250,'ik178'); F(hob,300,150,'ik168'); F(hob,300,400,'ik168');
+      A(wa,'O',60,WASHER); A(wa,'O',125,TROCKNER); A(wa,'O',200,['Ausgussbecken',60,45,20,'#f4f4f2',{kind:'sink',elev:65}]); A(wa,'S',150,'ik32'); F(wa,200,250,'ik168');
+      A(vo,'S',100,'ik32'); A(vo,'S',200,'ik32'); A(vo,'S',300,'ik32'); A(vo,'O',250,TRUHE); A(vo,'W',300,'ik32'); F(vo,250,250,'ik168');
+      A(ws,'O',250,WERKBANK); A(ws,'S',200,'ik178'); A(ws,'S',300,'ik180'); A(ws,'W',300,'ik180'); F(ws,200,250,'ik168');
+      F(th0,190,700,'ik168'); base.items.push(STAIR(1976,300,255,180)); });
+    // Obergeschoss mit Dachterrasse über dem Südflügel
+    const RO=(n,x,z,w,d)=>Object.assign(R(n,x,z,w,d),{h:260});
+    const es=RO('Elternschlafzimmer',0,0,600,600), an=RO('Ankleide',612,0,300,600), eb=RO('Elternbad',924,0,450,600), az=RO('Arbeitszimmer',1386,0,388,600), of=RO('Flur',0,612,1774,200), th2=RO('Treppenhaus',1786,0,250,812),
+      dt=OR('Dachterrasse','balkon',0,824,1936,500);
+    eb.floor='#d9d4ca'; eb.pattern='fliesen-gross';
+    const oO=[TUR(of,'O',60,90),TUR(of,'N',450,90),TUR(of,'N',700,85),TUR(of,'N',1000,85),TUR(of,'N',1450,85),TUR(of,'S',300,180,{style:'hebeschiebe',height:230}),TUR(of,'S',1300,100,{style:'balkon',height:230}),
+      FEN(es,'N',150,150,{sill:30,height:200}),FEN(es,'N',400,150,{sill:30,height:200}),FEN(es,'W',300,150),FEN(an,'N',150,80,{sill:120,height:100}),FEN(eb,'N',200,100,{sill:130,height:90,style:'kipp'}),
+      FEN(az,'N',200,150),FEN(th2,'O',300,120,{sill:30,height:200}),FEN(th2,'N',125,100),FEN(of,'W',60,80)];
+    const oI=onFloor(()=>{
+      A(es,'W',300,'ik38'); A(es,'W',170,'ik44'); A(es,'W',430,'ik44'); F(es,250,300,'ik75',90); A(es,'O',300,'dk209'); A(es,'O',300,'tx225',{elev:110}); F(es,450,120,'eggchair'); F(es,560,40,'ik172'); F(es,300,300,'ik164');
+      A(an,'W',130,'ik51'); A(an,'W',360,'ik51'); A(an,'O',130,'ik51'); A(an,'O',360,'ik51'); F(an,150,300,'dk201'); F(an,150,300,'ik168');
+      A(eb,'N',120,TUB); F(eb,390,60,SHOWER(120,120)); A(eb,'O',300,'ik68'); A(eb,'O',400,'ik68'); A(eb,'O',300,'ik150',{elev:120}); A(eb,'O',400,'ik150',{elev:120}); A(eb,'W',300,WCs); A(eb,'S',350,TOWEL); F(eb,220,330,'ik157'); F(eb,40,540,'ik173'); F(eb,225,300,'ik168');
+      A(az,'N',200,'ik60'); F(az,200,130,'ik62',180); A(az,'O',160,'ik29'); A(az,'O',250,'ik29'); A(az,'O',340,'ik29'); F(az,100,420,'dk200'); F(az,300,500,'chesstable'); F(az,194,300,'ik168');
+      [300,900,1500].forEach(x=>F(of,x,40,'ik168')); F(of,40,40,'ik172'); A(of,'N',1200,'ik176',{elev:140});
+      F(th2,190,700,'ik168');
+      F(dt,180,300,'whirlpool'); [600,700,800].forEach(x=>F(dt,x,250,'sunlounger')); F(dt,700,250,'parasol'); F(dt,1100,330,'dk206',180); F(dt,1100,200,'ik15'); F(dt,1600,250,'telescope');
+      F(dt,1500,440,'raisedbed'); [[30,30],[1900,30],[1900,470],[30,470]].forEach(p=>F(dt,p[0],p[1],'ik172')); });
+    base.floors=[{id:'fk',name:'Keller',lv:-1,h:255,rooms:[hk,wk,tr,kf,th0,hob,wa,vo,ws],openings:kO,items:kI},{id:'f0',name:'Erdgeschoss',lv:0,h:305},{id:'f1',name:'Obergeschoss',lv:1,h:285,rooms:[es,an,eb,az,of,th2,dt],openings:oO,items:oI}];
+    base.floorId='f0';
     base.pets=[{id:uid('p'),art:'hund',rasse:'golden',farbe:0},{id:uid('p'),art:'katze',rasse:'bkh',farbe:0}]; return base; }
   if(k==='haus'){ base.roomH=250;
     // 11 × 9 m, Satteldach (First Nord-Süd), Keller, Erdgeschoss, Dachgeschoss. Treppen liegen übereinander im Flur.
@@ -2552,7 +2595,7 @@ function envBlock(g, P, o){
 function buildEnv(){ setTimeout(()=>{ try{ applyEnvK(); wake(); }catch(e){} },0);
   disposeGroup(envG); disposeGroup(envOwnUp); envG.clear(); envOwnUp.clear();
   // Allgemeine Umgebung: Rasen, ein paar Bäume, bei Obergeschoss ein schlichtes Haus darunter
-  const lvl=state.level||0, b=bounds(), t=state.wall||12;
+  const lvl=state.level||0, b=envBounds(), t=state.wall||12;
   const fe=state.floors?flElev(flCur()):0, low=state.floors?!!flBelow():false;
   GROUND = (lvl>0 ? -(lvl*290+18) : -16) - fe;
   // Mit Keller darunter: Rasen nur rund ums Haus, damit man durchs Treppenloch in den Keller sieht
@@ -5803,6 +5846,9 @@ function stepMow(dt){ const it=mowDock(); if(!it){ if(MOW.g) MOW.g.visible=false
 KINDS.push(['kettlegrill','Kugelgrill'],['gasgrill','Gasgrill'],['smoker','Smoker'],['pizzaoven','Pizzaofen gemauert'],['pizzasteel','Pizzaofen aus Stahl'],['picnictable','Picknicktisch'],['gardenbench','Gartenbank'],['sunlounger','Sonnenliege'],['parasol','Sonnenschirm'],['swing','Schaukel'],['seesaw','Wippe'],['slide','Rutsche'],['sandbox','Sandkasten'],['trampoline','Trampolin'],['raisedbed','Hochbeet'],['flowerbed','Beet'],['gpath','Gartenweg'],['fence','Zaun'],['shed','Gartenhaus'],['mowerdock','Mähroboter mit Station'],['firepit','Feuerschale'],['hedge','Hecke'],['gtree','Baum'],['pond','Teich'],['bouncy','Hüpfburg']);
 KIND_RULES.unshift(['kugelgrill','kettlegrill'],['gasgrill','gasgrill'],['smoker','smoker'],['pizzaofen','pizzaoven'],['picknick','picnictable'],['gartenbank','gardenbench'],['sonnenliege','sunlounger'],['sonnenschirm','parasol'],['schaukel','swing'],['wippe','seesaw'],['rutsche','slide'],['sandkasten','sandbox'],['trampolin','trampoline'],['hochbeet','raisedbed'],['beet','flowerbed'],['gartenweg','gpath'],['zaun','fence'],['gartenhaus','shed'],['gartenhütte','shed'],['mähroboter','mowerdock'],['feuerschale','firepit'],['hecke','hedge'],['teich','pond'],['hüpfburg','bouncy']);
 NOCOL.add('gpath'); NOCOL.add('parasol');
+// Umgebung: im Obergeschoss auch Garten und Terrasse der unteren Etagen aussparen (sonst liegt der Rasen der Umgebung darüber)
+function envBounds(){ const b=Object.assign({},bounds()); if(!state.floors||!state.floors.length) return b; const cur=flCur(), t=state.wall||12;
+  state.floors.forEach(f=>{ if(f.id===cur.id||f.lv<0||f.lv>cur.lv) return; (f.rooms||[]).forEach(r=>{ b.x0=Math.min(b.x0,r.x-t); b.x1=Math.max(b.x1,r.x+r.w+t); b.z0=Math.min(b.z0,r.z-t); b.z1=Math.max(b.z1,r.z+r.d+t); }); }); return b; }
 
 // ---------- Start ----------
 syncWalls(); $('tLabels').setAttribute('aria-pressed',labels);
