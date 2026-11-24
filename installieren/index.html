@@ -275,7 +275,12 @@ section{padding-block:clamp(56px,9vw,110px)}
 .vc .pl{position:absolute;inset:0;margin:auto;width:64px;height:64px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#0b2b2f;cursor:pointer;display:none;place-items:center}
 .vc .pl svg{width:26px;height:26px;margin-left:4px}
 .vc.paused .pl{display:grid}
-@media (max-width:900px){.lgrid{grid-template-columns:1fr}.vc.big2{grid-column:auto}.vc.big2 video{aspect-ratio:16/10}}
+.vc img{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:16/10}
+.vc.big2 img{aspect-ratio:16/8}
+.newk{background:var(--bg)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}
+.pills span{font:600 13px Inter,sans-serif;padding:7px 12px;border-radius:999px;background:rgb(201 119 58 / .12);color:inherit}
+@media (max-width:900px){.lgrid{grid-template-columns:1fr}.vc.big2{grid-column:auto}.vc.big2 video,.vc.big2 img{aspect-ratio:16/10}}
 
 /* ---------- Galerie ---------- */
 .gal{background:var(--d1);color:var(--dink);position:relative;overflow:hidden;isolation:isolate}
@@ -584,6 +589,19 @@ footer .brand{font-size:18px}footer .brand .mk{width:26px;height:26px}
   </div>
 </div></section>
 
+<section class="life newk" id="villa"><div class="wrap">
+  <div class="sh rv"><div class="kick">Neu: Traumvilla &amp; Garten</div><h2>Einmal alles, bitte.</h2><p>Die neue Vorlage „Traumvilla“ hat alles, was Grundrizz kann: Spielzimmer, Fitnessraum, Wellness mit Whirlpool und Sauna, eine große Terrasse und einen Garten mit Pool, Hüpfburg und Mähroboter. Einfach öffnen und umschauen, oder als Ideenkiste für den eigenen Plan nehmen.</p></div>
+  <div class="pills rv"><span>Billard &amp; Kicker</span><span>Flipper &amp; Spielautomat</span><span>Flügel &amp; DJ-Pult</span><span>Pool &amp; Sauna</span><span>Grill &amp; Pizzaofen</span><span>Hüpfburg &amp; Trampolin</span><span>Hochbeet &amp; Teich</span><span>Mähroboter</span></div>
+  <div class="lgrid">
+    <figure class="vc big2 rv"><video muted loop playsinline preload="metadata" poster="vid/villa.jpg" aria-label="Kamerafahrt rund um die eingerichtete Traumvilla mit Garten"><source src="vid/villa.webm" type="video/webm"><source src="vid/villa.mp4" type="video/mp4"></video><span class="live"><i></i>Echt aus der App</span><button class="pl" type="button" aria-label="Abspielen"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg></button><figcaption><b>Rundflug um die Traumvilla</b><span>Neun Räume, Terrasse und Garten, komplett eingerichtet.</span></figcaption></figure>
+    <figure class="vc  rv"><video muted loop playsinline preload="metadata" poster="vid/mow.jpg" aria-label="Mähroboter fährt aus der Station über den Rasen"><source src="vid/mow.webm" type="video/webm"><source src="vid/mow.mp4" type="video/mp4"></video><span class="live"><i></i>Echt aus der App</span><button class="pl" type="button" aria-label="Abspielen"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg></button><figcaption><b>Mähroboter</b><span>Mäht kreuz und quer und findet allein zurück zur Station.</span></figcaption></figure>
+    <figure class="vc rv"><img src="img/villa-spiel.webp" alt="Spielzimmer mit Billardtisch, Kicker, Flipper und Spielautomat" loading="lazy" width="1440" height="900"><figcaption><b>Spielzimmer</b><span>Billard, Kicker, Flipper und Dartscheibe.</span></figcaption></figure>
+    <figure class="vc rv"><img src="img/villa-garten.webp" alt="Garten mit Hüpfburg, Pool, Trampolin, Schaukel und Hochbeeten" loading="lazy" width="1440" height="900"><figcaption><b>Garten</b><span>Pool, Hüpfburg, Trampolin, Beete und Teich.</span></figcaption></figure>
+    <figure class="vc rv"><img src="img/villa-wellness.webp" alt="Wellnessraum mit Whirlpool und Sauna neben dem Fitnessraum" loading="lazy" width="1440" height="900"><figcaption><b>Wellness &amp; Fitness</b><span>Whirlpool, Sauna, Laufband und Kraftstation.</span></figcaption></figure>
+  </div>
+  <p style="margin-top:22px">Auch Balkon, Terrasse und Garten zeichnest du jetzt selbst: Raum anlegen, „Art“ wählen, fertig.</p>
+</div></section>
+
 <section class="gal"><div class="wrap">
   <div class="sh rv"><div class="kick">Echte Ansichten</div><h2>So sieht Grundrizz aus.</h2><p>Keine Attrappen: Das sind Bildschirmfotos aus der App, mit einer der mitgelieferten Vorlagen.</p></div>
   <div class="gtabs" role="group" aria-label="Ansicht wählen">
@@ -712,7 +730,7 @@ footer .brand{font-size:18px}footer .brand .mk{width:26px;height:26px}
   window.addEventListener('appinstalled',function(){ i2.hidden=true; o2.hidden=false; });
   i2.addEventListener('click',function(){ document.getElementById('instBtn').click(); });
   // Filme nur abspielen, wenn sichtbar
-  document.querySelectorAll('.vc').forEach(function(f){ var v=f.querySelector('video'), b=f.querySelector('.pl'), user=false;
+  document.querySelectorAll('.vc').forEach(function(f){ var v=f.querySelector('video'), b=f.querySelector('.pl'), user=false; if(!v) return;
     function st(){ f.classList.toggle('paused',v.paused); } v.addEventListener('play',st); v.addEventListener('pause',st);
     b.addEventListener('click',function(){ user=true; v.play().catch(function(){}); });
     if(rm || !('IntersectionObserver' in window)){ f.classList.add('paused'); return; }
