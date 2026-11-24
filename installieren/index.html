@@ -178,19 +178,23 @@ section{padding-block:clamp(56px,9vw,110px)}
 @keyframes a1cur{0%{opacity:0;transform:translate(100px,96px)}6%,8%{opacity:1;transform:translate(60px,60px)}38%{opacity:1;transform:translate(340px,240px)}44%,100%{opacity:0;transform:translate(352px,252px)}}
 @keyframes a1ring{0%,7%{opacity:0;transform:scale(.3)}8%{opacity:.9}16%,100%{opacity:0;transform:scale(1.8)}}
 
-/* 2 Umzugs-Check (9 s) */
-.s2 .sofa{transform-box:fill-box;transform-origin:center;transform:translate(205px,0) rotate(90deg);animation:a2sofa 9s cubic-bezier(.5,0,.3,1) infinite both}
-.s2 .red{opacity:0;animation:a2red 9s infinite both}
+/* 2 Neue Ecke (9 s) */
+.s2 .sofa{transform-box:fill-box;transform-origin:center;transform:translate(214px,10px);animation:a2sofa 9s cubic-bezier(.55,0,.25,1) infinite both}
+.s2 .sel{opacity:0;animation:a2sel 9s infinite both}
 .s2 .grn{animation:a2grn 9s infinite both}
-.s2 .bb{opacity:0;animation:a2bb 9s ease-out infinite both}
+.s2 .ghost{animation:a2ghost 9s infinite both}
+.s2 .spot{animation:a2spot 9s infinite both}
+.s2 .dim2{animation:a2dim 9s ease-out infinite both}
 .s2 .bg{animation:a2bg 9s ease-out infinite both}
-.s2 .wid{opacity:0;animation:a2wid 9s infinite both}
-@keyframes a2sofa{0%{transform:translate(-70px,0) rotate(0);opacity:0}6%{opacity:1;transform:translate(-40px,0) rotate(0)}22%{transform:translate(84px,0) rotate(0)}24.5%{transform:translate(76px,0) rotate(0)}26.5%{transform:translate(84px,0) rotate(0)}29%{transform:translate(78px,0) rotate(0)}40%{transform:translate(48px,0) rotate(0)}52%{transform:translate(48px,0) rotate(90deg)}72%,93%{transform:translate(205px,0) rotate(90deg);opacity:1}100%{transform:translate(205px,0) rotate(90deg);opacity:0}}
-@keyframes a2red{0%,21%{opacity:0}23%,36%{opacity:.85}42%,100%{opacity:0}}
-@keyframes a2grn{0%,68%{opacity:0}73%,100%{opacity:.85}}
-@keyframes a2bb{0%,22%{opacity:0;transform:translateY(8px)}25%,37%{opacity:1;transform:none}42%,100%{opacity:0}}
-@keyframes a2bg{0%,70%{opacity:0;transform:translateY(8px)}75%,93%{opacity:1;transform:none}100%{opacity:0}}
-@keyframes a2wid{0%,20%{opacity:0}24%,37%{opacity:1}42%,100%{opacity:0}}
+.s2 .door2{animation:a2door 9s ease-out infinite both}
+@keyframes a2sofa{0%,6%{transform:none;opacity:0}10%,22%{transform:none;opacity:1}34%{transform:translate(106px,-24px) scale(1.07)}46%{transform:translate(214px,10px) scale(1.04)}50%,93%{transform:translate(214px,10px);opacity:1}100%{transform:translate(214px,10px);opacity:0}}
+@keyframes a2sel{0%,12%{opacity:0}15%,40%{opacity:1}46%,100%{opacity:0}}
+@keyframes a2grn{0%,49%{opacity:0}54%,93%{opacity:.8}100%{opacity:0}}
+@keyframes a2ghost{0%,22%{opacity:0}28%,93%{opacity:1}100%{opacity:0}}
+@keyframes a2spot{0%,18%{opacity:0}26%,46%{opacity:1}52%,100%{opacity:0}}
+@keyframes a2dim{0%,24%{opacity:0;transform:translateY(5px)}30%,93%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes a2bg{0%,54%{opacity:0;transform:translateY(8px)}59%,93%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes a2door{0%,64%{opacity:0;transform:translateY(8px)}69%,93%{opacity:1;transform:none}100%{opacity:0}}
 
 /* 3 Sonne (8 s) */
 .s3 .sun{transform-box:view-box;transform-origin:140px 205px;animation:a3sun 8s linear infinite both}
@@ -254,6 +258,24 @@ section{padding-block:clamp(56px,9vw,110px)}
 @keyframes a6halo{0%,50%{opacity:0;transform:scale(.9)}53%{opacity:.8}66%,100%{opacity:0;transform:scale(1.35)}}
 @keyframes a6press{0%,6%{transform:none}9%{transform:scale(.9)}12%,100%{transform:none}}
 @keyframes a6ok{0%,58%{opacity:0;transform:translateY(8px)}64%,94%{opacity:1;transform:none}100%{opacity:0}}
+
+/* ---------- Leben in der Wohnung ---------- */
+.life{background:var(--bg)}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.lgrid>*{min-width:0}
+.vc{position:relative;border-radius:22px;overflow:hidden;background:#0b1416;box-shadow:0 1px 2px rgb(var(--shadow) / .05),0 30px 60px -30px rgb(var(--shadow) / .45);margin:0}
+.vc.big2{grid-column:span 2}
+.vc video{display:block;width:100%;height:100%;object-fit:cover;aspect-ratio:16/10}
+.vc.big2 video{aspect-ratio:16/8}
+.vc figcaption{position:absolute;left:0;right:0;bottom:0;padding:40px 18px 16px;background:linear-gradient(transparent,rgba(5,15,17,.85));color:#fff}
+.vc figcaption b{display:block;font:700 18px Montserrat,sans-serif;letter-spacing:-.01em}
+.vc figcaption span{font-size:14px;color:#cfe0de}
+.vc .live{position:absolute;left:14px;top:14px;display:flex;align-items:center;gap:7px;font:600 11px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.45);padding:6px 10px;border-radius:999px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.vc .live i{width:7px;height:7px;border-radius:50%;background:#e3a36d;animation:blink 1.4s infinite}
+.vc .pl{position:absolute;inset:0;margin:auto;width:64px;height:64px;border-radius:50%;border:0;background:rgba(255,255,255,.9);color:#0b2b2f;cursor:pointer;display:none;place-items:center}
+.vc .pl svg{width:26px;height:26px;margin-left:4px}
+.vc.paused .pl{display:grid}
+@media (max-width:900px){.lgrid{grid-template-columns:1fr}.vc.big2{grid-column:auto}.vc.big2 video{aspect-ratio:16/10}}
 
 /* ---------- Galerie ---------- */
 .gal{background:var(--d1);color:var(--dink);position:relative;overflow:hidden;isolation:isolate}
@@ -394,7 +416,7 @@ footer .brand{font-size:18px}footer .brand .mk{width:26px;height:26px}
       <div>
         <div class="eyebrow"><i></i>Raumplaner in 3D · kostenlos</div>
         <h1>Wohnen, <em>bevor du einziehst.</em></h1>
-        <p class="lead">Grundriss zeichnen, Möbel stellen, in 3D durch die Räume gehen. Grundrizz zeigt dir, ob das Sofa durch die Tür passt, wann die Sonne ins Zimmer scheint und wie viel Farbe du brauchst.</p>
+        <p class="lead">Grundriss zeichnen, Möbel stellen, in 3D durch die Räume gehen. Grundrizz zeigt dir, ob dein Sofa in die neue Ecke passt, wann die Sonne ins Zimmer scheint und wie viel Farbe du brauchst.</p>
         <div class="cta">
           <button class="btn copper" id="instBtn" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Jetzt installieren</button>
           <a class="btn copper" id="howBtn" href="#installieren"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Kostenlos installieren</a>
@@ -408,7 +430,7 @@ footer .brand{font-size:18px}footer .brand .mk{width:26px;height:26px}
       <div class="devices" aria-label="Grundrizz auf Laptop und Handy" role="img">
         <div class="laptop"><div class="scr"><img src="img/3d.webp" alt="" width="1600" height="1000"></div><div class="base"></div></div>
         <div class="hphone"><img src="img/walk.webp" alt="" width="640" height="1090"></div>
-        <div class="badge b1"><span class="d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>Sofa passt durch die Tür</div>
+        <div class="badge b1"><span class="d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>Sofa passt in die Ecke</div>
         <div class="badge b2"><span class="d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5 19 19M5 19l1.5-1.5M17.5 6.5 19 5"/></svg></span>Juni: 7 h Sonne</div>
         <div class="badge b3"><span class="d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8v8M21 8v8M3 12h18M7 10l-4 2 4 2M17 10l4 2-4 2"/></svg></span><span>620 cm</span></div>
       </div>
@@ -449,28 +471,31 @@ footer .brand{font-size:18px}footer .brand .mk{width:26px;height:26px}
   </article>
 
   <article class="scene s2">
-    <div class="txt rv"><div class="num">02</div><h3>Passt das Sofa durch die Tür?</h3><p>Erfasse deine eigenen Möbel einmal. Der Umzugs-Check prüft, ob sie durch die Türen der neuen Wohnung passen und wo sie Platz haben. Bevor der Umzugswagen kommt.</p>
-      <ul class="chips"><li>Umzugs-Check</li><li>Eigene Möbel merken</li><li>Hunderte Möbel im Katalog</li></ul></div>
-    <div class="stage rv" role="img" aria-label="Ein Sofa bleibt quer an der Tür hängen, wird gedreht und passt längs hindurch.">
+    <div class="txt rv"><div class="num">02</div><h3>Passt dein Sofa in die neue Ecke?</h3><p>Merk dir deine Möbel aus der alten Wohnung einmal mit ihren Maßen. In der neuen Wohnung siehst du sofort, in welche Ecke sie passen und wie viel Luft bleibt. Ob sie durch die Tür gehen, prüft Grundrizz gleich mit, auch hochkant getragen.</p>
+      <ul class="chips"><li>Umzugs-Check</li><li>Eigene Möbel merken</li><li>Hochkant durch die Tür</li></ul></div>
+    <div class="stage rv" role="img" aria-label="Das Sofa aus der alten Wohnung wandert in die Ecke der neuen Wohnung und passt mit 15 Zentimetern Luft.">
       <svg viewBox="0 0 400 300">
         <defs><pattern id="g2" width="20" height="20" patternUnits="userSpaceOnUse"><path class="gl" d="M20 0H0V20"/></pattern></defs>
         <rect width="400" height="300" fill="url(#g2)"/>
-        <rect class="fl" x="234" y="20" width="166" height="260" style="opacity:.6"/>
-        <path class="w" d="M230 20V116M230 184V280" stroke-width="8"/>
-        <path d="M234 116A68 68 0 0 1 302 184" fill="none" style="stroke:var(--muted)" stroke-width="1.5" stroke-dasharray="3 3"/>
-        <text class="tm" x="22" y="278">Flur</text><text class="tm" x="388" y="278" text-anchor="end">Wohnzimmer</text>
-        <g><rect class="pf" x="240" y="90" width="72" height="20" rx="5" style="stroke:var(--line)"/><text class="tm" x="276" y="104" text-anchor="middle">Tür 90 cm</text></g>
+        <text class="tm" x="22" y="48">Alte Wohnung</text><text class="tm" x="222" y="48" style="fill:var(--accent)">Neue Wohnung</text>
+        <rect class="fl" x="20" y="60" width="160" height="186" style="opacity:.55"/><path class="w" d="M20 60H180V246H20Z" stroke-width="6"/>
+        <rect class="fl" x="220" y="60" width="166" height="186"/><path class="w" d="M220 60H386V246H220Z" stroke-width="6"/>
+        <rect x="223" y="150" width="29" height="93" style="fill:var(--sofa);opacity:.55"/><text class="tm" x="237" y="140" text-anchor="middle" style="font-size:8px">Regal</text>
+        <rect x="372" y="96" width="11" height="70" class="gls"/>
+        <rect class="spot" x="254" y="186" width="129" height="58" rx="3" fill="none" style="stroke:var(--accent)" stroke-width="2" stroke-dasharray="5 4"/>
+        <g class="dim2"><path class="dl" d="M254 176V184M383 176V184M254 180H383"/><rect class="pf" x="294" y="171" width="48" height="17" rx="4"/><text class="tm" x="318" y="183" text-anchor="middle">215 cm</text></g>
+        <rect class="ghost" x="40" y="180" width="120" height="48" rx="7" fill="none" style="stroke:var(--muted)" stroke-width="1.5" stroke-dasharray="4 4"/>
         <g class="sofa">
-          <rect x="80" y="75" width="60" height="150" rx="8" style="fill:var(--sofa)"/>
-          <rect x="80" y="75" width="16" height="150" rx="6" style="fill:rgba(0,0,0,.18)"/>
-          <path d="M100 125H140M100 175H140" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
-          <rect class="red bad-f" x="80" y="75" width="60" height="150" rx="8"/>
-          <rect class="grn ok-f" x="80" y="75" width="60" height="150" rx="8"/>
-          <text x="118" y="150" text-anchor="middle" transform="rotate(-90 118 150)" style="font:600 11px Inter,sans-serif;fill:#fff">Sofa 200 × 80</text>
+          <rect x="40" y="180" width="120" height="48" rx="7" style="fill:var(--sofa)"/>
+          <rect x="40" y="214" width="120" height="14" rx="5" style="fill:rgba(0,0,0,.18)"/>
+          <path d="M80 182V212M120 182V212" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+          <rect class="grn ok-f" x="40" y="180" width="120" height="48" rx="7"/>
+          <rect class="sel" x="36" y="176" width="128" height="56" rx="10" fill="none" style="stroke:var(--warm)" stroke-width="2.5"/>
+          <text x="100" y="202" text-anchor="middle" style="font:600 11px Inter,sans-serif;fill:#fff">Mein Sofa</text>
+          <text x="100" y="216" text-anchor="middle" style="font:500 9px 'IBM Plex Mono',monospace;fill:rgba(255,255,255,.85)">200 × 80</text>
         </g>
-        <g class="wid"><path d="M150 75V225M144 75H156M144 225H156" style="stroke:var(--bad)" stroke-width="2"/></g>
-        <g class="bdg bb"><rect class="bad-f" x="16" y="16" width="188" height="28"/><text x="110" y="35" text-anchor="middle">Quer: 200 cm, zu breit</text></g>
-        <g class="bdg bg"><rect class="ok-f" x="16" y="16" width="200" height="28"/><text x="116" y="35" text-anchor="middle">✓ Längs: 80 cm, passt!</text></g>
+        <g class="bdg bg"><rect class="ok-f" x="222" y="6" width="164" height="26"/><text x="304" y="24" text-anchor="middle">✓ Passt, 15 cm Luft</text></g>
+        <g class="door2"><rect class="pf" x="20" y="258" width="250" height="28" rx="14" style="stroke:var(--line)"/><text x="145" y="276" text-anchor="middle" style="font:500 11px Inter,sans-serif;fill:var(--ink)">Und die Tür? Hochkant getragen: <tspan style="fill:var(--ok);font-weight:600">passt ✓</tspan></text></g>
       </svg>
     </div>
   </article>
@@ -546,6 +571,15 @@ footer .brand{font-size:18px}footer .brand .mk{width:26px;height:26px}
       </svg>
     </div>
   </article>
+  </div>
+</div></section>
+
+<section class="life" id="leben"><div class="wrap">
+  <div class="sh rv"><div class="kick">Leben in der Wohnung</div><h2>Deine Wohnung lebt.</h2><p>Grundrizz ist mehr als ein Plan. Der Saugroboter zieht seine Bahnen, der Fernseher läuft, und abends fährt die Leinwand runter. Alles echt aus der App, nichts nachgestellt.</p></div>
+  <div class="lgrid">
+    <figure class="vc big2 rv"><video muted loop playsinline preload="metadata" poster="vid/cine.jpg" aria-label="Kinomodus: Leinwand fährt herunter und ein Film läuft"><source src="vid/cine.webm" type="video/webm"><source src="vid/cine.mp4" type="video/mp4"></video><span class="live"><i></i>Echt aus der App</span><button class="pl" type="button" aria-label="Abspielen"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg></button><figcaption><b>Kinoabend</b><span>Leinwand fährt runter, der Beamer startet, „Neon Bay“ läuft.</span></figcaption></figure>
+    <figure class="vc  rv"><video muted loop playsinline preload="metadata" poster="vid/bot.jpg" aria-label="Saugroboter fährt durchs Wohnzimmer"><source src="vid/bot.webm" type="video/webm"><source src="vid/bot.mp4" type="video/mp4"></video><span class="live"><i></i>Echt aus der App</span><button class="pl" type="button" aria-label="Abspielen"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg></button><figcaption><b>Saugroboter</b><span>Fährt aus der Station und saugt um die Möbel herum.</span></figcaption></figure>
+    <figure class="vc  rv"><video muted loop playsinline preload="metadata" poster="vid/tv.jpg" aria-label="Fernseher wird eingeschaltet und schaltet um"><source src="vid/tv.webm" type="video/webm"><source src="vid/tv.mp4" type="video/mp4"></video><span class="live"><i></i>Echt aus der App</span><button class="pl" type="button" aria-label="Abspielen"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8z"/></svg></button><figcaption><b>Fernseher an</b><span>Einschalten, umschalten, das Licht fällt in den Raum.</span></figcaption></figure>
   </div>
 </div></section>
 
@@ -672,6 +706,12 @@ footer .brand{font-size:18px}footer .brand .mk{width:26px;height:26px}
     var so=new IntersectionObserver(function(es){ es.forEach(function(e){ e.target.classList.toggle('on',e.isIntersecting); }); },{threshold:.35});
     document.querySelectorAll('.scene').forEach(function(el){ so.observe(el); });
   } else { document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); }); document.querySelectorAll('.scene').forEach(function(el){ el.classList.add('on'); }); }
+  // Filme nur abspielen, wenn sichtbar
+  document.querySelectorAll('.vc').forEach(function(f){ var v=f.querySelector('video'), b=f.querySelector('.pl'), user=false;
+    function st(){ f.classList.toggle('paused',v.paused); } v.addEventListener('play',st); v.addEventListener('pause',st);
+    b.addEventListener('click',function(){ user=true; v.play().catch(function(){}); });
+    if(rm || !('IntersectionObserver' in window)){ f.classList.add('paused'); return; }
+    new IntersectionObserver(function(es){ if(es[0].isIntersecting){ v.play().then(st).catch(function(){ f.classList.add('paused'); }); } else if(!v.paused) v.pause(); },{threshold:.4}).observe(f); });
   // Galerie
   var gal=document.querySelector('.gal'), bs=[].slice.call(gal.querySelectorAll('.gtabs button')), im=[].slice.call(gal.querySelectorAll('.vw img')), cap=document.getElementById('gcap'), cur=0, tm=null, vis=false;
   var caps=['Die ganze Wohnung in 3D, mit Licht, Schatten und echten Möbelmodellen.','Zeichnen mit Maßen in Zentimetern. Flächen rechnet Grundrizz selbst aus.','Sonnenstunden je Monat für jeden Raum, aus Fenstern und Himmelsrichtung.','Material für die ausgewählten Räume, mit Einkaufsliste zum Kopieren.'];
